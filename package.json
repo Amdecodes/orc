@@ -11,7 +11,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@zxing/library": "^0.21.3",
     "jimp": "^1.6.0",
+    "jsqr": "^1.4.0",
+    "qrcode-reader": "^1.0.4",
     "sharp": "^0.34.5",
     "tesseract.js": "^7.0.0"
   }

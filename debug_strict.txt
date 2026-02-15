@@ -1,0 +1,160 @@
+Found 10 images for back-side testing.
+
+--- Processing Back: image copy 2.png ---
+[extractBackID] Multi-Pass Start for samples/back/image copy 2.png
+[Pass 1] Adaptive Context...
+[Pass 2] Super-Resolution Fallback...
+[Pass 3] Extreme Contrast...
+Image too small to scale!! (1x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (1x36 vs min width of 3)
+Line cannot be recognized!!
+--- Processing Back: image copy 3.png ---
+[extractBackID] Multi-Pass Start for samples/back/image copy 3.png
+[Pass 1] Adaptive Context...
+[Pass 2] Super-Resolution Fallback...
+[Pass 3] Extreme Contrast...
+[validateFINStrict] Pattern Match: 8746 1739 5075 (from: "a0 Prone umber         wit FIN 8746 1739 5075")
+[Pass 4] Anchored Phone Precision Crop...
+--- Processing Back: image copy 4.png ---
+[extractBackID] Multi-Pass Start for samples/back/image copy 4.png
+[Pass 1] Adaptive Context...
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+[validateFINStrict] Pattern Match: 3275 2806 1203 (from: "0042164380        wi  FN 3275 2806 1203")
+[Pass 2] Super-Resolution Fallback...
+[Pass 4] Anchored Phone Precision Crop...
+--- Processing Back: image copy 5.png ---
+[extractBackID] Multi-Pass Start for samples/back/image copy 5.png
+[Pass 1] Adaptive Context...
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+[validateFINStrict] Pattern Match: 4304 9120 5724 (from: "[FIN 4304 9120 5724")
+[Pass 2] Super-Resolution Fallback...
+[Pass 4] Anchored Phone Precision Crop...
+--- Processing Back: image copy 6.png ---
+[extractBackID] Multi-Pass Start for samples/back/image copy 6.png
+[Pass 1] Adaptive Context...
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+[Pass 2] Super-Resolution Fallback...
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+[Pass 3] Extreme Contrast...
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (1x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (1x36 vs min width of 3)
+Line cannot be recognized!!
+--- Processing Back: image copy 7.png ---
+[extractBackID] Multi-Pass Start for samples/back/image copy 7.png
+[Pass 1] Adaptive Context...
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+[Pass 2] Super-Resolution Fallback...
+[validateFINStrict] Pattern Match: 7095 6153 9047 (from: "[FIN 7095 6153 9047")
+--- Processing Back: image copy 8.png ---
+[extractBackID] Multi-Pass Start for samples/back/image copy 8.png
+[Pass 1] Adaptive Context...
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+[Pass 2] Super-Resolution Fallback...
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+[Pass 3] Extreme Contrast...
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (1x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (1x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+[validateFINStrict] Pattern Match: 5629 0498 3571 (from: "01 Phone umber         wit FIN 5629 0498 3571")
+--- Processing Back: image copy 9.png ---
+[extractBackID] Multi-Pass Start for samples/back/image copy 9.png
+[Pass 1] Adaptive Context...
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+[Pass 2] Super-Resolution Fallback...
+[validateFINStrict] Pattern Match: 8609 7325 3483 (from: "[FIN 8609 7325 3483")
+--- Processing Back: image copy.png ---
+[extractBackID] Multi-Pass Start for samples/back/image copy.png
+[Pass 1] Adaptive Context...
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+[Pass 2] Super-Resolution Fallback...
+[Pass 3] Extreme Contrast...
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (1x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (1x36 vs min width of 3)
+Line cannot be recognized!!
+[Pass 4] Anchored Phone Precision Crop...
+--- Processing Back: image.png ---
+[extractBackID] Multi-Pass Start for samples/back/image.png
+[Pass 1] Adaptive Context...
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+Image too small to scale!! (2x36 vs min width of 3)
+Line cannot be recognized!!
+[Pass 2] Super-Resolution Fallback...
+[Pass 3] Extreme Contrast...
+[Pass 4] Anchored Phone Precision Crop...
+Results written to test_back_results.json

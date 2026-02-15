@@ -7,7 +7,7 @@ import { recognizeName } from "./ocr/recognize.js";
 import { getPngDimensions } from "./ocr/image_meta.js";
 
 const startBatch = async () => {
-  const images = fs.readdirSync("./images").filter(f => f.match(/^image.*\.png$/));
+  const images = fs.readdirSync("./samples/front").filter(f => f.match(/^image.*\.png$/) || f.endsWith(".png"));
   console.log(`Found ${images.length} images to process.`);
 
   const worker = await createWorker(["amh", "eng"]); // Bilingual detection
@@ -16,7 +16,7 @@ const startBatch = async () => {
   });
 
   for (const img of images) {
-    const imagePath = path.join("./images", img);
+    const imagePath = path.join("./samples/front", img);
     console.log(`\nProcessing: ${img}`);
 
     try {
