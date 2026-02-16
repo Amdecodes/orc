@@ -1,0 +1,10 @@
+Starting MODNet matting test...
+Calling removeBackground (MODNet)...
+MODNet Matting Session initialized.
+Running MODNet inference...
+Inference done. Output shape: 1,1,512,512, length: 262144
+Shirt Integrity Check: PASS
+Matting failed: Error: Input buffer contains unsupported image format
+    at Sharp.toBuffer (/home/amde/Documents/et-id-ocr-test/node_modules/sharp/lib/output.js:163:17)
+    at removeBackground (file:///home/amde/Documents/et-id-ocr-test/ocr/matting_engine.js:81:10)
+    at async testMatting (file:///home/amde/Documents/et-id-ocr-test/test_modnet_matting.js:18:24)

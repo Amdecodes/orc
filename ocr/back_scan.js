@@ -5,121 +5,13 @@ import { CROPS } from "./crops.js";
 import fs from "fs";
 import { scanQR } from "./qr.js";
 import { findBackAnchors, getDynamicCrop, findLabelsInTSV } from "./anchor.js";
+import { matchLocation, NUMERIC_WOREDA_REGIONS } from "./location_index.js";
 
-const NUMERIC_WOREDA_REGIONS = ["Addis Ababa", "Dire Dawa"];
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-function toTitleCase(str) {
-  if (!str) return "";
-  return str.toLowerCase().split(' ').map(word => {
-    return word.charAt(0).toUpperCase() + word.slice(1);
-  }).join(' ');
-}
-
-/**
- * Calculates pixel coordinates from percentages based on image dimensions.
- */
-function getCropRect(cropDef, imgWidth, imgHeight) {
-  return {
-    left: Math.round(cropDef.xPct * imgWidth),
-    top: Math.round(cropDef.yPct * imgHeight),
-    width: Math.round(cropDef.wPct * imgWidth),
-    height: Math.round(cropDef.hPct * imgHeight)
-  };
-}
-
-/**
- * Preprocesses a crop: grayscale -> normalize -> threshold -> sharpen
- */
-async function processCrop(imageBuffer, cropRect, imgWidth, imgHeight, threshold = 128) {
-  // Bounds check
-  if (cropRect.left < 0 || cropRect.top < 0 || 
-      cropRect.left + cropRect.width > imgWidth || 
-      cropRect.top + cropRect.height > imgHeight ||
-      cropRect.width <= 0 || cropRect.height <= 0) {
-      console.warn("Crop out of bounds, skipping...", cropRect);
-      return null;
-  }
-
-  return await sharp(imageBuffer)
-    .extract(cropRect)
-    .grayscale()
-    .normalize()
-    .threshold(threshold) 
-    .sharpen({ sigma: 1 })
-    .png()
-    .toBuffer();
-}
-
-/**
- * Simple Levenshtein distance for fuzzy matching
- */
-function levenshtein(a, b) {
-  if (a.length === 0) return b.length;
-  if (b.length === 0) return a.length;
-  const matrix = [];
-  for (let i = 0; i <= b.length; i++) matrix[i] = [i];
-  for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
-  for (let i = 1; i <= b.length; i++) {
-    for (let j = 1; j <= a.length; j++) {
-      if (b.charAt(i - 1) === a.charAt(j - 1)) {
-        matrix[i][j] = matrix[i - 1][j - 1];
-      } else {
-        matrix[i][j] = Math.min(
-          matrix[i - 1][j - 1] + 1,
-          matrix[i][j - 1] + 1,
-          matrix[i - 1][j] + 1
-        );
-      }
-    }
-  }
-  return matrix[b.length][a.length];
-}
-
-/**
- * Fuzzy matches a text against a list of candidates.
- */
-function fuzzyMatch(text, candidates, maxDist = 2) {
-  if (!text || text.trim().length < 3) return null; 
-  
-  const cleanText = text.toLowerCase().replace(/[^a-z0-9]/g, "");
-  if (cleanText.length < 3) return null;
-
-  let best = null;
-  let minDist = Infinity;
-
-  for (const c of candidates) {
-    const cleanCand = c.toLowerCase().replace(/[^a-z0-9]/g, "");
-    if (cleanText.includes(cleanCand) || cleanCand.includes(text.toLowerCase())) {
-       return { value: c, dist: 0 }; 
-    }
-    
-    // Scale threshold by length
-    const allowed = Math.min(maxDist, Math.floor(cleanCand.length / 3));
-    const dist = levenshtein(cleanText, cleanCand);
-    
-    if (dist <= allowed && dist < minDist) {
-      minDist = dist;
-      best = c;
-    }
-  }
-
-  if (best) return { value: best, dist: minDist };
-  return null;
-}
-
-// Load full location tree
-let LOCATION_DATA = null;
-function getLocationData() {
-  if (LOCATION_DATA) return LOCATION_DATA;
-  try {
-    const data = fs.readFileSync(new URL('../et.json', import.meta.url));
-    LOCATION_DATA = JSON.parse(data);
-    return LOCATION_DATA;
-  } catch (e) {
-    console.warn("Could not load et.json", e);
-    return [];
-  }
-}
+import { toTitleCase } from './ocr_utils.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 // Helper: Get image dimension from Sharp buffer
 async function getImageWidth(buffer) {
@@ -262,190 +154,40 @@ function getVotedResult(results) {
 }
 
 /**
- * Aggressively normalizes text for location matching.
- */
-function normalizeLocationText(text) {
-    if (!text) return "";
-    return text.toLowerCase()
-        .replace(/[0-9]/g, '') // Remove numbers (often OCR noise in address fields)
-        .replace(/[፡[\]()|\\/]/g, ' ') // Map common separator artifacts to space
-        .replace(/\s+/g, ' ') // Consolidate whitespace
-        .trim();
-}
-
-/**
- * Hierarchically resolves address components from text.
+ * Hierarchically resolves address components from text using unified logic.
  */
 function resolveAddress(text) {
-    const data = getLocationData();
     const result = { 
         region: null, 
+        region_am: null,
         zone: null, 
+        zone_am: null,
         woreda: null, 
-        raw_text: "", 
+        woreda_am: null,
+        raw_text: text, 
         normalized: "", 
         confidence: 0 
     };
+
     if (!text || text.length < 3) return result;
 
-    const flatText = text.replace(/\n/g, ' ');
-    const normalizedText = normalizeLocationText(text);
-
-    // Track matched tokens for address.raw
-    const matchedTokens = [];
-
-    // 1. Find Region (Best match)
-    let bestRegion = null;
-
-    const regionAliases = {
-        "Addis Ababa": ["አዲስ አበባ", "አ/አ", "a.a", "addis ababa", "adlis abba", "addes ababa"],
-        "Oromia": ["ኦሮሚያ", "oromiya", "oronia", "oromiyaa"],
-        "Amhara": ["አማራ", "anhara", "amara"],
-        "Sidama": ["ሲዳማ", "sidana", "sidama region"],
-        "SNNPR": ["ደቡብ", "s.n.n.p.r", "snnp", "south ethiopia"],
-        "Dire Dawa": ["ድሬዳዋ", "ድሬ ዳዋ", "dire dawa city"],
-        "Tigray": ["ትግራይ", "tigrai", "tegray"]
-    };
-
-    for (const r of data) {
-        const rName = r.region.en.toLowerCase();
-        const rAm = r.region.am;
-        
-        // Try exact match or aliases
-        if (normalizedText.includes(rName) || (rAm && text.includes(rAm))) {
-            bestRegion = r.region.en;
-            matchedTokens.push(rName); // Use normalized matching token
-            break;
+    try {
+        const match = matchLocation(text);
+        if (match) {
+            result.region = match.region;
+            result.region_am = match.region_am;
+            result.zone = match.zone;
+            result.zone_am = match.zone_am;
+            result.woreda = match.woreda;
+            result.woreda_am = match.woreda_am;
+            result.confidence = match.confidence;
+            result.normalized = [match.region, match.zone, match.woreda].filter(Boolean).join(", ");
         }
-        
-        const aliases = regionAliases[r.region.en] || [];
-        const foundAlias = aliases.find(a => normalizedText.includes(a));
-        if (foundAlias) {
-            bestRegion = r.region.en;
-            matchedTokens.push(foundAlias);
-            break;
-        }
+    } catch (e) {
+        console.error(`[resolveAddress] Error: ${e.message}`);
+        result._error = "Address parse failed safely";
     }
 
-    if (!bestRegion) return result;
-    result.region = bestRegion;
-    result.confidence += 0.4;
-    result.raw_text = matchedTokens.join("\n");
-
-    // 2. Find Zone within Region
-    const regionObj = data.find(r => r.region.en === result.region);
-    if (regionObj && regionObj.zones) {
-        let bestZone = null;
-        let zoneData = null;
-
-        const ZONE_ALIASES = {
-            "Mehal Sidama Zone": ["mehal sidama", "sidama mehal", "መሃል ሲዳማ"],
-            "Hawassa Citiy Administration": ["hawassa city", "hawassa administration", "ሀዋሳ ከተማ", "hawasa"],
-            "Addis Ketema Subcity": ["addis ketema", "አዲስ ከተማ"],
-            "Akaki Kaliti Subcity": ["akaki kaliti", "akaqi", "አቃቂ ቃሊቲ"],
-            "Arada Subcity": ["arada", "አራዳ"],
-            "Bole Subcity": ["bole", "ቦሌ"],
-            "Gulele Subcity": ["gulele", "ጉለሌ"],
-            "Kerkos": ["kerkos", "kirkos", "ቂርቆስ"],
-            "Kolfe Keraniyo Subcity": ["kolfe keraniyo", "ኮልፌ ቀራኒዮ"],
-            "Lemi Kura Subcity": ["lemi kura", "ለሚ ኩራ"],
-            "Lideta": ["lideta", "ልደታ"],
-            "Nifas Silk Lafto Subcity": ["nifas silk", "lafto", "ንፋስ ስልክ"],
-            "Yeka Subcity": ["yeka", "የካ"],
-            "Lemi Kura": ["lemi kura", "ለሚ ኩራ"]
-        };
-
-        for (const z of regionObj.zones) {
-            let zName = z.zone.en;
-            
-            // FIX: Stop inventing words ("Subcity") for Addis Ababa
-            if (result.region === "Addis Ababa") {
-                zName = zName.replace(/\s*subcity\s*/i, "").trim();
-            }
-
-            const zEnLower = zName.toLowerCase();
-            const zAm = z.zone.am;
-            const aliases = ZONE_ALIASES[zName] || [];
-
-            // Pattern match: word-based overlap or alias
-            const zWords = zEnLower.split(' ').filter(w => w.length > 2);
-            const matchesWords = zWords.length > 0 && zWords.every(word => normalizedText.includes(word));
-            const foundAlias = aliases.find(a => normalizedText.includes(a.toLowerCase()));
-
-            if (matchesWords || foundAlias || (zAm && text.includes(zAm))) {
-                bestZone = toTitleCase(zName);
-                zoneData = z;
-                matchedTokens.push(foundAlias || zName);
-                break;
-            }
-        }
-        
-        if (bestZone) {
-            result.zone = bestZone;
-            result.confidence += 0.5;
-            result.raw_text = matchedTokens.join("\n");
-            
-            // 3. Find Woreda within Zone
-            if (zoneData && zoneData.woredas) {
-                // Priority 1: Exact Amharic match
-                for (const w of zoneData.woredas) {
-                    if (w.am && flatText.includes(w.am)) {
-                        const isNumericRegion = NUMERIC_WOREDA_REGIONS.includes(result.region);
-                        result.woreda = isNumericRegion 
-                            ? "Woreda " + w.en.replace(/\D/g, '').padStart(2, '0')
-                            : toTitleCase(w.en);
-                        result.confidence += 0.4;
-                        matchedTokens.push(w.am);
-                        break;
-                    }
-                }
-                // Priority 2: English match or numeric pattern
-                if (!result.woreda) {
-                    for (const w of zoneData.woredas) {
-                        const wEnLower = w.en.toLowerCase();
-                        const bareWoreda = wEnLower.replace('wereda ', '').replace('woreda ', '');
-                        if (normalizedText.includes(bareWoreda) && bareWoreda.length > 2) {
-                            const isNumericRegion = NUMERIC_WOREDA_REGIONS.includes(result.region);
-                            if (isNumericRegion) {
-                                result.woreda = "Woreda " + bareWoreda.padStart(2, '0');
-                            } else {
-                                result.woreda = toTitleCase(w.en);
-                            }
-                            result.confidence += 0.4;
-                            matchedTokens.push(bareWoreda);
-                            break;
-                        }
-                    }
-                }
-                // Stage 4C: Semantic Proof (Deterministic recovery)
-                if (!result.woreda) {
-                    const numMatch = normalizedText.match(/(?:woreda|wereda|ወረዳ)\s?(\d{1,2})/i);
-                    if (numMatch) {
-                        const num = String(parseInt(numMatch[1], 10)).padStart(2, '0');
-                        const found = zoneData.woredas.find(w => w.en.includes(num));
-                        if (found) {
-                            const isNumericRegion = NUMERIC_WOREDA_REGIONS.includes(result.region);
-                            if (isNumericRegion) {
-                                result.woreda = "Woreda " + num;
-                                result.confidence += 0.3;
-                                matchedTokens.push("Woreda " + num);
-                                console.log(`[Stage 4C] Recovered Woreda ${num} from numeric pattern.`);
-                            }
-                        }
-                    }
-                }
-                if (result.woreda) {
-                    result.raw_text = matchedTokens.join("\n");
-                    result.normalized = [result.region, result.zone, result.woreda].filter(Boolean).join(", ");
-                }
-            }
-        }
-    }
-
-    result.confidence = Math.min(1.0, result.confidence);
-    if (!result.normalized && result.region) {
-        result.normalized = [result.region, result.zone, result.woreda].filter(Boolean).join(", ");
-    }
     return result;
 }
 
@@ -899,13 +641,17 @@ export async function extractBackID(imagePath) {
     
     // Independent Woreda override (Golden Rule)
     const deterministicWoreda = extractWoredaDeterministic(words);
-    if (deterministicWoreda && !address.woreda) {
+    if (deterministicWoreda) {
         const isNumericRegion = NUMERIC_WOREDA_REGIONS.includes(address.region);
-        if (isNumericRegion) {
-            address.woreda = "Woreda " + deterministicWoreda;
-            address.confidence = Math.max(address.confidence, 0.95);
-            address.raw_text = (address.raw_text ? address.raw_text + "\n" : "") + "Woreda " + deterministicWoreda;
-            address.normalized = [address.region, address.zone, address.woreda].filter(Boolean).join(", ");
+        // Only override if we are in a numeric region (most common) OR if address.woreda is missing
+        // AND if the deterministic value differs from current result
+        const targetWoreda = "Woreda " + deterministicWoreda;
+        if (isNumericRegion && address.woreda !== targetWoreda) {
+             console.log(`[WoredaRecovery] Overriding ${address.woreda} with deterministic ${targetWoreda}`);
+             address.woreda = targetWoreda;
+             address.woreda_am = "ወረዳ " + deterministicWoreda; // Best effort amharic
+             address.confidence = Math.max(address.confidence, 0.95);
+             address.normalized = [address.region, address.zone, address.woreda].filter(Boolean).join(", ");
         }
     }
 
@@ -938,23 +684,67 @@ export async function extractBackID(imagePath) {
         saveCache(cache);
     }
 
+    // --- 6. Final Evaluation & Confidence Scoring ---
+
+    const calculateConfidence = (val, type, meta = {}) => {
+
+        if (!val) return 0;
+        let score = 0;
+
+        // QR Source: Absolute Trust
+        if (meta.source === "QR") return 1.0;
+
+        if (type === "fin") {
+            // FIN Rules
+            if (/^\d{12}$/.test(val)) score += 0.8;
+            if (meta.consensus) score += 0.15; // 2+ passes agreed
+            if (meta.cached) score += 0.1;
+        } 
+        
+        if (type === "phone") {
+            // Phone Rules
+            if (/^(09|07)\d{8}$/.test(val)) score += 0.8;
+            if (meta.labelProximity) score += 0.1; 
+            if (meta.consensus) score += 0.1;
+        }
+
+        if (type === "address") {
+            // Already computed in resolveAddress
+            return val.confidence || 0;
+        }
+
+        return Math.min(0.95, score); // Cap OCR at 0.95, only QR gets 1.0
+    };
+
+    const finConfidence = calculateConfidence(fin, 'fin', { 
+        source: qrData?.uin ? "QR" : "OCR",
+        consensus: finResult ? (finResult.candidates && finResult.candidates.filter(c => c === fin).length >= 2) : false,
+        cached: cache && !!cache[imgHash]?.fin
+    });
+
+    const phoneConfidence = calculateConfidence(phone, 'phone', {
+        source: qrData?.phone ? "QR" : "OCR",
+        consensus: phoneResult ? (phoneResult.candidates && phoneResult.candidates.filter(c => c === phone).length >= 2) : false,
+        labelProximity: true 
+    });
+
     return {
       fin: fin || qrData?.uin || null, 
       phone: phone || qrData?.phone || null,
       nationality,
       address,
       vid: qrData?.vid || null,
-      _status: isSuccess ? "Extracted (Safe Mode)" : "Rejected (Unsafe Data)",
+      _status: (fin && phone) ? "Extracted (Safe Mode)" : "Partial/Failed",
       _source: "Safe Mode Architecture",
       _confidence: {
-          fin: fin ? 1.0 : 0,
-          phone: phone ? 1.0 : 0,
+          fin: finConfidence,
+          phone: phoneConfidence,
           address: address.confidence
       }
     };
 
   } catch (e) {
-    console.error(`[SafeMode] Fatal Error: ${e.message}`, e.stack);
+    console.error(`[SafeMode] Fatal Error: ${e.message}`);
     return { fin: null, phone: null, _status: "Error", _error: e.message };
   }
 }

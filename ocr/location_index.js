@@ -1,163 +1,230 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { toTitleCase } from './ocr_utils.js';
 
-// Resolve path to et.json (one level up from this file)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ET_JSON_PATH = path.join(__dirname, '../et.json');
 
-let LOCATION_INDEX = null;
+let LOCATION_DATA = null;
 
-// Helper normalization function
-function norm(str) {
-  if (!str) return "";
-  return str.toString().toLowerCase().trim();
+// Regions where Woredas are typically just numbers (01, 02...)
+export const NUMERIC_WOREDA_REGIONS = ["Addis Ababa", "Dire Dawa", "Sheger", "Hareri"];
+
+/**
+ * Load and cache the location data.
+ * Returns a hierarchical object: { "Region": { am: "...", zones: { "Zone": ... } } }
+ */
+function getLocationData() {
+  if (LOCATION_DATA) return LOCATION_DATA;
+  try {
+    const rawData = fs.readFileSync(ET_JSON_PATH, 'utf-8');
+    LOCATION_DATA = JSON.parse(rawData);
+    return LOCATION_DATA;
+  } catch (err) {
+    console.error("Failed to load et.json:", err);
+    return {};
+  }
 }
 
 /**
- * Normalize OCR output aggressively to match the index.
+ * Enhanced Normalization for English matching.
  */
-export function normalizeOCR(text) {
-  return norm(text)
-    .replace(/\bwereda\b/g, "woreda")
-    .replace(/\bzone\b/g, "")
-    .replace(/\bregion\b/g, "")
-    .replace(/\bsubcity\b/g, "")
-    .replace(/\bkifle ketema\b/g, "")
-    .replace(/\bliyu\b/g, "")
-    .replace(/\bspecial\b/g, "")
-    .replace(/\s+/g, " ") // Collapse multiple spaces
+function normalizeEnglish(text) {
+  if (!text) return "";
+  return text
+    .toLowerCase()
+    .replace(/[\n\r]/g, " ")
+    .replace(/\b(subcity|sub city|town administration|city administration|kifle ketema)\b/g, "")
+    .replace(/[^a-z0-9\s]/g, " ")
+    .replace(/\s+/g, " ")
     .trim();
 }
 
 /**
- * Build a flat OCR index from the nested location data.
- * Keys now carry weight and type information.
+ * Enhanced Normalization for Amharic matching.
  */
-function buildLocationIndex(locations) {
-  const index = [];
-
-  for (const r of locations) {
-    for (const z of r.zones) {
-      const woredas = z.woredas || [];
-      
-      for (const w of woredas) {
-        const keys = [];
-        
-        // Region Keys (Weight 3)
-        if (r.region.en) keys.push({ text: normalizeOCR(r.region.en), weight: 3, type: 'region' });
-        if (r.region.am) keys.push({ text: normalizeOCR(r.region.am), weight: 3, type: 'region' });
-        
-        // Zone Keys (Weight 2)
-        if (z.zone.en) keys.push({ text: normalizeOCR(z.zone.en), weight: 2, type: 'zone' });
-        if (z.zone.am) keys.push({ text: normalizeOCR(z.zone.am), weight: 2, type: 'zone' });
-        
-        // Woreda Keys (Weight 1)
-        if (w.en) keys.push({ text: normalizeOCR(w.en), weight: 1, type: 'woreda' });
-        if (w.am) keys.push({ text: normalizeOCR(w.am), weight: 1, type: 'woreda' });
-
-        index.push({
-          region: r.region,
-          zone: z.zone,
-          woreda: w,
-          keys: keys
-        });
-      }
-    }
-  }
-
-  return index;
+function normalizeAmharic(text) {
+  if (!text) return "";
+  return text
+    .replace(/ክፍለ ከተማ|ከተማ/g, "")
+    .replace(/[^\u1200-\u137F\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 /**
- * Load and build the index if not already built.
+ * Helper to check if a pattern matches as a whole word/token in text.
  */
-function getOrBuildIndex() {
-  if (LOCATION_INDEX) return LOCATION_INDEX;
-
-  try {
-    const rawData = fs.readFileSync(ET_JSON_PATH, 'utf-8');
-    const locations = JSON.parse(rawData);
-    LOCATION_INDEX = buildLocationIndex(locations);
-    return LOCATION_INDEX;
-  } catch (err) {
-    console.error("Failed to load location index form et.json:", err);
-    return [];
-  }
+function containsWord(text, pattern) {
+  if (!pattern || pattern.length < 2) return false;
+  // Escape regex special chars
+  const escaped = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  // Match as whole word (boundary or start/end)
+  const regex = new RegExp(`(?:^|[\\s,.:;፡])(${escaped})(?=[\\s,.:;፡]|$)`, "i");
+  return regex.test(text);
 }
 
 /**
- * Match OCR text against reference index.
- * Returns the best match with confidence score and partial resolution.
+ * PRODUCTION-GRADE matching logic.
+ * Follows Region -> Zone -> Woreda hierarchy with English-keyed Amharic lookup.
  */
 export function matchLocation(ocrText) {
   if (!ocrText) return null;
-  
-  const index = getOrBuildIndex();
-  const text = normalizeOCR(ocrText);
-  // Ignore tiny tokens < 2 chars to avoid noise (e.g. "a", "I")
-  const inputTokens = text.split(" ").filter(t => t.length >= 2);
 
-  // FIX: Addis Ababa subcity shortcut
-  // If text contains "subcity", "ketema", "kifle", likely Addis or major city
-  const isAddisHint = /subcity|ketema|kifle/i.test(ocrText);
+  const data = getLocationData(); // Object
+  const normEn = normalizeEnglish(ocrText);
+  const normAm = normalizeAmharic(ocrText);
 
-  let bestEntry = null;
-  let bestScore = -Infinity;
-  let bestMatches = { region: false, zone: false, woreda: false };
+  const result = {
+    region: null,
+    region_am: null,
+    zone: null,
+    zone_am: null,
+    woreda: null,
+    woreda_am: null,
+    confidence: 0,
+    raw_ocr: ocrText
+  };
 
-  for (const entry of index) {
-    let score = 0;
-    let matchedTypes = { region: false, zone: false, woreda: false };
+  // 1. Region Detection
+  let regionName = null;
+  let regionData = null;
+  let regionMatchScore = 0;
 
-    for (const key of entry.keys) {
-      if (!key.text) continue;
+  for (const rName of Object.keys(data)) {
+    const rData = data[rName];
+    // Relaxed Check: If OCR includes the Region Key (case-insensitive)
+    // The key is now "Addis Ababa", "Amhara", etc.
+    const rKeyNorm = normalizeEnglish(rName);
+    const rAmNorm = normalizeAmharic(rData.am || "");
 
-      // Token-based matching: ALL significant tokens of the key must match input
-      const keyTokens = key.text.split(" ").filter(t => t.length >= 2);
-      if (keyTokens.length === 0) continue; 
+    if (containsWord(normEn, rKeyNorm)) {
+      regionName = rName;
+      regionData = rData;
+      regionMatchScore = 0.95;
+      break; 
+    }
+    if (rAmNorm.length > 1 && containsWord(normAm, rAmNorm)) {
+      regionName = rName;
+      regionData = rData;
+      regionMatchScore = 1.0;
+      break;
+    }
+  }
 
-      const allTokensMatch = keyTokens.every(kt => inputTokens.some(it => it.includes(kt)));
+  if (!regionData) return null;
+
+  result.region = regionName; // Key is already Title Case usually
+  result.region_am = regionData.am;
+  result.confidence = regionMatchScore;
+
+  // 2. Zone Detection (Within Region)
+  let zoneName = null;
+  let zoneData = null;
+  let zoneScore = 0;
+
+  if (regionData.zones) {
+    const zoneKeys = Object.keys(regionData.zones);
+    
+    // Attempt match
+    for (const zName of zoneKeys) {
+      const zData = regionData.zones[zName];
+      const zKeyNorm = normalizeEnglish(zName);
+      const zAmNorm = normalizeAmharic(zData.am || "");
       
-      if (allTokensMatch) {
-        score += key.weight;
-        matchedTypes[key.type] = true;
+      // Check Aliases if present
+      const aliases = zData.aliases || [];
+      const aliasMatch = aliases.some(a => containsWord(normEn, normalizeEnglish(a)));
+
+      if (containsWord(normEn, zKeyNorm) || aliasMatch) {
+        zoneName = zName;
+        zoneData = zData;
+        zoneScore = 0.95;
+        break;
+      }
+      if (zAmNorm.length > 1 && containsWord(normAm, zAmNorm)) {
+        zoneName = zName;
+        zoneData = zData;
+        zoneScore = 1.0;
+        break;
       }
     }
 
-    // FIX: Addis Ababa penalty
-    if (entry.region.en === "Addis Ababa" && score < 5) {
-      score -= 2;
-    }
-
-    if (isAddisHint && entry.region.en === "Addis Ababa") {
-      score += 1; // Slight boost
-    }
-
-    if (score > bestScore) {
-      bestScore = score;
-      bestEntry = entry;
-      bestMatches = matchedTypes;
+    // Auto-select if only 1 zone exists (e.g. Dire Dawa, Harari)
+    if (!zoneData && zoneKeys.length === 1) {
+       zoneName = zoneKeys[0];
+       zoneData = regionData.zones[zoneName];
+       zoneScore = 0.5; // Implicit match
     }
   }
 
-  // Threshold Logic
-  const isStrongMatch = (bestScore >= 5);
-  // Relaxed Structural Match: 
-  // If we matched Region(3) (Sidama) + Zone(2) (Mehal Sidama) = 5.
-  // If we matched Zone(2) + Woreda(1) = 3.
-  const isStructuralMatch = (bestScore >= 3 && (bestMatches.zone || bestMatches.woreda));
+  if (zoneData) {
+    // Clean zone name for output (key is already clean from refactor)
+    result.zone = zoneName;
+    result.zone_am = zoneData.am;
+    result.confidence = (result.confidence + zoneScore) / 2;
 
-  if (bestEntry && (isStrongMatch || isStructuralMatch)) {
-    return {
-      region: bestEntry.region,
-      zone: bestEntry.zone,
-      woreda: bestMatches.woreda ? bestEntry.woreda : null,
-      confidence: Number((bestScore / 6).toFixed(2)),
-      raw_ocr: ocrText
-    };
+    // 3. Woreda Detection (Within Zone)
+    if (zoneData.woredas) {
+      const wKeys = Object.keys(zoneData.woredas);
+      let foundWoredaKey = null;
+      let foundWoredaAm = null;
+      
+      // CASE A: Numeric Woreda Pattern "Woreda 01", "Woreda 02"...
+      // STRICT REQUIREMENT: Must have "Woreda" prefix in English or Amharic to avoid header noise "04".
+      // Look for: (Woreda|Wereda|ወረዳ) [space]* (digits)
+      // Or: (digits) [space]* (Woreda|Wereda|ወረዳ) (e.g. 01 Woreda)
+      
+      const strictNumMatch = ocrText.match(/(?:Woreda|Wereda|Kebele|ወረዳ)\s*(0?[1-9]|[12][0-9]|30)\b/i) || 
+                             ocrText.match(/\b(0?[1-9]|[12][0-9]|30)\s*(?:Woreda|Wereda|Kebele|ወረዳ)/i);
+
+      if (strictNumMatch) {
+          const numStr = strictNumMatch[1].padStart(2, '0'); // "01"
+          const targetKeyRaw = "Woreda " + numStr; // "Woreda 01"
+          
+          if (zoneData.woredas[targetKeyRaw]) {
+              foundWoredaKey = targetKeyRaw;
+              foundWoredaAm = zoneData.woredas[targetKeyRaw];
+          } 
+          else if (NUMERIC_WOREDA_REGIONS.includes(regionName)) {
+               foundWoredaKey = targetKeyRaw;
+               foundWoredaAm = "ወረዳ " + numStr;
+          }
+      }
+
+      // CASE B: Named Woreda / Key Lookup
+      // Only if strict numeric failed. 
+      if (!foundWoredaKey) {
+        for (const wName of wKeys) {
+            // Skip "Woreda XX" keys here, we handled them in Case A
+            if (wName.startsWith("Woreda ")) continue;
+
+            const wValAm = zoneData.woredas[wName];
+            const wEnNorm = normalizeEnglish(wName);
+            const wAmNorm = normalizeAmharic(wValAm || "");
+
+            if (containsWord(normEn, wEnNorm)) {
+                foundWoredaKey = wName;
+                foundWoredaAm = wValAm;
+                break;
+            }
+            if (wAmNorm.length > 1 && containsWord(normAm, wAmNorm)) {
+                foundWoredaKey = wName;
+                foundWoredaAm = wValAm;
+                break;
+            }
+        }
+      }
+
+      if (foundWoredaKey) {
+          result.woreda = foundWoredaKey; // Key is "Woreda 01" or Name
+          result.woreda_am = foundWoredaAm;
+          result.confidence = Math.min(1.0, result.confidence + 0.1);
+      }
+    }
   }
 
-  return null;
+  return result;
 }

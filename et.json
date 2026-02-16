@@ -1,4425 +1,1436 @@
-[
-  {
-    "region": {
-      "en": "Sheger",
-      "am": "ሸገር"
-    },
-    "zones": [
-      {
-        "zone": {
-          "en": "Sida Awash",
-          "am": "ሲዳ አዋሽ",
-          "raw_en": "Sida Awash"
-        },
-        "woredas": [
-          {
-            "en": "Mermera",
-            "am": "ምርመራ"
-          }
-        ]
+{
+  "Sheger": {
+    "am": "ሸገር",
+    "zones": {
+      "Sida Awash": {
+        "am": "ሲዳ አዋሽ",
+        "woredas": {
+          "Mermera": "ምርመራ"
+        }
       }
-    ]
+    }
   },
-  {
-    "region": {
-      "en": "Addis Ababa",
-      "am": "አዲስ አበባ"
-    },
-    "zones": [
-      {
-        "zone": {
-          "en": "Addis Ketema Subcity",
-          "am": "አዲስ ከተማ ክፍለ ከተማ",
-          "raw_en": "Addis Ketema Subcity"
+  "Addis Ababa": {
+    "am": "አዲስ አበባ",
+    "zones": {
+      "Addis Ketema": {
+        "am": "አዲስ ከተማ",
+        "woredas": {
+          "Woreda 01": "ወረዳ 01",
+          "Woreda 03": "ወረዳ 03",
+          "Woreda 04": "ወረዳ 04",
+          "Woreda 05": "ወረዳ 05",
+          "Woreda 06": "ወረዳ 06",
+          "Woreda 08": "ወረዳ 08",
+          "Woreda 09": "ወረዳ 09",
+          "Woreda 10": "ወረዳ 10",
+          "Woreda 11": "ወረዳ 11",
+          "Woreda 12": "ወረዳ 12",
+          "Woreda 13": "ወረዳ 13",
+          "Woreda 14": "ወረዳ 14"
         },
-        "woredas": [
-          {
-            "en": "Wereda 01",
-            "am": "ወረዳ 01"
-          },
-          {
-            "en": "Wereda 03",
-            "am": "ወረዳ 03"
-          },
-          {
-            "en": "Wereda 04",
-            "am": "ወረዳ 04"
-          },
-          {
-            "en": "Wereda 05",
-            "am": "ወረዳ 05"
-          },
-          {
-            "en": "Wereda 06",
-            "am": "ወረዳ 06"
-          },
-          {
-            "en": "Wereda 08",
-            "am": "ወረዳ 08"
-          },
-          {
-            "en": "Wereda 09",
-            "am": "ወረዳ 09"
-          },
-          {
-            "en": "Wereda 10",
-            "am": "ወረዳ 10"
-          },
-          {
-            "en": "Wereda 11",
-            "am": "ወረዳ 11"
-          },
-          {
-            "en": "Wereda 12",
-            "am": "ወረዳ 12"
-          },
-          {
-            "en": "Wereda 13",
-            "am": "ወረዳ 13"
-          },
-          {
-            "en": "Wereda 14",
-            "am": "ወረዳ 14"
-          }
+        "aliases": [
+          "Addis Ketema Subcity"
         ]
       },
-      {
-        "zone": {
-          "en": "Akaki Kaliti Subcity",
-          "am": "አቃቂ ቃሊቲ ክፍለ ከተማ",
-          "raw_en": "Akaki Kaliti Subcity"
+      "Akaki Kaliti": {
+        "am": "አቃቂ ቃሊቲ",
+        "woredas": {
+          "Woreda 01": "ወረዳ 01",
+          "Woreda 02": "ወረዳ 02",
+          "Woreda 03": "ወረዳ 03",
+          "Woreda 04": "ወረዳ 04",
+          "Woreda 05": "ወረዳ 05",
+          "Woreda 06": "ወረዳ 06",
+          "Woreda 07": "ወረዳ 07",
+          "Woreda 08": "ወረዳ 08",
+          "Woreda 09": "ወረዳ 09",
+          "Woreda 10": "ወረዳ 10",
+          "Woreda 12": "ወረዳ 12",
+          "Woreda 13": "ወረዳ 13"
+        }
+      },
+      "Arada": {
+        "am": "አራዳ",
+        "woredas": {
+          "Woreda 01": "ወረዳ 01",
+          "Woreda 02": "ወረዳ 02",
+          "Woreda 03": "ወረዳ 03",
+          "Woreda 04": "ወረዳ 04",
+          "Woreda 05": "ወረዳ 05",
+          "Woreda 06": "ወረዳ 06",
+          "Woreda 07": "ወረዳ 07",
+          "Woreda 08": "ወረዳ 08",
+          "Woreda 09": "ወረዳ 09",
+          "Woreda 10": "ወረዳ 10"
+        }
+      },
+      "Bole": {
+        "am": "ቦሌ",
+        "woredas": {
+          "Woreda 01": "ወረዳ 01",
+          "Woreda 02": "ወረዳ 02",
+          "Woreda 03": "ወረዳ 03",
+          "Woreda 04": "ወረዳ 04",
+          "Woreda 05": "ወረዳ 05",
+          "Woreda 06": "ወረዳ 06",
+          "Woreda 07": "ወረዳ 07",
+          "Woreda 09": "ወረዳ 09",
+          "Woreda 11": "ወረዳ 11",
+          "Woreda 12": "ወረዳ 12",
+          "Woreda 13": "ወረዳ 13",
+          "Woreda 14": "ወረዳ 14"
+        }
+      },
+      "Gulele": {
+        "am": "ጉለሌ",
+        "woredas": {
+          "Woreda 01": "ወረዳ 01",
+          "Woreda 02": "ወረዳ 02",
+          "Woreda 03": "ወረዳ 03",
+          "Woreda 04": "ወረዳ 04",
+          "Woreda 05": "ወረዳ 05",
+          "Woreda 06": "ወረዳ 06",
+          "Woreda 07": "ወረዳ 07",
+          "Woreda 08": "ወረዳ 08",
+          "Woreda 09": "ወረዳ 09",
+          "Woreda 10": "ወረዳ 10"
+        }
+      },
+      "Kerkos": {
+        "am": "ቂርቆስ",
+        "woredas": {
+          "Woreda 01": "ወረዳ 01",
+          "Woreda 02": "ወረዳ 02",
+          "Woreda 03": "ወረዳ 03",
+          "Woreda 04": "ወረዳ 04",
+          "Woreda 05": "ወረዳ 05",
+          "Woreda 07": "ወረዳ 07",
+          "Woreda 08": "ወረዳ 08",
+          "Woreda 09": "ወረዳ 09",
+          "Woreda 10": "ወረዳ 10",
+          "Woreda 11": "ወረዳ 11"
+        }
+      },
+      "Kolfe Keraniyo": {
+        "am": "ኮልፌ ቀራኒዮ",
+        "woredas": {
+          "Woreda 01": "ወረዳ 01",
+          "Woreda 02": "ወረዳ 02",
+          "Woreda 03": "ወረዳ 03",
+          "Woreda 04": "ወረዳ 04",
+          "Woreda 05": "ወረዳ 05",
+          "Woreda 06": "ወረዳ 06",
+          "Woreda 07": "ወረዳ 07",
+          "Woreda 08": "ወረዳ 08",
+          "Woreda 09": "ወረዳ 09",
+          "Woreda 10": "ወረዳ 10",
+          "Woreda 11": "ወረዳ 11"
+        }
+      },
+      "Lemi Kura": {
+        "am": "ለሚ ኩራ",
+        "woredas": {
+          "Woreda 01": "ወረዳ 01",
+          "Woreda 02": "ወረዳ 02",
+          "Woreda 03": "ወረዳ 03",
+          "Woreda 04": "ወረዳ 04",
+          "Woreda 05": "ወረዳ 05",
+          "Woreda 06": "ወረዳ 06",
+          "Woreda 07": "ወረዳ 07",
+          "Woreda 08": "ወረዳ 08",
+          "Woreda 09": "ወረዳ 09",
+          "Woreda 10": "ወረዳ 10"
         },
-        "woredas": [
-          {
-            "en": "Wereda 01",
-            "am": "ወረዳ 01"
-          },
-          {
-            "en": "Wereda 02",
-            "am": "ወረዳ 02"
-          },
-          {
-            "en": "Wereda 03",
-            "am": "ወረዳ 03"
-          },
-          {
-            "en": "Wereda 04",
-            "am": "ወረዳ 04"
-          },
-          {
-            "en": "Wereda 05",
-            "am": "ወረዳ 05"
-          },
-          {
-            "en": "Wereda 06",
-            "am": "ወረዳ 06"
-          },
-          {
-            "en": "Wereda 07",
-            "am": "ወረዳ 07"
-          },
-          {
-            "en": "Wereda 08",
-            "am": "ወረዳ 08"
-          },
-          {
-            "en": "Wereda 09",
-            "am": "ወረዳ 09"
-          },
-          {
-            "en": "Wereda 10",
-            "am": "ወረዳ 10"
-          },
-          {
-            "en": "Wereda 12",
-            "am": "ወረዳ 12"
-          },
-          {
-            "en": "Wereda 13",
-            "am": "ወረዳ 13"
-          }
+        "aliases": [
+          "Lemi Kura"
         ]
       },
-      {
-        "zone": {
-          "en": "Arada Subcity",
-          "am": "አራዳ ክፍለ ከተማ",
-          "raw_en": "Arada Subcity"
-        },
-        "woredas": [
-          {
-            "en": "Wereda 01",
-            "am": "ወረዳ 01"
-          },
-          {
-            "en": "Wereda 02",
-            "am": "ወረዳ 02"
-          },
-          {
-            "en": "Wereda 03",
-            "am": "ወረዳ 03"
-          },
-          {
-            "en": "Wereda 04",
-            "am": "ወረዳ 04"
-          },
-          {
-            "en": "Wereda 05",
-            "am": "ወረዳ 05"
-          },
-          {
-            "en": "Wereda 06",
-            "am": "ወረዳ 06"
-          },
-          {
-            "en": "Wereda 07",
-            "am": "ወረዳ 07"
-          },
-          {
-            "en": "Wereda 08",
-            "am": "ወረዳ 08"
-          },
-          {
-            "en": "Wereda 09",
-            "am": "ወረዳ 09"
-          },
-          {
-            "en": "Wereda 10",
-            "am": "ወረዳ 10"
-          }
-        ]
+      "Lideta": {
+        "am": "ልደታ",
+        "woredas": {
+          "Woreda 01": "ወረዳ 01",
+          "Woreda 02": "ወረዳ 02",
+          "Woreda 03": "ወረዳ 03",
+          "Woreda 04": "ወረዳ 04",
+          "Woreda 05": "ወረዳ 05",
+          "Woreda 06": "ወረዳ 06",
+          "Woreda 07": "ወረዳ 07",
+          "Woreda 08": "ወረዳ 08",
+          "Woreda 09": "ወረዳ 09",
+          "Woreda 10": "ወረዳ 10"
+        }
       },
-      {
-        "zone": {
-          "en": "Bole Subcity",
-          "am": "ቦሌ ክፍለ ከተማ",
-          "raw_en": "Bole Subcity"
-        },
-        "woredas": [
-          {
-            "en": "Wereda 01",
-            "am": "ወረዳ 01"
-          },
-          {
-            "en": "Wereda 02",
-            "am": "ወረዳ 02"
-          },
-          {
-            "en": "Wereda 03",
-            "am": "ወረዳ 03"
-          },
-          {
-            "en": "Wereda 04",
-            "am": "ወረዳ 04"
-          },
-          {
-            "en": "Wereda 05",
-            "am": "ወረዳ 05"
-          },
-          {
-            "en": "Wereda 06",
-            "am": "ወረዳ 06"
-          },
-          {
-            "en": "Wereda 07",
-            "am": "ወረዳ 07"
-          },
-          {
-            "en": "Wereda 09",
-            "am": "ወረዳ 09"
-          },
-          {
-            "en": "Wereda 11",
-            "am": "ወረዳ 11"
-          },
-          {
-            "en": "Wereda 12",
-            "am": "ወረዳ 12"
-          },
-          {
-            "en": "Wereda 13",
-            "am": "ወረዳ 13"
-          },
-          {
-            "en": "Wereda 14",
-            "am": "ወረዳ 14"
-          }
-        ]
+      "Nifas Slik Lafto": {
+        "am": "ንፋስ ስልክ ላፍቶ",
+        "woredas": {
+          "Woreda 01": "ወረዳ 01",
+          "Woreda 02": "ወረዳ 02",
+          "Woreda 05": "ወረዳ 05",
+          "Woreda 06": "ወረዳ 06",
+          "Woreda 07": "ወረዳ 07",
+          "Woreda 08": "ወረዳ 08",
+          "Woreda 09": "ወረዳ 09",
+          "Woreda 10": "ወረዳ 10",
+          "Woreda 11": "ወረዳ 11",
+          "Woreda 12": "ወረዳ 12",
+          "Woreda 13": "ወረዳ 13",
+          "Woreda 15": "ወረዳ 15"
+        }
       },
-      {
-        "zone": {
-          "en": "Gulele Subcity",
-          "am": "ጉለሌ ክፍለ ከተማ",
-          "raw_en": "Gulele Subcity"
+      "Yeka": {
+        "am": "የካ",
+        "woredas": {
+          "Woreda 01": "ወረዳ 01",
+          "Woreda 02": "ወረዳ 02",
+          "Woreda 03": "ወረዳ 03",
+          "Woreda 04": "ወረዳ 04",
+          "Woreda 05": "ወረዳ 05",
+          "Woreda 06": "ወረዳ 06",
+          "Woreda 07": "ወረዳ 07",
+          "Woreda 08": "ወረዳ 08",
+          "Woreda 09": "ወረዳ 09",
+          "Woreda 10": "ወረዳ 10",
+          "Woreda 11": "ወረዳ 11",
+          "Woreda 12": "ወረዳ 12"
         },
-        "woredas": [
-          {
-            "en": "Wereda 01",
-            "am": "ወረዳ 01"
-          },
-          {
-            "en": "Wereda 02",
-            "am": "ወረዳ 02"
-          },
-          {
-            "en": "Wereda 03",
-            "am": "ወረዳ 03"
-          },
-          {
-            "en": "Wereda 04",
-            "am": "ወረዳ 04"
-          },
-          {
-            "en": "Wereda 05",
-            "am": "ወረዳ 05"
-          },
-          {
-            "en": "Wereda 06",
-            "am": "ወረዳ 06"
-          },
-          {
-            "en": "Wereda 07",
-            "am": "ወረዳ 07"
-          },
-          {
-            "en": "Wereda 08",
-            "am": "ወረዳ 08"
-          },
-          {
-            "en": "Wereda 09",
-            "am": "ወረዳ 09"
-          },
-          {
-            "en": "Wereda 10",
-            "am": "ወረዳ 10"
-          }
-        ]
-      },
-      {
-        "zone": {
-          "en": "Kerkos",
-          "am": "ቂርቆስ ክፍለ ከተማ",
-          "raw_en": "Kerkos"
-        },
-        "woredas": [
-          {
-            "en": "Wereda 01",
-            "am": "ወረዳ 01"
-          },
-          {
-            "en": "Wereda 02",
-            "am": "ወረዳ 02"
-          },
-          {
-            "en": "Wereda 03",
-            "am": "ወረዳ 03"
-          },
-          {
-            "en": "Wereda 04",
-            "am": "ወረዳ 04"
-          },
-          {
-            "en": "Wereda 05",
-            "am": "ወረዳ 05"
-          },
-          {
-            "en": "Wereda 07",
-            "am": "ወረዳ 07"
-          },
-          {
-            "en": "Wereda 08",
-            "am": "ወረዳ 08"
-          },
-          {
-            "en": "Wereda 09",
-            "am": "ወረዳ 09"
-          },
-          {
-            "en": "Wereda 10",
-            "am": "ወረዳ 10"
-          },
-          {
-            "en": "Wereda 11",
-            "am": "ወረዳ 11"
-          }
-        ]
-      },
-      {
-        "zone": {
-          "en": "Kolfe Keraniyo Subcity",
-          "am": "ኮልፌ ቀራኒዮ ክፍለ ከተማ",
-          "raw_en": "Kolfe Keraniyo Subcity"
-        },
-        "woredas": [
-          {
-            "en": "Wereda 01",
-            "am": "ወረዳ 01"
-          },
-          {
-            "en": "Wereda 02",
-            "am": "ወረዳ 02"
-          },
-          {
-            "en": "Wereda 03",
-            "am": "ወረዳ 03"
-          },
-          {
-            "en": "Wereda 04",
-            "am": "ወረዳ 04"
-          },
-          {
-            "en": "Wereda 05",
-            "am": "ወረዳ 05"
-          },
-          {
-            "en": "Wereda 06",
-            "am": "ወረዳ 06"
-          },
-          {
-            "en": "Wereda 07",
-            "am": "ወረዳ 07"
-          },
-          {
-            "en": "Wereda 08",
-            "am": "ወረዳ 08"
-          },
-          {
-            "en": "Wereda 09",
-            "am": "ወረዳ 09"
-          },
-          {
-            "en": "Wereda 10",
-            "am": "ወረዳ 10"
-          },
-          {
-            "en": "Wereda 11",
-            "am": "ወረዳ 11"
-          }
-        ]
-      },
-      {
-        "zone": {
-          "en": "Lemi kura sub city",
-          "am": "ለሚ ኩራ ክፍለ ከተማ",
-          "raw_en": "Lemi kura sub city"
-        },
-        "woredas": [
-          {
-            "en": "Wereda 02",
-            "am": "ወረዳ 02"
-          },
-          {
-            "en": "Wereda 03",
-            "am": "ወረዳ 03"
-          },
-          {
-            "en": "Wereda 04",
-            "am": "ወረዳ 04"
-          },
-          {
-            "en": "Wereda 05",
-            "am": "ወረዳ 05"
-          },
-          {
-            "en": "Wereda 06",
-            "am": "ወረዳ 06"
-          },
-          {
-            "en": "Wereda 08",
-            "am": "ወረዳ 08"
-          },
-          {
-            "en": "Wereda 09",
-            "am": "ወረዳ 09"
-          },
-          {
-            "en": "Wereda 10",
-            "am": "ወረዳ 10"
-          },
-          {
-            "en": "Wereda 13",
-            "am": "ወረዳ 13"
-          },
-          {
-            "en": "Wereda 14",
-            "am": "ወረዳ 14"
-          }
-        ]
-      },
-      {
-        "zone": {
-          "en": "Lideta",
-          "am": "ልደታ ክፍለ ከተማ",
-          "raw_en": "Lideta"
-        },
-        "woredas": [
-          {
-            "en": "Wereda 01",
-            "am": "ወረዳ 01"
-          },
-          {
-            "en": "Wereda 02",
-            "am": "ወረዳ 02"
-          },
-          {
-            "en": "Wereda 03",
-            "am": "ወረዳ 03"
-          },
-          {
-            "en": "Wereda 04",
-            "am": "ወረዳ 04"
-          },
-          {
-            "en": "Wereda 05",
-            "am": "ወረዳ 05"
-          },
-          {
-            "en": "Wereda 06",
-            "am": "ወረዳ 06"
-          },
-          {
-            "en": "Wereda 07",
-            "am": "ወረዳ 07"
-          },
-          {
-            "en": "Wereda 08",
-            "am": "ወረዳ 08"
-          },
-          {
-            "en": "Wereda 09",
-            "am": "ወረዳ 09"
-          },
-          {
-            "en": "Wereda 10",
-            "am": "ወረዳ 10"
-          }
-        ]
-      },
-      {
-        "zone": {
-          "en": "Nifas Slik Lafto Subcity",
-          "am": "ንፋስ ስልክ ላፍቶ ክፍለ ከተማ",
-          "raw_en": "Nifas Slik Lafto Subcity"
-        },
-        "woredas": [
-          {
-            "en": "Wereda 01",
-            "am": "ወረዳ 01"
-          },
-          {
-            "en": "Wereda 02",
-            "am": "ወረዳ 02"
-          },
-          {
-            "en": "Wereda 05",
-            "am": "ወረዳ 05"
-          },
-          {
-            "en": "Wereda 06",
-            "am": "ወረዳ 06"
-          },
-          {
-            "en": "Wereda 07",
-            "am": "ወረዳ 07"
-          },
-          {
-            "en": "Wereda 08",
-            "am": "ወረዳ 08"
-          },
-          {
-            "en": "Wereda 09",
-            "am": "ወረዳ 09"
-          },
-          {
-            "en": "Wereda 10",
-            "am": "ወረዳ 10"
-          },
-          {
-            "en": "Wereda 11",
-            "am": "ወረዳ 11"
-          },
-          {
-            "en": "Wereda 12",
-            "am": "ወረዳ 12"
-          },
-          {
-            "en": "Wereda 13",
-            "am": "ወረዳ 13"
-          },
-          {
-            "en": "Wereda 15",
-            "am": "ወረዳ 15"
-          }
-        ]
-      },
-      {
-        "zone": {
-          "en": "Yeka Subcity",
-          "am": "የካ ክፍለ ከተማ",
-          "raw_en": "Yeka Subcity"
-        },
-        "woredas": [
-          {
-            "en": "Wereda 01",
-            "am": "ወረዳ 01"
-          },
-          {
-            "en": "Wereda 02",
-            "am": "ወረዳ 02"
-          },
-          {
-            "en": "Wereda 03",
-            "am": "ወረዳ 03"
-          },
-          {
-            "en": "Wereda 04",
-            "am": "ወረዳ 04"
-          },
-          {
-            "en": "Wereda 05",
-            "am": "ወረዳ 05"
-          },
-          {
-            "en": "Wereda 06",
-            "am": "ወረዳ 06"
-          },
-          {
-            "en": "Wereda 07",
-            "am": "ወረዳ 07"
-          },
-          {
-            "en": "Wereda 08",
-            "am": "ወረዳ 08"
-          },
-          {
-            "en": "Wereda 09",
-            "am": "ወረዳ 09"
-          },
-          {
-            "en": "Wereda 10",
-            "am": "ወረዳ 10"
-          },
-          {
-            "en": "Wereda 11",
-            "am": "ወረዳ 11"
-          },
-          {
-            "en": "Wereda 12",
-            "am": "ወረዳ 12"
-          }
-        ]
-      },
-      {
-        "zone": {
-          "en": "Lemi Kura Subcity",
-          "am": "ለሚ ኩራ ክፍለ ከተማ",
-          "raw_en": "Lemi Kura"
-        },
-        "woredas": [
-          {
-            "en": "Wereda 01",
-            "am": "ወረዳ 01"
-          },
-          {
-            "en": "Wereda 02",
-            "am": "ወረዳ 02"
-          },
-          {
-            "en": "Wereda 03",
-            "am": "ወረዳ 03"
-          },
-          {
-            "en": "Wereda 04",
-            "am": "ወረዳ 04"
-          },
-          {
-            "en": "Wereda 05",
-            "am": "ወረዳ 05"
-          },
-          {
-            "en": "Wereda 06",
-            "am": "ወረዳ 06"
-          },
-          {
-            "en": "Wereda 07",
-            "am": "ወረዳ 07"
-          },
-          {
-            "en": "Wereda 08",
-            "am": "ወረዳ 08"
-          },
-          {
-            "en": "Wereda 09",
-            "am": "ወረዳ 09"
-          },
-          {
-            "en": "Wereda 10",
-            "am": "ወረዳ 10"
-          }
+        "aliases": [
+          "Yeka Subcity"
         ]
       }
-    ]
+    }
   },
-  {
-    "region": {
-      "en": "Afar",
-      "am": "አፋር ክልል"
-    },
-    "zones": [
-      {
-        "zone": {
-          "en": "Zone 1 (Awsiresu)",
-          "am": "ዞን 1 (አውሲ ረሱ)",
-          "raw_en": "Zone_1(Awsiresu)"
+  "Afar": {
+    "am": "አፋር ክልል",
+    "zones": {
+      "Zone 1": {
+        "am": "ዞን 1 (አውሲ ረሱ)",
+        "woredas": {
+          "Adear": "አዳር",
+          "Afambo": "አፋምቦ",
+          "Aysaita Ketema Astedader": "አሳይታ ከተማ",
+          "Aysayita": "አሳይታ",
+          "Chifra": "ጭፍራ",
+          "Dubti": "ዱብቲ",
+          "Dubti Ketema Astedader": "ዱብቲ ከተማ",
+          "Elidar": "ኤሊዳር",
+          "Geyreni": "ገይረኒ",
+          "Kori": "ኮሪ",
+          "Mile": "ሚሌ"
         },
-        "woredas": [
-          {
-            "en": "Adear",
-            "am": "አዳር"
-          },
-          {
-            "en": "Afambo",
-            "am": "አፋምቦ"
-          },
-          {
-            "en": "Aysaita Ketema Astedader",
-            "am": "አሳይታ ከተማ"
-          },
-          {
-            "en": "Aysayita",
-            "am": "አሳይታ"
-          },
-          {
-            "en": "Chifra",
-            "am": "ጭፍራ"
-          },
-          {
-            "en": "Dubti",
-            "am": "ዱብቲ"
-          },
-          {
-            "en": "Dubti Ketema Astedader",
-            "am": "ዱብቲ ከተማ"
-          },
-          {
-            "en": "Elidar",
-            "am": "ኤሊዳር"
-          },
-          {
-            "en": "Geyreni",
-            "am": "ገይረኒ"
-          },
-          {
-            "en": "Kori",
-            "am": "ኮሪ"
-          },
-          {
-            "en": "Mile",
-            "am": "ሚሌ"
-          }
+        "aliases": [
+          "Zone_1(Awsiresu)"
         ]
       },
-      {
-        "zone": {
-          "en": "Zone 2 (Kelbetiresu)",
-          "am": "ዞን 2 (ክልበቲ ረሱ)",
-          "raw_en": "Zone_2 (Kelbetiresu)"
+      "Zone 2 (Kelbetiresu)": {
+        "am": "ዞን 2 (ክልበቲ ረሱ)",
+        "woredas": {
+          "Abala Ketema Astedader": "አባላ ከተማ",
+          "Abeala": "አባላ",
+          "Afdera": "አፍዴራ",
+          "Berehale": "በርሃሌ",
+          "Bidu": "ቢዱ",
+          "Dalol": "ዳሎል",
+          "Erebti": "እረብቲ",
+          "Kuneba": "ኩነባ",
+          "Megale": "መጋሌ"
         },
-        "woredas": [
-          {
-            "en": "Abala Ketema Astedader",
-            "am": "አባላ ከተማ"
-          },
-          {
-            "en": "Abeala",
-            "am": "አባላ"
-          },
-          {
-            "en": "Afdera",
-            "am": "አፍዴራ"
-          },
-          {
-            "en": "Berehale",
-            "am": "በርሃሌ"
-          },
-          {
-            "en": "Bidu",
-            "am": "ቢዱ"
-          },
-          {
-            "en": "Dalol",
-            "am": "ዳሎል"
-          },
-          {
-            "en": "Erebti",
-            "am": "እረብቲ"
-          },
-          {
-            "en": "Kuneba",
-            "am": "ኩነባ"
-          },
-          {
-            "en": "Megale",
-            "am": "መጋሌ"
-          }
+        "aliases": [
+          "Zone_2 (Kelbetiresu)"
         ]
       },
-      {
-        "zone": {
-          "en": "Zone 3 (Gebiresu)",
-          "am": "ዞን 3 (ገቢ ረሱ)",
-          "raw_en": "Zone_3 (Gebiresu)"
+      "Zone 3 (Gebiresu)": {
+        "am": "ዞን 3 (ገቢ ረሱ)",
+        "woredas": {
+          "Amibara": "አሚባራ",
+          "Argoba Liyu": "አርጎባ ልዩ ወረዳ",
+          "Awash Fentale": "አዋሽ ፈንታሌ",
+          "Awash Ketema Astedader": "አዋሽ ከተማ",
+          "Dulesa": "ዱለቻ",
+          "Gelalo": "ገላሎ",
+          "Gewane": "ገዋኔ"
         },
-        "woredas": [
-          {
-            "en": "Amibara",
-            "am": "አሚባራ"
-          },
-          {
-            "en": "Argoba Liyu",
-            "am": "አርጎባ ልዩ ወረዳ"
-          },
-          {
-            "en": "Awash Fentale",
-            "am": "አዋሽ ፈንታሌ"
-          },
-          {
-            "en": "Awash Ketema Astedader",
-            "am": "አዋሽ ከተማ"
-          },
-          {
-            "en": "Dulesa",
-            "am": "ዱለቻ"
-          },
-          {
-            "en": "Gelalo",
-            "am": "ገላሎ"
-          },
-          {
-            "en": "Gewane",
-            "am": "ገዋኔ"
-          }
+        "aliases": [
+          "Zone_3 (Gebiresu)"
         ]
       },
-      {
-        "zone": {
-          "en": "Zone 4 (Fentiresu)",
-          "am": "ዞን 4 (ፈንቲ ረሱ)",
-          "raw_en": "Zone_4 (Fentiresu)"
+      "Zone 4 (Fentiresu)": {
+        "am": "ዞን 4 (ፈንቲ ረሱ)",
+        "woredas": {
+          "Awra": "አውራ",
+          "Ewa": "ኢዋ",
+          "Golina": "ጎሊና",
+          "Teru": "ተሩ",
+          "Yalo": "ያሎ"
         },
-        "woredas": [
-          {
-            "en": "Awra",
-            "am": "አውራ"
-          },
-          {
-            "en": "Ewa",
-            "am": "ኢዋ"
-          },
-          {
-            "en": "Golina",
-            "am": "ጎሊና"
-          },
-          {
-            "en": "Teru",
-            "am": "ተሩ"
-          },
-          {
-            "en": "Yalo",
-            "am": "ያሎ"
-          }
+        "aliases": [
+          "Zone_4 (Fentiresu)"
         ]
       },
-      {
-        "zone": {
-          "en": "Zone 5 (Hari Resu)",
-          "am": "ዞን 5 (ሃሪ ረሱ)",
-          "raw_en": "Zone_5 (Hari Resu)"
+      "Zone 5 (Hari Resu)": {
+        "am": "ዞን 5 (ሃሪ ረሱ)",
+        "woredas": {
+          "Dalifage": "ዳሊፋጌ",
+          "Dewe": "ደዌ",
+          "Hadele'ela": "ሃደሌኤላ",
+          "Semurobi": "ሰሙሮቢ",
+          "Telalak": "ተላላክ"
         },
-        "woredas": [
-          {
-            "en": "Dalifage",
-            "am": "ዳሊፋጌ"
-          },
-          {
-            "en": "Dewe",
-            "am": "ደዌ"
-          },
-          {
-            "en": "Hadele'ela",
-            "am": "ሃደሌኤላ"
-          },
-          {
-            "en": "Semurobi",
-            "am": "ሰሙሮቢ"
-          },
-          {
-            "en": "Telalak",
-            "am": "ተላላክ"
-          }
+        "aliases": [
+          "Zone_5 (Hari Resu)"
         ]
       },
-      {
-        "zone": {
-          "en": "Zone 6",
-          "am": "ዞን 6",
-          "raw_en": "Zone_6"
+      "Zone 6": {
+        "am": "ዞን 6",
+        "woredas": {
+          "Logia Semera": "ሎጊያ ሰመራ"
         },
-        "woredas": [
-          {
-            "en": "Logia Semera",
-            "am": "ሎጊያ ሰመራ"
-          }
+        "aliases": [
+          "Zone_6"
         ]
       }
-    ]
+    }
   },
-  {
-    "region": {
-      "en": "Amhara",
-      "am": "አማራ"
-    },
-    "zones": [
-      {
-        "zone": {
-          "en": "Awi",
-          "am": "አዊ",
-          "raw_en": "Awi"
+  "Amhara": {
+    "am": "አማራ",
+    "zones": {
+      "Awi": {
+        "am": "አዊ",
+        "woredas": {
+          "Ankesha Guagusa": "አንከሻ ጓጉሳ",
+          "Ayehu Guagusa": "አየሁ ጓጉሳ",
+          "Banja Shigudad": "ባንጃ ሽጉዳድ",
+          "Chagini": "ቻግኒ",
+          "Dangila": "ዳንግላ",
+          "Dangla Ketema Astedader": "ዳንግላ ከተማ",
+          "Enjibara Ketema Astedader": "እንጅባራ ከተማ",
+          "Fagita Lekoma": "ፋግታ ለኮማ",
+          "Guagusashekudad": "ጓጉሳ ሽኩዳድ",
+          "Guangua": "ጓጓ",
+          "Jawi": "ጃዊ",
+          "Zigem": "ዚገም"
+        }
+      },
+      "Bahir Dar Liyu": {
+        "am": "ባህር ዳር ልዩ ዞን",
+        "woredas": {
+          "Bahir Dar Ketema Zuria": "ባህር ዳር ከተማ ዙሪያ",
+          "Bahirdar Ketema /Geter/ and Tana Subcity": "ባህር ዳር ከተማ (ገጠር እና ጣና ክፍለ ከተማ)",
+          "Belay Zeleke": "በላይ ዘለቀ",
+          "Fasilo": "ፋሲሎ",
+          "Ginbot 20": "ግንቦት 20",
+          "Gishe Abay": "ግሼ አባይ",
+          "Hidar 11": "ህዳር 11"
         },
-        "woredas": [
-          {
-            "en": "Ankesha Guagusa",
-            "am": "አንከሻ ጓጉሳ"
-          },
-          {
-            "en": "Ayehu Guagusa",
-            "am": "አየሁ ጓጉሳ"
-          },
-          {
-            "en": "Banja Shigudad",
-            "am": "ባንጃ ሽጉዳድ"
-          },
-          {
-            "en": "Chagini",
-            "am": "ቻግኒ"
-          },
-          {
-            "en": "Dangila",
-            "am": "ዳንግላ"
-          },
-          {
-            "en": "Dangla Ketema Astedader",
-            "am": "ዳንግላ ከተማ"
-          },
-          {
-            "en": "Enjibara Ketema Astedader",
-            "am": "እንጅባራ ከተማ"
-          },
-          {
-            "en": "Fagita Lekoma",
-            "am": "ፋግታ ለኮማ"
-          },
-          {
-            "en": "Guagusashekudad",
-            "am": "ጓጉሳ ሽኩዳድ"
-          },
-          {
-            "en": "Guangua",
-            "am": "ጓጓ"
-          },
-          {
-            "en": "Jawi",
-            "am": "ጃዊ"
-          },
-          {
-            "en": "Zigem",
-            "am": "ዚገም"
-          }
+        "aliases": [
+          "Bahir Dar"
         ]
       },
-      {
-        "zone": {
-          "en": "Bahir Dar Liyu",
-          "am": "ባህር ዳር ልዩ ዞን",
-          "raw_en": "Bahir Dar Liyu"
-        },
-        "woredas": [
-          {
-            "en": "Bahir Dar Ketema Zuria",
-            "am": "ባህር ዳር ከተማ ዙሪያ"
-          },
-          {
-            "en": "Bahirdar Ketema /Geter/ and Tana Subcity",
-            "am": "ባህር ዳር ከተማ (ገጠር እና ጣና ክፍለ ከተማ)"
-          },
-          {
-            "en": "Belay Zeleke",
-            "am": "በላይ ዘለቀ"
-          },
-          {
-            "en": "Fasilo",
-            "am": "ፋሲሎ"
-          },
-          {
-            "en": "Ginbot 20",
-            "am": "ግንቦት 20"
-          },
-          {
-            "en": "Gishe Abay",
-            "am": "ግሼ አባይ"
-          },
-          {
-            "en": "Hidar 11",
-            "am": "ህዳር 11"
-          }
-        ]
+      "Debub Gonder": {
+        "am": "ደቡብ ጎንደር",
+        "woredas": {
+          "Addis Zemen": "አዲስ ዘመን",
+          "Andabet": "አንዳቤት",
+          "Debre Tabor": "ደብረ ታቦር",
+          "Dera": "ደራ",
+          "Ebinat": "እብናት",
+          "Estie": "እስቴ",
+          "Farta": "ፋርታ",
+          "Fogera": "ፎገራ",
+          "Guna Begie Midir": "ጉና ቤጌ ምድር",
+          "Lay Gayint": "ላይ ጋይንት",
+          "Libokemkem": "ሊቦ ከምከም",
+          "Mekane Eyesus": "መካነ ኢየሱስ",
+          "Meketewa": "መከተዋ",
+          "Nifas Mewcha": "ንፋስ መውጫ",
+          "Sedie Muja": "ሰዴ ሙጃ",
+          "Simada": "ስማዳ",
+          "Tachgayint": "ታች ጋይንት",
+          "Woreta": "ወረታ"
+        }
       },
-      {
-        "zone": {
-          "en": "Debub Gonder",
-          "am": "ደቡብ ጎንደር",
-          "raw_en": "Debub Gonder"
-        },
-        "woredas": [
-          {
-            "en": "Addis Zemen",
-            "am": "አዲስ ዘመን"
-          },
-          {
-            "en": "Andabet",
-            "am": "አንዳቤት"
-          },
-          {
-            "en": "Debre Tabor",
-            "am": "ደብረ ታቦር"
-          },
-          {
-            "en": "Dera",
-            "am": "ደራ"
-          },
-          {
-            "en": "Ebinat",
-            "am": "እብናት"
-          },
-          {
-            "en": "Estie",
-            "am": "እስቴ"
-          },
-          {
-            "en": "Farta",
-            "am": "ፋርታ"
-          },
-          {
-            "en": "Fogera",
-            "am": "ፎገራ"
-          },
-          {
-            "en": "Guna Begie Midir",
-            "am": "ጉና ቤጌ ምድር"
-          },
-          {
-            "en": "Lay Gayint",
-            "am": "ላይ ጋይንት"
-          },
-          {
-            "en": "Libokemkem",
-            "am": "ሊቦ ከምከም"
-          },
-          {
-            "en": "Mekane Eyesus",
-            "am": "መካነ ኢየሱስ"
-          },
-          {
-            "en": "Meketewa",
-            "am": "መከተዋ"
-          },
-          {
-            "en": "Nifas Mewcha",
-            "am": "ንፋስ መውጫ"
-          },
-          {
-            "en": "Sedie Muja",
-            "am": "ሰዴ ሙጃ"
-          },
-          {
-            "en": "Simada",
-            "am": "ስማዳ"
-          },
-          {
-            "en": "Tachgayint",
-            "am": "ታች ጋይንት"
-          },
-          {
-            "en": "Woreta",
-            "am": "ወረታ"
-          }
-        ]
+      "Debub Wello": {
+        "am": "ደቡብ ወሎ",
+        "woredas": {
+          "Albuko": "አልብኮ",
+          "Ambasel": "አምባሰል",
+          "Argoba Liyu": "አርጎባ ልዩ",
+          "Borena": "ቦረና",
+          "Delanta": "ደላንታ",
+          "Dessie Zuriya": "ደሴ ዙሪያ",
+          "Haik": "ሐይቅ",
+          "Jama": "ጃማ",
+          "Kalu": "ቃሉ",
+          "Kelala": "ከላላ",
+          "Kombolcha Ketema Astedader": "ኮምቦልቻ ከተማ",
+          "Kutaber": "ኩታበር",
+          "Legambo": "ለጋምቦ",
+          "Legehida": "ለገሂዳ",
+          "Mehal Sayint": "መሃል ሳይንት",
+          "Mekane Selam Ketema Astedader": "መካነ ሰላም ከተማ",
+          "Mekdela": "መቅደላ",
+          "Saynt Adjibar": "ሳይንት አጅባር",
+          "Tehuledere": "ተሁለደሬ",
+          "Teneta": "ተንታ",
+          "Werebabo": "ወረባቦ",
+          "Wereilu": "ወረኢሉ",
+          "Wereilu Ketema Astedader": "ወረኢሉ ከተማ",
+          "Wogdie": "ወግዲ"
+        }
       },
-      {
-        "zone": {
-          "en": "Debub Wello",
-          "am": "ደቡብ ወሎ",
-          "raw_en": "Debub Wello"
-        },
-        "woredas": [
-          {
-            "en": "Albuko",
-            "am": "አልብኮ"
-          },
-          {
-            "en": "Ambasel",
-            "am": "አምባሰል"
-          },
-          {
-            "en": "Argoba Liyu",
-            "am": "አርጎባ ልዩ"
-          },
-          {
-            "en": "Borena",
-            "am": "ቦረና"
-          },
-          {
-            "en": "Delanta",
-            "am": "ደላንታ"
-          },
-          {
-            "en": "Dessie Zuriya",
-            "am": "ደሴ ዙሪያ"
-          },
-          {
-            "en": "Haik",
-            "am": "ሐይቅ"
-          },
-          {
-            "en": "Jama",
-            "am": "ጃማ"
-          },
-          {
-            "en": "Kalu",
-            "am": "ቃሉ"
-          },
-          {
-            "en": "Kelala",
-            "am": "ከላላ"
-          },
-          {
-            "en": "Kombolcha Ketema Astedader",
-            "am": "ኮምቦልቻ ከተማ"
-          },
-          {
-            "en": "Kutaber",
-            "am": "ኩታበር"
-          },
-          {
-            "en": "Legambo",
-            "am": "ለጋምቦ"
-          },
-          {
-            "en": "Legehida",
-            "am": "ለገሂዳ"
-          },
-          {
-            "en": "Mehal Sayint",
-            "am": "መሃል ሳይንት"
-          },
-          {
-            "en": "Mekane Selam Ketema Astedader",
-            "am": "መካነ ሰላም ከተማ"
-          },
-          {
-            "en": "Mekdela",
-            "am": "መቅደላ"
-          },
-          {
-            "en": "Saynt Adjibar",
-            "am": "ሳይንት አጅባር"
-          },
-          {
-            "en": "Tehuledere",
-            "am": "ተሁለደሬ"
-          },
-          {
-            "en": "Teneta",
-            "am": "ተንታ"
-          },
-          {
-            "en": "Werebabo",
-            "am": "ወረባቦ"
-          },
-          {
-            "en": "Wereilu",
-            "am": "ወረኢሉ"
-          },
-          {
-            "en": "Wereilu Ketema Astedader",
-            "am": "ወረኢሉ ከተማ"
-          },
-          {
-            "en": "Wogdie",
-            "am": "ወግዲ"
-          }
-        ]
+      "Gondar Ketema Liyu Zone": {
+        "am": "ጎንደር ከተማ ልዩ ዞን",
+        "woredas": {
+          "Arada": "አራዳ",
+          "Azezo Tseda": "አዘዞ ጠዳ",
+          "Fasil": "ፋሲል",
+          "Gondar Ketama /Geter/ and Zobel Subcity": "ጎንደር ከተማ (ገጠር እና ዞበል ክፍለ ከተማ)",
+          "Jantekel": "ጃንተከል",
+          "Maraki": "ማራኪ"
+        }
       },
-      {
-        "zone": {
-          "en": "Gondar Ketema Liyu Zone",
-          "am": "ጎንደር ከተማ ልዩ ዞን",
-          "raw_en": "Gondar Ketema Liyu Zone"
-        },
-        "woredas": [
-          {
-            "en": "Arada",
-            "am": "አራዳ"
-          },
-          {
-            "en": "Azezo Tseda",
-            "am": "አዘዞ ጠዳ"
-          },
-          {
-            "en": "Fasil",
-            "am": "ፋሲል"
-          },
-          {
-            "en": "Gondar Ketama /Geter/ and Zobel Subcity",
-            "am": "ጎንደር ከተማ (ገጠር እና ዞበል ክፍለ ከተማ)"
-          },
-          {
-            "en": "Jantekel",
-            "am": "ጃንተከል"
-          },
-          {
-            "en": "Maraki",
-            "am": "ማራኪ"
-          }
-        ]
+      "Misrak Gojjam": {
+        "am": "ምስራቅ ጎጃም",
+        "woredas": {
+          "Aneded": "አነደድ",
+          "Awabel": "አዋበል",
+          "Baso Liben": "ባሶ ሊበን",
+          "Bibugn": "ቢቡኝ",
+          "Bichena Ketema Astedader": "ቢቸና ከተማ",
+          "Debay Tilat Gin": "ደባይ ጥላጥ ግን",
+          "Debre Elias": "ደብረ ኤልያስ",
+          "Debre Markos": "ደብረ ማርቆስ",
+          "Dejen": "ደጀን",
+          "Dejen Ketema Astedader": "ደጀን ከተማ",
+          "Enarji Ena Enawuga": "እነርጅ እና እናውጋ",
+          "Enebsie Sar Midir": "እነብሰ ሳር ምድር",
+          "Enemay": "እነማይ",
+          "Goncha Siso Enese": "ጎንቻ ሲሶ እነሴ",
+          "Gozamen": "ጎዛመን",
+          "Hulet Eju Enese": "ሁለት እጁ እነሴ",
+          "Machakel": "ማጫከል",
+          "Mota Ketema Astedader": "ሞጣ ከተማ",
+          "Sede": "ሰደ",
+          "Shebel Berenta": "ሸበል በረንታ",
+          "Sinan": "ሲናን"
+        }
       },
-      {
-        "zone": {
-          "en": "Misrak Gojjam",
-          "am": "ምስራቅ ጎጃም",
-          "raw_en": "Misrak Gojjam"
+      "Semen Shewa (Amhara)": {
+        "am": "ሰሜን ሸዋ (አማራ)",
+        "woredas": {
+          "Alemketema Town Adminstration": "ዓለም ከተማ",
+          "Angolelanatera": "አንጎለላና ተራ",
+          "Ankober": "አንኮበር",
+          "Antsokia Gemza": "አንፆኪያ ገምዛ",
+          "Arerti Town Administration": "አረርቲ ከተማ",
+          "Asagrt": "አሳግርት",
+          "Ataye Town Administration": "አጣዬ ከተማ",
+          "Basso Ena Werena": "ባሶና ወረና",
+          "Berehet": "በረኸት",
+          "Bulga Town Administration": "ቡልጋ ከተማ",
+          "Debre Birhan": "ደብረ ብርሃን",
+          "Debre sina Town Adminstration": "ደብረ ሲና ከተማ",
+          "Eenewari Town Adminstration": "እነዋሪ ከተማ",
+          "Efratana Gidim": "ኤፍራታና ግድም",
+          "Ensaro": "እንሳሮ",
+          "Geshe": "ገሼ",
+          "Hagere Maryam Kesem": "ሐገረ ማርያም ከሰም",
+          "Kewot": "ቀወት",
+          "Mehalmeda": "መሃል ሜዳ",
+          "Menz Gera Midere": "መንዝ ጌራ ምድር",
+          "Menz Keya Gebrael": "መንዝ ቀያ ገብርኤል",
+          "Menz Mama Midir": "መንዝ ማማ ምድር",
+          "Menzlalo": "መንዝ ላሎ",
+          "Merehabetie": "መርሃቤቴ",
+          "Mida Woremo": "ሚዳ ወረሞ",
+          "Minjar Shonkora": "ምንጃር ሸንኮራ",
+          "Mojana Wedera": "ሞጃና ወደራ",
+          "Molale Town Administration": "ሞላሌ ከተማ",
+          "Moretna Jiru": "ሞረትና ጅሩ",
+          "Saya Debirna Wayu": "ሳያ ደብርና ዋዩ",
+          "Shewarobit Town Administration": "ሸዋሮቢት ከተማ",
+          "Tarmaber": "ጣርማበር"
         },
-        "woredas": [
-          {
-            "en": "Aneded",
-            "am": "አነደድ"
-          },
-          {
-            "en": "Awabel",
-            "am": "አዋበል"
-          },
-          {
-            "en": "Baso Liben",
-            "am": "ባሶ ሊበን"
-          },
-          {
-            "en": "Bibugn",
-            "am": "ቢቡኝ"
-          },
-          {
-            "en": "Bichena Ketema Astedader",
-            "am": "ቢቸና ከተማ"
-          },
-          {
-            "en": "Debay Tilat Gin",
-            "am": "ደባይ ጥላጥ ግን"
-          },
-          {
-            "en": "Debre Elias",
-            "am": "ደብረ ኤልያስ"
-          },
-          {
-            "en": "Debre Markos",
-            "am": "ደብረ ማርቆስ"
-          },
-          {
-            "en": "Dejen",
-            "am": "ደጀን"
-          },
-          {
-            "en": "Dejen Ketema Astedader",
-            "am": "ደጀን ከተማ"
-          },
-          {
-            "en": "Enarji Ena Enawuga",
-            "am": "እነርጅ እና እናውጋ"
-          },
-          {
-            "en": "Enebsie Sar Midir",
-            "am": "እነብሰ ሳር ምድር"
-          },
-          {
-            "en": "Enemay",
-            "am": "እነማይ"
-          },
-          {
-            "en": "Goncha Siso Enese",
-            "am": "ጎንቻ ሲሶ እነሴ"
-          },
-          {
-            "en": "Gozamen",
-            "am": "ጎዛመን"
-          },
-          {
-            "en": "Hulet Eju Enese",
-            "am": "ሁለት እጁ እነሴ"
-          },
-          {
-            "en": "Machakel",
-            "am": "ማጫከል"
-          },
-          {
-            "en": "Mota Ketema Astedader",
-            "am": "ሞጣ ከተማ"
-          },
-          {
-            "en": "Sede",
-            "am": "ሰደ"
-          },
-          {
-            "en": "Shebel Berenta",
-            "am": "ሸበል በረንታ"
-          },
-          {
-            "en": "Sinan",
-            "am": "ሲናን"
-          }
-        ]
-      },
-      {
-        "zone": {
-          "en": "Semen Shewa (Amhara)",
-          "am": "ሰሜን ሸዋ (አማራ)",
-          "raw_en": "Semen Shewa"
-        },
-        "woredas": [
-          {
-            "en": "Alemketema Town Adminstration",
-            "am": "ዓለም ከተማ"
-          },
-          {
-            "en": "Angolelanatera",
-            "am": "አንጎለላና ተራ"
-          },
-          {
-            "en": "Ankober",
-            "am": "አንኮበር"
-          },
-          {
-            "en": "Antsokia Gemza",
-            "am": "አንፆኪያ ገምዛ"
-          },
-          {
-            "en": "Arerti Town Administration",
-            "am": "አረርቲ ከተማ"
-          },
-          {
-            "en": "Asagrt",
-            "am": "አሳግርት"
-          },
-          {
-            "en": "Ataye Town Administration",
-            "am": "አጣዬ ከተማ"
-          },
-          {
-            "en": "Basso Ena Werena",
-            "am": "ባሶና ወረና"
-          },
-          {
-            "en": "Berehet",
-            "am": "በረኸት"
-          },
-          {
-            "en": "Bulga Town Administration",
-            "am": "ቡልጋ ከተማ"
-          },
-          {
-            "en": "Debre Birhan",
-            "am": "ደብረ ብርሃን"
-          },
-          {
-            "en": "Debre sina Town Adminstration",
-            "am": "ደብረ ሲና ከተማ"
-          },
-          {
-            "en": "Eenewari Town Adminstration",
-            "am": "እነዋሪ ከተማ"
-          },
-          {
-            "en": "Efratana Gidim",
-            "am": "ኤፍራታና ግድም"
-          },
-          {
-            "en": "Ensaro",
-            "am": "እንሳሮ"
-          },
-          {
-            "en": "Geshe",
-            "am": "ገሼ"
-          },
-          {
-            "en": "Hagere Maryam Kesem",
-            "am": "ሐገረ ማርያም ከሰም"
-          },
-          {
-            "en": "Kewot",
-            "am": "ቀወት"
-          },
-          {
-            "en": "Mehalmeda",
-            "am": "መሃል ሜዳ"
-          },
-          {
-            "en": "Menz Gera Midere",
-            "am": "መንዝ ጌራ ምድር"
-          },
-          {
-            "en": "Menz Keya Gebrael",
-            "am": "መንዝ ቀያ ገብርኤል"
-          },
-          {
-            "en": "Menz Mama Midir",
-            "am": "መንዝ ማማ ምድር"
-          },
-          {
-            "en": "Menzlalo",
-            "am": "መንዝ ላሎ"
-          },
-          {
-            "en": "Merehabetie",
-            "am": "መርሃቤቴ"
-          },
-          {
-            "en": "Mida Woremo",
-            "am": "ሚዳ ወረሞ"
-          },
-          {
-            "en": "Minjar Shonkora",
-            "am": "ምንጃር ሸንኮራ"
-          },
-          {
-            "en": "Mojana Wedera",
-            "am": "ሞጃና ወደራ"
-          },
-          {
-            "en": "Molale Town Administration",
-            "am": "ሞላሌ ከተማ"
-          },
-          {
-            "en": "Moretna Jiru",
-            "am": "ሞረትና ጅሩ"
-          },
-          {
-            "en": "Saya Debirna Wayu",
-            "am": "ሳያ ደብርና ዋዩ"
-          },
-          {
-            "en": "Shewarobit Town Administration",
-            "am": "ሸዋሮቢት ከተማ"
-          },
-          {
-            "en": "Tarmaber",
-            "am": "ጣርማበር"
-          }
+        "aliases": [
+          "Semen Shewa"
         ]
       }
-    ]
+    }
   },
-  {
-    "region": {
-      "en": "Oromia",
-      "am": "ኦሮሚያ"
-    },
-    "zones": [
-      {
-        "zone": {
-          "en": "Adama Liyu Zone",
-          "am": "አዳማ ልዩ ዞን",
-          "raw_en": "Adama Liyu Zone"
-        },
-        "woredas": [
-          {
-            "en": "Aba Geda",
-            "am": "አባ ገዳ"
-          },
-          {
-            "en": "Bale",
-            "am": "ባሌ"
-          },
-          {
-            "en": "Boku",
-            "am": "ቦኩ"
-          },
-          {
-            "en": "Denibel",
-            "am": "ደኒበል"
-          },
-          {
-            "en": "Dibe",
-            "am": "ዲቤ"
-          },
-          {
-            "en": "Logo",
-            "am": "ሎጎ"
-          }
-        ]
+  "Oromia": {
+    "am": "ኦሮሚያ",
+    "zones": {
+      "Adama Liyu Zone": {
+        "am": "አዳማ ልዩ ዞን",
+        "woredas": {
+          "Aba Geda": "አባ ገዳ",
+          "Bale": "ባሌ",
+          "Boku": "ቦኩ",
+          "Denibel": "ደኒበል",
+          "Dibe": "ዲቤ",
+          "Logo": "ሎጎ"
+        }
       },
-      {
-        "zone": {
-          "en": "Arsi",
-          "am": "አርሲ",
-          "raw_en": "Arsi"
-        },
-        "woredas": [
-          {
-            "en": "Amigna",
-            "am": "አሚኛ"
-          },
-          {
-            "en": "Aseko",
-            "am": "አሴኮ"
-          },
-          {
-            "en": "Bekoji City Admin",
-            "am": "በቀጂ ከተማ"
-          },
-          {
-            "en": "Bele Gesigar",
-            "am": "በሌ ገሲጋር"
-          },
-          {
-            "en": "Chole",
-            "am": "ጮሌ"
-          },
-          {
-            "en": "Digalu Na Tijo",
-            "am": "ዲጋሉና ቲጆ"
-          },
-          {
-            "en": "Diksis",
-            "am": "ዲክሲስ"
-          },
-          {
-            "en": "Dodota",
-            "am": "ዶዶታ"
-          },
-          {
-            "en": "Gololcha",
-            "am": "ጎሎልቻ"
-          },
-          {
-            "en": "Guna",
-            "am": "ጉና"
-          },
-          {
-            "en": "Hitosa",
-            "am": "ሂጦሳ"
-          },
-          {
-            "en": "Honkolo Wabe",
-            "am": "ሆንቆሎ ዋቤ"
-          },
-          {
-            "en": "Jeju",
-            "am": "ጄጁ"
-          },
-          {
-            "en": "Lemu Na Bilbilo",
-            "am": "ለሙና ቢልቢሎ"
-          },
-          {
-            "en": "Lodehitosa",
-            "am": "ሎዴ ሂጦሳ"
-          },
-          {
-            "en": "Merti",
-            "am": "መርቲ"
-          },
-          {
-            "en": "Munesa",
-            "am": "ሙኔሳ"
-          },
-          {
-            "en": "Robe",
-            "am": "ሮቤ"
-          },
-          {
-            "en": "Seru",
-            "am": "ሰሩ"
-          },
-          {
-            "en": "Shanen Kolu",
-            "am": "ሻነን ኮሉ"
-          },
-          {
-            "en": "Shirka",
-            "am": "ሽርካ"
-          },
-          {
-            "en": "Sire",
-            "am": "ሲሬ"
-          },
-          {
-            "en": "Sude",
-            "am": "ሱዴ"
-          },
-          {
-            "en": "Tena",
-            "am": "ጤና"
-          },
-          {
-            "en": "Tiyo",
-            "am": "ቲዮ"
-          },
-          {
-            "en": "Zewaydugda",
-            "am": "ዝዋይ ዱግዳ"
-          }
-        ]
+      "Arsi": {
+        "am": "አርሲ",
+        "woredas": {
+          "Amigna": "አሚኛ",
+          "Aseko": "አሴኮ",
+          "Bekoji City Admin": "በቀጂ ከተማ",
+          "Bele Gesigar": "በሌ ገሲጋር",
+          "Chole": "ጮሌ",
+          "Digalu Na Tijo": "ዲጋሉና ቲጆ",
+          "Diksis": "ዲክሲስ",
+          "Dodota": "ዶዶታ",
+          "Gololcha": "ጎሎልቻ",
+          "Guna": "ጉና",
+          "Hitosa": "ሂጦሳ",
+          "Honkolo Wabe": "ሆንቆሎ ዋቤ",
+          "Jeju": "ጄጁ",
+          "Lemu Na Bilbilo": "ለሙና ቢልቢሎ",
+          "Lodehitosa": "ሎዴ ሂጦሳ",
+          "Merti": "መርቲ",
+          "Munesa": "ሙኔሳ",
+          "Robe": "ሮቤ",
+          "Seru": "ሰሩ",
+          "Shanen Kolu": "ሻነን ኮሉ",
+          "Shirka": "ሽርካ",
+          "Sire": "ሲሬ",
+          "Sude": "ሱዴ",
+          "Tena": "ጤና",
+          "Tiyo": "ቲዮ",
+          "Zewaydugda": "ዝዋይ ዱግዳ"
+        }
       },
-      {
-        "zone": {
-          "en": "Bishoftu",
-          "am": "ቢሾፍቱ",
-          "raw_en": "Bishoftu"
-        },
-        "woredas": [
-          {
-            "en": "Abusera",
-            "am": "አቡሰራ"
-          },
-          {
-            "en": "Arsede",
-            "am": "አርሴዴ"
-          },
-          {
-            "en": "Biftu",
-            "am": "ቢፍቱ"
-          },
-          {
-            "en": "Deka Bora",
-            "am": "ደካ ቦራ"
-          },
-          {
-            "en": "Dire",
-            "am": "ዲሬ"
-          },
-          {
-            "en": "Erere",
-            "am": "ኤረር"
-          },
-          {
-            "en": "Hora",
-            "am": "ሆራ"
-          },
-          {
-            "en": "Kilole",
-            "am": "ኪሎሌ"
-          },
-          {
-            "en": "Melka",
-            "am": "መልካ"
-          },
-          {
-            "en": "Oda Nebe",
-            "am": "ኦዳ ነቤ"
-          },
-          {
-            "en": "Tedecha",
-            "am": "ተደቻ"
-          }
-        ]
+      "Bishoftu": {
+        "am": "ቢሾፍቱ",
+        "woredas": {
+          "Abusera": "አቡሰራ",
+          "Arsede": "አርሴዴ",
+          "Biftu": "ቢፍቱ",
+          "Deka Bora": "ደካ ቦራ",
+          "Dire": "ዲሬ",
+          "Erere": "ኤረር",
+          "Hora": "ሆራ",
+          "Kilole": "ኪሎሌ",
+          "Melka": "መልካ",
+          "Oda Nebe": "ኦዳ ነቤ",
+          "Tedecha": "ተደቻ"
+        }
       },
-      {
-        "zone": {
-          "en": "Jimma",
-          "am": "ጅማ",
-          "raw_en": "Jimma"
-        },
-        "woredas": [
-          {
-            "en": "Agaro",
-            "am": "አጋሮ ከተማ"
-          },
-          {
-            "en": "Boter Tolay",
-            "am": "ቦተር ቶላይ"
-          },
-          {
-            "en": "Cora Botar",
-            "am": "ጮራ ቦተር"
-          },
-          {
-            "en": "Dedo",
-            "am": "ዴዶ"
-          },
-          {
-            "en": "Gera",
-            "am": "ጌራ"
-          },
-          {
-            "en": "Gomma",
-            "am": "ጎማ"
-          },
-          {
-            "en": "Gumay",
-            "am": "ጉማይ"
-          },
-          {
-            "en": "Kersa",
-            "am": "ከርሳ"
-          },
-          {
-            "en": "Limu Kosa",
-            "am": "ሊሙ ኮሳ"
-          },
-          {
-            "en": "Limu Seka",
-            "am": "ሊሙ ሰቃ"
-          },
-          {
-            "en": "Mana",
-            "am": "ማና"
-          },
-          {
-            "en": "Mencho",
-            "am": "መንቾ"
-          },
-          {
-            "en": "Nono Benja",
-            "am": "ኖኖ በንጃ"
-          },
-          {
-            "en": "Omo Beyam",
-            "am": "ኦሞ በያም"
-          },
-          {
-            "en": "Omo Nada",
-            "am": "ኦሞ ናዳ"
-          },
-          {
-            "en": "Seka Chekorsa",
-            "am": "ሰቃ ጨኮርሳ"
-          },
-          {
-            "en": "Setema",
-            "am": "ሰቴማ"
-          },
-          {
-            "en": "Shebe Sonbo",
-            "am": "ሸቤ ሶንቦ"
-          },
-          {
-            "en": "Sigimo",
-            "am": "ሲጊሞ"
-          },
-          {
-            "en": "Sokoru",
-            "am": "ሶቆሩ"
-          },
-          {
-            "en": "Tiroafeta",
-            "am": "ጥሮ አፌታ"
-          }
-        ]
+      "Jimma": {
+        "am": "ጅማ",
+        "woredas": {
+          "Agaro": "አጋሮ ከተማ",
+          "Boter Tolay": "ቦተር ቶላይ",
+          "Cora Botar": "ጮራ ቦተር",
+          "Dedo": "ዴዶ",
+          "Gera": "ጌራ",
+          "Gomma": "ጎማ",
+          "Gumay": "ጉማይ",
+          "Kersa": "ከርሳ",
+          "Limu Kosa": "ሊሙ ኮሳ",
+          "Limu Seka": "ሊሙ ሰቃ",
+          "Mana": "ማና",
+          "Mencho": "መንቾ",
+          "Nono Benja": "ኖኖ በንጃ",
+          "Omo Beyam": "ኦሞ በያም",
+          "Omo Nada": "ኦሞ ናዳ",
+          "Seka Chekorsa": "ሰቃ ጨኮርሳ",
+          "Setema": "ሰቴማ",
+          "Shebe Sonbo": "ሸቤ ሶንቦ",
+          "Sigimo": "ሲጊሞ",
+          "Sokoru": "ሶቆሩ",
+          "Tiroafeta": "ጥሮ አፌታ"
+        }
       },
-      {
-        "zone": {
-          "en": "Sheger",
-          "am": "ሸገር ከተማ",
-          "raw_en": "Sheger"
-        },
-        "woredas": [
-          {
-            "en": "Abbaa Gadaa",
-            "am": "አባ ገዳ"
-          },
-          {
-            "en": "Akako",
-            "am": "አቃቂ"
-          },
-          {
-            "en": "Andode",
-            "am": "አንዶዴ"
-          },
-          {
-            "en": "Anne Dima",
-            "am": "አኔ ዲማ"
-          },
-          {
-            "en": "Bero",
-            "am": "ቤሮ"
-          },
-          {
-            "en": "Caffe",
-            "am": "ጨፌ"
-          },
-          {
-            "en": "Chefe Karabu",
-            "am": "ጨፌ ቀራቡ"
-          },
-          {
-            "en": "Dalleti",
-            "am": "ዳሌቲ"
-          },
-          {
-            "en": "Denbel Tafo",
-            "am": "ደንበል ጣፎ"
-          },
-          {
-            "en": "Dire Sekoru",
-            "am": "ዲሬ ሰቆሩ"
-          },
-          {
-            "en": "Eco Abeba Limat",
-            "am": "ኢኮ አበበ ልማት"
-          },
-          {
-            "en": "Egdu",
-            "am": "እግዱ"
-          },
-          {
-            "en": "Ejersa Goro",
-            "am": "እጀርሳ ጎሮ"
-          },
-          {
-            "en": "Eka Saden",
-            "am": "እቃ ሰደን"
-          },
-          {
-            "en": "Geda Faji",
-            "am": "ገዳ ፋጂ"
-          },
-          {
-            "en": "Gefersa Burayu",
-            "am": "ገፈርሳ ቡራዩ"
-          },
-          {
-            "en": "Gelan",
-            "am": "ገላን"
-          },
-          {
-            "en": "Guddu",
-            "am": "ጉዱ"
-          },
-          {
-            "en": "Guje",
-            "am": "ጉጄ"
-          },
-          {
-            "en": "Katta",
-            "am": "ካታ"
-          },
-          {
-            "en": "Kolobo",
-            "am": "ኮሎቦ"
-          },
-          {
-            "en": "Kura Jida",
-            "am": "ኩራ ጂዳ"
-          },
-          {
-            "en": "Lege Dadi Dale",
-            "am": "ለገ ዳዲ ዳሌ"
-          },
-          {
-            "en": "Lekule Geja",
-            "am": "ለኩሌ ገጃ"
-          },
-          {
-            "en": "Malka Gafarsa",
-            "am": "መልካ ገፈርሳ"
-          },
-          {
-            "en": "Metta",
-            "am": "ሜታ"
-          },
-          {
-            "en": "Mogle",
-            "am": "ሞግሌ"
-          },
-          {
-            "en": "Muda Furi",
-            "am": "ሙዳ ፉሪ"
-          },
-          {
-            "en": "Nonno",
-            "am": "ኖኖ"
-          },
-          {
-            "en": "Salam Abeba Limat",
-            "am": "ሰላም አበበ ልማት"
-          },
-          {
-            "en": "Sida Awash",
-            "am": "ሲዳ አዋሽ"
-          },
-          {
-            "en": "Tele Ababa Limat",
-            "am": "ቴሌ አበበ ልማት"
-          },
-          {
-            "en": "Tufa Muna",
-            "am": "ቱፋ ሙና"
-          },
-          {
-            "en": "Tulu Dimtu",
-            "am": "ቱሉ ዲምቱ"
-          },
-          {
-            "en": "Wasarbi",
-            "am": "ዋሰርቢ"
-          },
-          {
-            "en": "Wedassa",
-            "am": "ወዳሳ"
-          },
-          {
-            "en": "Welgaho Legaberi",
-            "am": "ወልጋሆ ለገበሪ"
-          }
-        ]
+      "Sheger": {
+        "am": "ሸገር ከተማ",
+        "woredas": {
+          "Abbaa Gadaa": "አባ ገዳ",
+          "Akako": "አቃቂ",
+          "Andode": "አንዶዴ",
+          "Anne Dima": "አኔ ዲማ",
+          "Bero": "ቤሮ",
+          "Caffe": "ጨፌ",
+          "Chefe Karabu": "ጨፌ ቀራቡ",
+          "Dalleti": "ዳሌቲ",
+          "Denbel Tafo": "ደንበል ጣፎ",
+          "Dire Sekoru": "ዲሬ ሰቆሩ",
+          "Eco Abeba Limat": "ኢኮ አበበ ልማት",
+          "Egdu": "እግዱ",
+          "Ejersa Goro": "እጀርሳ ጎሮ",
+          "Eka Saden": "እቃ ሰደን",
+          "Geda Faji": "ገዳ ፋጂ",
+          "Gefersa Burayu": "ገፈርሳ ቡራዩ",
+          "Gelan": "ገላን",
+          "Guddu": "ጉዱ",
+          "Guje": "ጉጄ",
+          "Katta": "ካታ",
+          "Kolobo": "ኮሎቦ",
+          "Kura Jida": "ኩራ ጂዳ",
+          "Lege Dadi Dale": "ለገ ዳዲ ዳሌ",
+          "Lekule Geja": "ለኩሌ ገጃ",
+          "Malka Gafarsa": "መልካ ገፈርሳ",
+          "Metta": "ሜታ",
+          "Mogle": "ሞግሌ",
+          "Muda Furi": "ሙዳ ፉሪ",
+          "Nonno": "ኖኖ",
+          "Salam Abeba Limat": "ሰላም አበበ ልማት",
+          "Sida Awash": "ሲዳ አዋሽ",
+          "Tele Ababa Limat": "ቴሌ አበበ ልማት",
+          "Tufa Muna": "ቱፋ ሙና",
+          "Tulu Dimtu": "ቱሉ ዲምቱ",
+          "Wasarbi": "ዋሰርቢ",
+          "Wedassa": "ወዳሳ",
+          "Welgaho Legaberi": "ወልጋሆ ለገበሪ"
+        }
       }
-    ]
+    }
   },
-  {
-    "region": {
-      "en": "Benishangul Gumuz",
-      "am": "ቤኒሻንጉል ጉሙዝ ክልል"
-    },
-    "zones": [
-      {
-        "zone": {
-          "en": "Assosa",
-          "am": "አሶሳ ዞን",
-          "raw_en": "Assosa"
-        },
-        "woredas": [
-          {
-            "en": "Assosa",
-            "am": "አሶሳ"
-          },
-          {
-            "en": "Bambasi",
-            "am": "ባምባሲ"
-          },
-          {
-            "en": "Homosha",
-            "am": "ሆሞሻ"
-          },
-          {
-            "en": "Kurmuk",
-            "am": "ኩርሙክ"
-          },
-          {
-            "en": "Menge",
-            "am": "መንጌ"
-          },
-          {
-            "en": "Odda Buldgilu",
-            "am": "ኦዳ ቡልድግሉ"
-          },
-          {
-            "en": "Sherqole",
-            "am": "ሸርቆሌ"
-          },
-          {
-            "en": "Woreda And",
-            "am": "ወረዳ አንድ"
-          },
-          {
-            "en": "Woreda Hulet",
-            "am": "ወረዳ ሁለት"
-          }
-        ]
+  "Benishangul Gumuz": {
+    "am": "ቤኒሻንጉል ጉሙዝ ክልል",
+    "zones": {
+      "Assosa": {
+        "am": "አሶሳ ዞን",
+        "woredas": {
+          "Assosa": "አሶሳ",
+          "Bambasi": "ባምባሲ",
+          "Homosha": "ሆሞሻ",
+          "Kurmuk": "ኩርሙክ",
+          "Menge": "መንጌ",
+          "Odda Buldgilu": "ኦዳ ቡልድግሉ",
+          "Sherqole": "ሸርቆሌ",
+          "Woreda And": "ወረዳ አንድ",
+          "Woreda Hulet": "ወረዳ ሁለት"
+        }
       },
-      {
-        "zone": {
-          "en": "Kemashi",
-          "am": "ከማሺ ዞን",
-          "raw_en": "Kemashi"
-        },
-        "woredas": [
-          {
-            "en": "Agalo Meti",
-            "am": "አጋሎ ሜቲ"
-          },
-          {
-            "en": "Bello Jiganfoy",
-            "am": "ቤሎ ጂጋንፎይ"
-          },
-          {
-            "en": "Kemashi",
-            "am": "ከማሺ"
-          },
-          {
-            "en": "Sedal",
-            "am": "ሰዳል"
-          },
-          {
-            "en": "Yasso",
-            "am": "ያሶ"
-          }
-        ]
+      "Kemashi": {
+        "am": "ከማሺ ዞን",
+        "woredas": {
+          "Agalo Meti": "አጋሎ ሜቲ",
+          "Bello Jiganfoy": "ቤሎ ጂጋንፎይ",
+          "Kemashi": "ከማሺ",
+          "Sedal": "ሰዳል",
+          "Yasso": "ያሶ"
+        }
       },
-      {
-        "zone": {
-          "en": "Mao Ena Komo",
-          "am": "ማኦ እና ኮሞ ልዩ ወረዳ",
-          "raw_en": "Mao Ena Komo"
-        },
-        "woredas": [
-          {
-            "en": "Mao Ena Komo",
-            "am": "ማኦ እና ኮሞ"
-          }
-        ]
+      "Mao Ena Komo": {
+        "am": "ማኦ እና ኮሞ ልዩ ወረዳ",
+        "woredas": {
+          "Mao Ena Komo": "ማኦ እና ኮሞ"
+        }
       },
-      {
-        "zone": {
-          "en": "Metekel",
-          "am": "መተከል ዞን",
-          "raw_en": "Metekel"
-        },
-        "woredas": [
-          {
-            "en": "Bulen",
-            "am": "ቡለን"
-          },
-          {
-            "en": "Dangur",
-            "am": "ዳንጉር"
-          },
-          {
-            "en": "Debate",
-            "am": "ድባጤ"
-          },
-          {
-            "en": "Guba",
-            "am": "ጉባ"
-          },
-          {
-            "en": "Mandura",
-            "am": "ማንዱራ"
-          },
-          {
-            "en": "Pawe",
-            "am": "ፓዌ"
-          },
-          {
-            "en": "Wombera",
-            "am": "ወንበራ"
-          }
-        ]
+      "Metekel": {
+        "am": "መተከል ዞን",
+        "woredas": {
+          "Bulen": "ቡለን",
+          "Dangur": "ዳንጉር",
+          "Debate": "ድባጤ",
+          "Guba": "ጉባ",
+          "Mandura": "ማንዱራ",
+          "Pawe": "ፓዌ",
+          "Wombera": "ወንበራ"
+        }
       }
-    ]
+    }
   },
-  {
-    "region": {
-      "en": "Central Ethiopia",
-      "am": "ማዕከላዊ ኢትዮጵያ ክልል"
-    },
-    "zones": [
-      {
-        "zone": {
-          "en": "Gurage",
-          "am": "ጉራጌ ዞን",
-          "raw_en": "Gurage"
-        },
-        "woredas": [
-          {
-            "en": "Abashige",
-            "am": "አባሽጌ"
-          },
-          {
-            "en": "Agena Ketema Astedader",
-            "am": "አገና ከተማ"
-          },
-          {
-            "en": "Arekit Ketema Astedader",
-            "am": "አረኪት ከተማ"
-          },
-          {
-            "en": "Cheha",
-            "am": "ቸሃ"
-          },
-          {
-            "en": "Emdiber Ketema Astedader",
-            "am": "እምድብር ከተማ"
-          },
-          {
-            "en": "Endegagn",
-            "am": "እንደጋኝ"
-          },
-          {
-            "en": "Enor",
-            "am": "እነኖር"
-          },
-          {
-            "en": "Enor Ener Mager",
-            "am": "እነኖር እነር ማገር"
-          },
-          {
-            "en": "Ezha",
-            "am": "እዣ"
-          },
-          {
-            "en": "Gedebano Gutazar Welene",
-            "am": "ገደባኖ ጉታዘር ወለኔ"
-          },
-          {
-            "en": "Geta",
-            "am": "ጌታ"
-          },
-          {
-            "en": "Gumer",
-            "am": "ጉመር"
-          },
-          {
-            "en": "Gunchire Ketema Astedader",
-            "am": "ጉንችሬ ከተማ"
-          },
-          {
-            "en": "Mihur Ena Aklil",
-            "am": "ምሁር እና አክሊል"
-          },
-          {
-            "en": "Wolkite Ketema Astedader",
-            "am": "ወልቂጤ ከተማ"
-          }
-        ]
+  "Central Ethiopia": {
+    "am": "ማዕከላዊ ኢትዮጵያ ክልል",
+    "zones": {
+      "Gurage": {
+        "am": "ጉራጌ ዞን",
+        "woredas": {
+          "Abashige": "አባሽጌ",
+          "Agena Ketema Astedader": "አገና ከተማ",
+          "Arekit Ketema Astedader": "አረኪት ከተማ",
+          "Cheha": "ቸሃ",
+          "Emdiber Ketema Astedader": "እምድብር ከተማ",
+          "Endegagn": "እንደጋኝ",
+          "Enor": "እነኖር",
+          "Enor Ener Mager": "እነኖር እነር ማገር",
+          "Ezha": "እዣ",
+          "Gedebano Gutazar Welene": "ገደባኖ ጉታዘር ወለኔ",
+          "Geta": "ጌታ",
+          "Gumer": "ጉመር",
+          "Gunchire Ketema Astedader": "ጉንችሬ ከተማ",
+          "Mihur Ena Aklil": "ምሁር እና አክሊል",
+          "Wolkite Ketema Astedader": "ወልቂጤ ከተማ"
+        }
       },
-      {
-        "zone": {
-          "en": "Hadiya",
-          "am": "ሀዲያ ዞን",
-          "raw_en": "Hadiya"
-        },
-        "woredas": [
-          {
-            "en": "Ameka",
-            "am": "አመካ"
-          },
-          {
-            "en": "Analemmo",
-            "am": "አናሌሞ"
-          },
-          {
-            "en": "Bonosha Town Administration",
-            "am": "ቦኖሻ ከተማ"
-          },
-          {
-            "en": "Duna",
-            "am": "ዱና"
-          },
-          {
-            "en": "Fonko Town Administration",
-            "am": "ፎንቆ ከተማ"
-          },
-          {
-            "en": "Gembora",
-            "am": "ገምቦራ"
-          },
-          {
-            "en": "Gibe",
-            "am": "ጊቤ"
-          },
-          {
-            "en": "Gimbichu Ketema Astedader",
-            "am": "ግምቢቹ ከተማ"
-          },
-          {
-            "en": "Homecho Town Adminstration",
-            "am": "ሆመቾ ከተማ"
-          },
-          {
-            "en": "Hosana",
-            "am": "ሆሳዕና"
-          },
-          {
-            "en": "Jajura Ketema Astedader",
-            "am": "ጃጁራ ከተማ"
-          },
-          {
-            "en": "Limu",
-            "am": "ሊሙ"
-          },
-          {
-            "en": "Merab Badawacho",
-            "am": "ምዕራብ ባዳዋቾ"
-          },
-          {
-            "en": "Mirab Soro",
-            "am": "ምዕራብ ሶሮ"
-          },
-          {
-            "en": "Misha",
-            "am": "ሚሻ"
-          },
-          {
-            "en": "Misrak Badowoch",
-            "am": "ምስራቅ ባዳዋቾ"
-          },
-          {
-            "en": "Shashego",
-            "am": "ሻሸጎ"
-          },
-          {
-            "en": "Shone City Admin",
-            "am": "ሾኔ ከተማ"
-          },
-          {
-            "en": "Siraro Badowoch",
-            "am": "ሲራሮ ባዳዋቾ"
-          },
-          {
-            "en": "Soro",
-            "am": "ሶሮ"
-          }
-        ]
+      "Hadiya": {
+        "am": "ሀዲያ ዞን",
+        "woredas": {
+          "Ameka": "አመካ",
+          "Analemmo": "አናሌሞ",
+          "Bonosha Town Administration": "ቦኖሻ ከተማ",
+          "Duna": "ዱና",
+          "Fonko Town Administration": "ፎንቆ ከተማ",
+          "Gembora": "ገምቦራ",
+          "Gibe": "ጊቤ",
+          "Gimbichu Ketema Astedader": "ግምቢቹ ከተማ",
+          "Homecho Town Adminstration": "ሆመቾ ከተማ",
+          "Hosana": "ሆሳዕና",
+          "Jajura Ketema Astedader": "ጃጁራ ከተማ",
+          "Limu": "ሊሙ",
+          "Merab Badawacho": "ምዕራብ ባዳዋቾ",
+          "Mirab Soro": "ምዕራብ ሶሮ",
+          "Misha": "ሚሻ",
+          "Misrak Badowoch": "ምስራቅ ባዳዋቾ",
+          "Shashego": "ሻሸጎ",
+          "Shone City Admin": "ሾኔ ከተማ",
+          "Siraro Badowoch": "ሲራሮ ባዳዋቾ",
+          "Soro": "ሶሮ"
+        }
       },
-      {
-        "zone": {
-          "en": "Halaba",
-          "am": "ሀላባ ዞን",
-          "raw_en": "Halaba"
-        },
-        "woredas": [
-          {
-            "en": "Atoti Ulo",
-            "am": "አቶቲ ኡሎ"
-          },
-          {
-            "en": "Halaba Ketema Astedader",
-            "am": "ሀላባ ከተማ"
-          },
-          {
-            "en": "Wera",
-            "am": "ወራ"
-          },
-          {
-            "en": "Wera Dijo",
-            "am": "ወራ ዲጆ"
-          }
-        ]
+      "Halaba": {
+        "am": "ሀላባ ዞን",
+        "woredas": {
+          "Atoti Ulo": "አቶቲ ኡሎ",
+          "Halaba Ketema Astedader": "ሀላባ ከተማ",
+          "Wera": "ወራ",
+          "Wera Dijo": "ወራ ዲጆ"
+        }
       },
-      {
-        "zone": {
-          "en": "Kabena Liyu",
-          "am": "ቀቤና ልዩ ወረዳ",
-          "raw_en": "Kabena Liyu"
-        },
-        "woredas": [
-          {
-            "en": "Kabena Liyu",
-            "am": "ቀቤና ልዩ ወረዳ"
-          }
-        ]
+      "Kabena Liyu": {
+        "am": "ቀቤና ልዩ ወረዳ",
+        "woredas": {
+          "Kabena Liyu": "ቀቤና ልዩ ወረዳ"
+        }
       },
-      {
-        "zone": {
-          "en": "Kembata",
-          "am": "ከምባታ ዞን",
-          "raw_en": "Kembata"
-        },
-        "woredas": [
-          {
-            "en": "Adiloo Zuriya",
-            "am": "አዲሎ ዙሪያ"
-          },
-          {
-            "en": "Angecha",
-            "am": "አንገጫ"
-          },
-          {
-            "en": "Angecha Ketema Astedader",
-            "am": "አንገጫ ከተማ"
-          },
-          {
-            "en": "Damboya",
-            "am": "ደምቦያ"
-          },
-          {
-            "en": "Damboya Keteme Astededar",
-            "am": "ደምቦያ ከተማ"
-          },
-          {
-            "en": "Doyogena",
-            "am": "ዶዮገነ"
-          },
-          {
-            "en": "Durame Keteme Astedader",
-            "am": "ዱራሜ ከተማ"
-          },
-          {
-            "en": "Hadaro Ketema Astidadar",
-            "am": "ሀዳሮ ከተማ"
-          },
-          {
-            "en": "Hadaro Tunto",
-            "am": "ሀዳሮ ቱንቶ"
-          },
-          {
-            "en": "Kachabira",
-            "am": "ካቻቢራ"
-          },
-          {
-            "en": "Kedida Gamella",
-            "am": "ቀዲዳ ጋሜላ"
-          },
-          {
-            "en": "Shinshicho Ketema Astedader",
-            "am": "ሽንሺቾ ከተማ"
-          }
-        ]
+      "Kembata": {
+        "am": "ከምባታ ዞን",
+        "woredas": {
+          "Adiloo Zuriya": "አዲሎ ዙሪያ",
+          "Angecha": "አንገጫ",
+          "Angecha Ketema Astedader": "አንገጫ ከተማ",
+          "Damboya": "ደምቦያ",
+          "Damboya Keteme Astededar": "ደምቦያ ከተማ",
+          "Doyogena": "ዶዮገነ",
+          "Durame Keteme Astedader": "ዱራሜ ከተማ",
+          "Hadaro Ketema Astidadar": "ሀዳሮ ከተማ",
+          "Hadaro Tunto": "ሀዳሮ ቱንቶ",
+          "Kachabira": "ካቻቢራ",
+          "Kedida Gamella": "ቀዲዳ ጋሜላ",
+          "Shinshicho Ketema Astedader": "ሽንሺቾ ከተማ"
+        }
       },
-      {
-        "zone": {
-          "en": "Mareko Liyu",
-          "am": "ማረቆ ልዩ ወረዳ",
-          "raw_en": "Mareko Liyu"
-        },
-        "woredas": [
-          {
-            "en": "Mareko Liyu",
-            "am": "ማረቆ ልዩ ወረዳ"
-          }
-        ]
+      "Mareko Liyu": {
+        "am": "ማረቆ ልዩ ወረዳ",
+        "woredas": {
+          "Mareko Liyu": "ማረቆ ልዩ ወረዳ"
+        }
       },
-      {
-        "zone": {
-          "en": "Misrak Gurage",
-          "am": "ምስራቅ ጉራጌ ዞን",
-          "raw_en": "Misrak Gurage"
-        },
-        "woredas": [
-          {
-            "en": "Bui Ketema Astedader",
-            "am": "ቡኢ ከተማ"
-          },
-          {
-            "en": "Butajira Ketema Astedader",
-            "am": "ቡታጅራ ከተማ"
-          },
-          {
-            "en": "Debub Sodo",
-            "am": "ደቡብ ሶዶ"
-          },
-          {
-            "en": "Enseno Ketema Astedader",
-            "am": "እንሰኖ ከተማ"
-          },
-          {
-            "en": "Meskan",
-            "am": "መስካን"
-          },
-          {
-            "en": "Misrak Meskan",
-            "am": "ምስራቅ መስካን"
-          },
-          {
-            "en": "Sodo",
-            "am": "ሶዶ"
-          }
-        ]
+      "Misrak Gurage": {
+        "am": "ምስራቅ ጉራጌ ዞን",
+        "woredas": {
+          "Bui Ketema Astedader": "ቡኢ ከተማ",
+          "Butajira Ketema Astedader": "ቡታጅራ ከተማ",
+          "Debub Sodo": "ደቡብ ሶዶ",
+          "Enseno Ketema Astedader": "እንሰኖ ከተማ",
+          "Meskan": "መስካን",
+          "Misrak Meskan": "ምስራቅ መስካን",
+          "Sodo": "ሶዶ"
+        }
       },
-      {
-        "zone": {
-          "en": "Silte",
-          "am": "ስልጤ ዞን",
-          "raw_en": "Silte"
-        },
-        "woredas": [
-          {
-            "en": "Alem Gebeya Ketema Astedader",
-            "am": "ዓለም ገበያ ከተማ"
-          },
-          {
-            "en": "Alicho Wiriro",
-            "am": "አሊቾ ውሪሮ"
-          },
-          {
-            "en": "Dalocha",
-            "am": "ዳሎቻ"
-          },
-          {
-            "en": "Dalocha Ketema Astedader",
-            "am": "ዳሎቻ ከተማ"
-          },
-          {
-            "en": "Hulbareg",
-            "am": "ሁልባረግ"
-          },
-          {
-            "en": "Kibet Ketema Astedader",
-            "am": "ኪበት ከተማ"
-          },
-          {
-            "en": "Lanfuro",
-            "am": "ላንፉሮ"
-          },
-          {
-            "en": "Mirab Azernet Berbere",
-            "am": "ምዕራብ አዘርነት በርበሬ"
-          },
-          {
-            "en": "Misrak Azernet Berbere",
-            "am": "ምስራቅ አዘርነት በርበሬ"
-          },
-          {
-            "en": "Misrak Silte",
-            "am": "ምስራቅ ስልጤ"
-          },
-          {
-            "en": "Mito",
-            "am": "ሚቶ"
-          },
-          {
-            "en": "Sankura",
-            "am": "ሳንኩራ"
-          },
-          {
-            "en": "Silte",
-            "am": "ስልጤ"
-          },
-          {
-            "en": "Tora Ketema Astedader",
-            "am": "ቶራ ከተማ"
-          },
-          {
-            "en": "Worabe Ketema Astedader",
-            "am": "ወራቤ ከተማ"
-          }
-        ]
+      "Silte": {
+        "am": "ስልጤ ዞን",
+        "woredas": {
+          "Alem Gebeya Ketema Astedader": "ዓለም ገበያ ከተማ",
+          "Alicho Wiriro": "አሊቾ ውሪሮ",
+          "Dalocha": "ዳሎቻ",
+          "Dalocha Ketema Astedader": "ዳሎቻ ከተማ",
+          "Hulbareg": "ሁልባረግ",
+          "Kibet Ketema Astedader": "ኪበት ከተማ",
+          "Lanfuro": "ላንፉሮ",
+          "Mirab Azernet Berbere": "ምዕራብ አዘርነት በርበሬ",
+          "Misrak Azernet Berbere": "ምስራቅ አዘርነት በርበሬ",
+          "Misrak Silte": "ምስራቅ ስልጤ",
+          "Mito": "ሚቶ",
+          "Sankura": "ሳንኩራ",
+          "Silte": "ስልጤ",
+          "Tora Ketema Astedader": "ቶራ ከተማ",
+          "Worabe Ketema Astedader": "ወራቤ ከተማ"
+        }
       },
-      {
-        "zone": {
-          "en": "Tembaro Leyu",
-          "am": "ጠምባሮ ልዩ ወረዳ",
-          "raw_en": "Tembaro Leyu"
-        },
-        "woredas": [
-          {
-            "en": "Mudula Ketema Astedader",
-            "am": "ሙዱላ ከተማ"
-          },
-          {
-            "en": "Tembaro",
-            "am": "ጠምባሮ"
-          }
-        ]
+      "Tembaro Leyu": {
+        "am": "ጠምባሮ ልዩ ወረዳ",
+        "woredas": {
+          "Mudula Ketema Astedader": "ሙዱላ ከተማ",
+          "Tembaro": "ጠምባሮ"
+        }
       },
-      {
-        "zone": {
-          "en": "Yem",
-          "am": "የም ልዩ ወረዳ",
-          "raw_en": "Yem"
-        },
-        "woredas": [
-          {
-            "en": "Dori Saja",
-            "am": "ዶሪ ሳጃ"
-          },
-          {
-            "en": "Fofa",
-            "am": "ፎፋ"
-          },
-          {
-            "en": "Saja Ketama Astedader",
-            "am": "ሳጃ ከተማ"
-          },
-          {
-            "en": "Toba",
-            "am": "ቶባ"
-          }
-        ]
+      "Yem": {
+        "am": "የም ልዩ ወረዳ",
+        "woredas": {
+          "Dori Saja": "ዶሪ ሳጃ",
+          "Fofa": "ፎፋ",
+          "Saja Ketama Astedader": "ሳጃ ከተማ",
+          "Toba": "ቶባ"
+        }
       }
-    ]
+    }
   },
-  {
-    "region": {
-      "en": "Dire Dawa",
-      "am": "ድሬዳዋ ከተማ አስተዳደር"
-    },
-    "zones": [
-      {
-        "zone": {
-          "en": "Dire Dawa Astedadar",
-          "am": "ድሬዳዋ",
-          "raw_en": "Dire Dawa Astedadar"
-        },
-        "woredas": [
-          {
-            "en": "01 Woreda Astedadar",
-            "am": "ወረዳ 01"
-          },
-          {
-            "en": "02 Woreda Astedadar",
-            "am": "ወረዳ 02"
-          },
-          {
-            "en": "03 Woreda Astedadar",
-            "am": "ወረዳ 03"
-          },
-          {
-            "en": "04 Woreda Astedadar",
-            "am": "ወረዳ 04"
-          },
-          {
-            "en": "05 Woreda Astedadar",
-            "am": "ወረዳ 05"
-          },
-          {
-            "en": "06 Woreda Astedadar",
-            "am": "ወረዳ 06"
-          },
-          {
-            "en": "07 Woreda Astedadar",
-            "am": "ወረዳ 07"
-          },
-          {
-            "en": "08 Woreda Astedadar",
-            "am": "ወረዳ 08"
-          },
-          {
-            "en": "09 Woreda Astedadar",
-            "am": "ወረዳ 09"
-          },
-          {
-            "en": "Aseliso",
-            "am": "አሰሊሶ"
-          },
-          {
-            "en": "Biyo Awale",
-            "am": "ቢዮ አዋሌ"
-          },
-          {
-            "en": "Jaldesa/Kelad",
-            "am": "ጀልዴሳ/ቀላድ"
-          },
-          {
-            "en": "Wahil",
-            "am": "ዋሂል"
-          }
-        ]
+  "Dire Dawa": {
+    "am": "ድሬዳዋ ከተማ አስተዳደር",
+    "zones": {
+      "Dire Dawa Astedadar": {
+        "am": "ድሬዳዋ",
+        "woredas": {
+          "Woreda 01": "ወረዳ 01",
+          "Woreda 02": "ወረዳ 02",
+          "Woreda 03": "ወረዳ 03",
+          "Woreda 04": "ወረዳ 04",
+          "Woreda 05": "ወረዳ 05",
+          "Woreda 06": "ወረዳ 06",
+          "Woreda 07": "ወረዳ 07",
+          "Woreda 08": "ወረዳ 08",
+          "Woreda 09": "ወረዳ 09",
+          "Aseliso": "አሰሊሶ",
+          "Biyo Awale": "ቢዮ አዋሌ",
+          "Jaldesa/Kelad": "ጀልዴሳ/ቀላድ",
+          "Wahil": "ዋሂል"
+        }
       }
-    ]
+    }
   },
-  {
-    "region": {
-      "en": "Ethiopia Somali",
-      "am": "የኢትዮጵያ ሶማሌ ክልል"
-    },
-    "zones": [
-      {
-        "zone": {
-          "en": "Afder",
-          "am": "አፍዴር ዞን",
-          "raw_en": "Afder"
-        },
-        "woredas": [
-          {
-            "en": "Bare",
-            "am": "ባሬ"
-          },
-          {
-            "en": "Chereti",
-            "am": "ጨረቲ"
-          },
-          {
-            "en": "Dolo Bay",
-            "am": "ዶሎ ባይ"
-          },
-          {
-            "en": "Elkere",
-            "am": "ኤልከሬ"
-          },
-          {
-            "en": "Godgod",
-            "am": "ጎድጎድ"
-          },
-          {
-            "en": "Haregele",
-            "am": "ሀረገሌ"
-          },
-          {
-            "en": "Kohle",
-            "am": "ኮህሌ"
-          },
-          {
-            "en": "Mirab Emiy",
-            "am": "ምዕራብ እሚይ"
-          },
-          {
-            "en": "Raaso",
-            "am": "ራሶ"
-          }
-        ]
+  "Ethiopia Somali": {
+    "am": "የኢትዮጵያ ሶማሌ ክልል",
+    "zones": {
+      "Afder": {
+        "am": "አፍዴር ዞን",
+        "woredas": {
+          "Bare": "ባሬ",
+          "Chereti": "ጨረቲ",
+          "Dolo Bay": "ዶሎ ባይ",
+          "Elkere": "ኤልከሬ",
+          "Godgod": "ጎድጎድ",
+          "Haregele": "ሀረገሌ",
+          "Kohle": "ኮህሌ",
+          "Mirab Emiy": "ምዕራብ እሚይ",
+          "Raaso": "ራሶ"
+        }
       },
-      {
-        "zone": {
-          "en": "Dawa",
-          "am": "ዳዋ ዞን",
-          "raw_en": "Dawa"
-        },
-        "woredas": [
-          {
-            "en": "Hudet",
-            "am": "ሁዴት"
-          },
-          {
-            "en": "Kadaduma",
-            "am": "ቀዳዱማ"
-          },
-          {
-            "en": "Moyale",
-            "am": "ሞያሌ"
-          },
-          {
-            "en": "Mubarek",
-            "am": "ሙባረክ"
-          }
-        ]
+      "Dawa": {
+        "am": "ዳዋ ዞን",
+        "woredas": {
+          "Hudet": "ሁዴት",
+          "Kadaduma": "ቀዳዱማ",
+          "Moyale": "ሞያሌ",
+          "Mubarek": "ሙባረክ"
+        }
       },
-      {
-        "zone": {
-          "en": "Dollo",
-          "am": "ዶሎ ዞን",
-          "raw_en": "Dollo"
-        },
-        "woredas": [
-          {
-            "en": "Boh",
-            "am": "ቦህ"
-          },
-          {
-            "en": "Danot",
-            "am": "ዳኖት"
-          },
-          {
-            "en": "Daratole",
-            "am": "ዳራቶሌ"
-          },
-          {
-            "en": "Galladi",
-            "am": "ገላዲ"
-          },
-          {
-            "en": "Gelahemur",
-            "am": "ገላሃሙር"
-          },
-          {
-            "en": "Lehel Yuob",
-            "am": "ለሃል ዩኦብ"
-          },
-          {
-            "en": "Warder",
-            "am": "ዋርዴር"
-          },
-          {
-            "en": "Warder ketema astedader",
-            "am": "ዋርዴር ከተማ"
-          }
-        ]
+      "Dollo": {
+        "am": "ዶሎ ዞን",
+        "woredas": {
+          "Boh": "ቦህ",
+          "Danot": "ዳኖት",
+          "Daratole": "ዳራቶሌ",
+          "Galladi": "ገላዲ",
+          "Gelahemur": "ገላሃሙር",
+          "Lehel Yuob": "ለሃል ዩኦብ",
+          "Warder": "ዋርዴር",
+          "Warder ketema astedader": "ዋርዴር ከተማ"
+        }
       },
-      {
-        "zone": {
-          "en": "Erer",
-          "am": "ኤረር ዞን",
-          "raw_en": "Erer"
-        },
-        "woredas": [
-          {
-            "en": "Fiqi",
-            "am": "ፊቂ"
-          },
-          {
-            "en": "Hamero",
-            "am": "ሀመሮ"
-          },
-          {
-            "en": "Legahida",
-            "am": "ለገሂዳ"
-          },
-          {
-            "en": "Meyu Muliqe",
-            "am": "መዩ ሙሉቄ"
-          },
-          {
-            "en": "Qubi",
-            "am": "ቁቢ"
-          },
-          {
-            "en": "Selihad",
-            "am": "ሰሊሀድ"
-          },
-          {
-            "en": "Wangey",
-            "am": "ዋንጌይ"
-          },
-          {
-            "en": "Yohob",
-            "am": "ዮሆብ"
-          }
-        ]
+      "Erer": {
+        "am": "ኤረር ዞን",
+        "woredas": {
+          "Fiqi": "ፊቂ",
+          "Hamero": "ሀመሮ",
+          "Legahida": "ለገሂዳ",
+          "Meyu Muliqe": "መዩ ሙሉቄ",
+          "Qubi": "ቁቢ",
+          "Selihad": "ሰሊሀድ",
+          "Wangey": "ዋንጌይ",
+          "Yohob": "ዮሆብ"
+        }
       },
-      {
-        "zone": {
-          "en": "Fafan",
-          "am": "ፋፋን ዞን",
-          "raw_en": "Fafan"
-        },
-        "woredas": [
-          {
-            "en": "Awebera",
-            "am": "አውበሬ"
-          },
-          {
-            "en": "Babile",
-            "am": "ባቢሌ"
-          },
-          {
-            "en": "Debub Jigjiga",
-            "am": "ቦምባስ"
-          },
-          {
-            "en": "Golgeno",
-            "am": ""
-          },
-          {
-            "en": "Gursum",
-            "am": ""
-          },
-          {
-            "en": "Harewa",
-            "am": ""
-          },
-          {
-            "en": "Harores",
-            "am": ""
-          },
-          {
-            "en": "Harshin",
-            "am": "ሀርሺን"
-          },
-          {
-            "en": "Jijiga",
-            "am": "ጂጂጋ"
-          },
-          {
-            "en": "Qebribeyah",
-            "am": "ቀብሪበያህ"
-          },
-          {
-            "en": "Qoran Mula",
-            "am": "ቁራን ሙላ"
-          },
-          {
-            "en": "Togochale City Admenistration",
-            "am": "ቶጎጫሌ ከተማ"
-          },
-          {
-            "en": "Tulu Guled",
-            "am": "ቱሉ ጉሌድ"
-          }
-        ]
+      "Fafan": {
+        "am": "ፋፋን ዞን",
+        "woredas": {
+          "Awebera": "አውበሬ",
+          "Babile": "ባቢሌ",
+          "Debub Jigjiga": "ቦምባስ",
+          "Golgeno": "",
+          "Gursum": "",
+          "Harewa": "",
+          "Harores": "",
+          "Harshin": "ሀርሺን",
+          "Jijiga": "ጂጂጋ",
+          "Qebribeyah": "ቀብሪበያህ",
+          "Qoran Mula": "ቁራን ሙላ",
+          "Togochale City Admenistration": "ቶጎጫሌ ከተማ",
+          "Tulu Guled": "ቱሉ ጉሌድ"
+        }
       },
-      {
-        "zone": {
-          "en": "Jerer",
-          "am": "ጀረር ዞን",
-          "raw_en": "Jerer"
-        },
-        "woredas": [
-          {
-            "en": "Ararso",
-            "am": "አራርሶ"
-          },
-          {
-            "en": "Aware",
-            "am": "አዋሬ"
-          },
-          {
-            "en": "Bilebur",
-            "am": "ቢለቡር"
-          },
-          {
-            "en": "Buriqot",
-            "am": "ቡሪቆት"
-          },
-          {
-            "en": "Daror",
-            "am": "ዳሮር"
-          },
-          {
-            "en": "Degamedo",
-            "am": "ደጋመዶ"
-          },
-          {
-            "en": "Degehabur",
-            "am": "ደገሀቡር"
-          },
-          {
-            "en": "Degehabur City Admnistration",
-            "am": "ደገሀቡር ከተማ"
-          },
-          {
-            "en": "Dig",
-            "am": "ዲግ"
-          },
-          {
-            "en": "Gashamo",
-            "am": "ጋሻሞ"
-          },
-          {
-            "en": "Gunegedo",
-            "am": "ጉነገዶ"
-          },
-          {
-            "en": "Yoale",
-            "am": "ዮአሌ"
-          }
-        ]
+      "Jerer": {
+        "am": "ጀረር ዞን",
+        "woredas": {
+          "Ararso": "አራርሶ",
+          "Aware": "አዋሬ",
+          "Bilebur": "ቢለቡር",
+          "Buriqot": "ቡሪቆት",
+          "Daror": "ዳሮር",
+          "Degamedo": "ደጋመዶ",
+          "Degehabur": "ደገሀቡር",
+          "Degehabur City Admnistration": "ደገሀቡር ከተማ",
+          "Dig": "ዲግ",
+          "Gashamo": "ጋሻሞ",
+          "Gunegedo": "ጉነገዶ",
+          "Yoale": "ዮአሌ"
+        }
       },
-      {
-        "zone": {
-          "en": "Korahe",
-          "am": "ቆራሄ ዞን",
-          "raw_en": "Korahe"
-        },
-        "woredas": [
-          {
-            "en": "Bodelay",
-            "am": "ቦደላይ"
-          },
-          {
-            "en": "Debawayin",
-            "am": "ደባወይን"
-          },
-          {
-            "en": "El_ogaden",
-            "am": "ኤል ኦጋዴን"
-          },
-          {
-            "en": "Gogilo",
-            "am": "ጎጊሎ"
-          },
-          {
-            "en": "Higilola",
-            "am": "ሂጊሎላ"
-          },
-          {
-            "en": "Kebridehar",
-            "am": "ቀብሪደሃር"
-          },
-          {
-            "en": "Lasdenkere",
-            "am": "ላስደንከሬ"
-          },
-          {
-            "en": "Marsin",
-            "am": "ማርሲን"
-          },
-          {
-            "en": "Qebridahar Citiy Administration",
-            "am": "ቀብሪደሃር ከተማ"
-          },
-          {
-            "en": "Shakosh",
-            "am": "ሻቆሽ"
-          },
-          {
-            "en": "Shilabo",
-            "am": "ሽላቦ"
-          }
-        ]
+      "Korahe": {
+        "am": "ቆራሄ ዞን",
+        "woredas": {
+          "Bodelay": "ቦደላይ",
+          "Debawayin": "ደባወይን",
+          "El_ogaden": "ኤል ኦጋዴን",
+          "Gogilo": "ጎጊሎ",
+          "Higilola": "ሂጊሎላ",
+          "Kebridehar": "ቀብሪደሃር",
+          "Lasdenkere": "ላስደንከሬ",
+          "Marsin": "ማርሲን",
+          "Qebridahar Citiy Administration": "ቀብሪደሃር ከተማ",
+          "Shakosh": "ሻቆሽ",
+          "Shilabo": "ሽላቦ"
+        }
       },
-      {
-        "zone": {
-          "en": "Liben",
-          "am": "ሊበን ዞን",
-          "raw_en": "Liben"
-        },
-        "woredas": [
-          {
-            "en": "Bokolmayu",
-            "am": "ቦቆልማዩ"
-          },
-          {
-            "en": "Deka Softu",
-            "am": "ደካ ሶፍቱ"
-          },
-          {
-            "en": "Dolo Addo",
-            "am": "ዶሎ አዶ"
-          },
-          {
-            "en": "Filtu",
-            "am": "ፊልቱ"
-          },
-          {
-            "en": "Goro Bekeksa",
-            "am": "ጎሮ በከክሳ"
-          },
-          {
-            "en": "Gura Damole",
-            "am": "ጉራ ዳሞሌ"
-          },
-          {
-            "en": "Karssa Dula",
-            "am": "ካርሳ ዱላ"
-          }
-        ]
+      "Liben": {
+        "am": "ሊበን ዞን",
+        "woredas": {
+          "Bokolmayu": "ቦቆልማዩ",
+          "Deka Softu": "ደካ ሶፍቱ",
+          "Dolo Addo": "ዶሎ አዶ",
+          "Filtu": "ፊልቱ",
+          "Goro Bekeksa": "ጎሮ በከክሳ",
+          "Gura Damole": "ጉራ ዳሞሌ",
+          "Karssa Dula": "ካርሳ ዱላ"
+        }
       },
-      {
-        "zone": {
-          "en": "Nogob",
-          "am": "ኖጎብ ዞን",
-          "raw_en": "Nogob"
-        },
-        "woredas": [
-          {
-            "en": "Ayun",
-            "am": "አዩን"
-          },
-          {
-            "en": "Duhun",
-            "am": "ዱሁን"
-          },
-          {
-            "en": "Elweyne",
-            "am": "ኤልወይኔ"
-          },
-          {
-            "en": "Gerbo",
-            "am": "ገርቦ"
-          },
-          {
-            "en": "Hararey",
-            "am": "ሀራሬይ"
-          },
-          {
-            "en": "Haroshegah",
-            "am": "ሀሮሸጋህ"
-          },
-          {
-            "en": "Sagage",
-            "am": "ሳግ"
-          }
-        ]
+      "Nogob": {
+        "am": "ኖጎብ ዞን",
+        "woredas": {
+          "Ayun": "አዩን",
+          "Duhun": "ዱሁን",
+          "Elweyne": "ኤልወይኔ",
+          "Gerbo": "ገርቦ",
+          "Hararey": "ሀራሬይ",
+          "Haroshegah": "ሀሮሸጋህ",
+          "Sagage": "ሳግ"
+        }
       },
-      {
-        "zone": {
-          "en": "Shebele",
-          "am": "",
-          "raw_en": "Shebele"
-        },
-        "woredas": [
-          {
-            "en": "Abaqero",
-            "am": ""
-          },
-          {
-            "en": "Adadle",
-            "am": ""
-          },
-          {
-            "en": "Beerano",
-            "am": ""
-          },
-          {
-            "en": "Danan",
-            "am": ""
-          },
-          {
-            "en": "East Eme",
-            "am": ""
-          },
-          {
-            "en": "Elelle",
-            "am": ""
-          },
-          {
-            "en": "Ferfer",
-            "am": ""
-          },
-          {
-            "en": "Gode",
-            "am": ""
-          },
-          {
-            "en": "Gode Council",
-            "am": ""
-          },
-          {
-            "en": "Kelafo",
-            "am": ""
-          },
-          {
-            "en": "Mustahil",
-            "am": ""
-          }
-        ]
+      "Shebele": {
+        "am": "",
+        "woredas": {
+          "Abaqero": "",
+          "Adadle": "",
+          "Beerano": "",
+          "Danan": "",
+          "East Eme": "",
+          "Elelle": "",
+          "Ferfer": "",
+          "Gode": "",
+          "Gode Council": "",
+          "Kelafo": "",
+          "Mustahil": ""
+        }
       },
-      {
-        "zone": {
-          "en": "Siti",
-          "am": "",
-          "raw_en": "Siti"
-        },
-        "woredas": [
-          {
-            "en": "Afdem",
-            "am": ""
-          },
-          {
-            "en": "Aysha",
-            "am": ""
-          },
-          {
-            "en": "Dembel",
-            "am": ""
-          },
-          {
-            "en": "Erer",
-            "am": ""
-          },
-          {
-            "en": "Geblalu",
-            "am": ""
-          },
-          {
-            "en": "Gotabike",
-            "am": ""
-          },
-          {
-            "en": "Hadigala",
-            "am": ""
-          },
-          {
-            "en": "Me'Aso",
-            "am": ""
-          },
-          {
-            "en": "Shinile",
-            "am": ""
-          }
-        ]
+      "Siti": {
+        "am": "",
+        "woredas": {
+          "Afdem": "",
+          "Aysha": "",
+          "Dembel": "",
+          "Erer": "",
+          "Geblalu": "",
+          "Gotabike": "",
+          "Hadigala": "",
+          "Me'Aso": "",
+          "Shinile": ""
+        }
       }
-    ]
+    }
   },
-  {
-    "region": {
-      "en": "Gambela",
-      "am": "ጋምቤላ ክልል"
-    },
-    "zones": [
-      {
-        "zone": {
-          "en": "Angewak",
-          "am": "አኙዋክ ዞን",
-          "raw_en": "Angewak"
-        },
-        "woredas": [
-          {
-            "en": "Abobo",
-            "am": "አቦቦ"
-          },
-          {
-            "en": "Dima",
-            "am": ""
-          },
-          {
-            "en": "Gambela Zuriya",
-            "am": "ጋምቤላ ዙሪያ"
-          },
-          {
-            "en": "Gambella",
-            "am": "ጋምቤላ ከተማ"
-          },
-          {
-            "en": "Gog",
-            "am": "ጎግ"
-          },
-          {
-            "en": "Jor",
-            "am": "ጆር"
-          }
-        ]
+  "Gambela": {
+    "am": "ጋምቤላ ክልል",
+    "zones": {
+      "Angewak": {
+        "am": "አኙዋክ ዞን",
+        "woredas": {
+          "Abobo": "አቦቦ",
+          "Dima": "",
+          "Gambela Zuriya": "ጋምቤላ ዙሪያ",
+          "Gambella": "ጋምቤላ ከተማ",
+          "Gog": "ጎግ",
+          "Jor": "ጆር"
+        }
       },
-      {
-        "zone": {
-          "en": "Itang Special",
-          "am": "ኢታንግ ልዩ ወረዳ",
-          "raw_en": "Itang Special"
-        },
-        "woredas": [
-          {
-            "en": "Itang",
-            "am": "ኢታንግ ልዩ ወረዳ"
-          }
-        ]
+      "Itang Special": {
+        "am": "ኢታንግ ልዩ ወረዳ",
+        "woredas": {
+          "Itang": "ኢታንግ ልዩ ወረዳ"
+        }
       },
-      {
-        "zone": {
-          "en": "Mejenger",
-          "am": "መዠንገር ዞን",
-          "raw_en": "Mejenger"
-        },
-        "woredas": [
-          {
-            "en": "Godere",
-            "am": "ጎዴሬ"
-          },
-          {
-            "en": "Mengeshi",
-            "am": "መንገሺ"
-          }
-        ]
+      "Mejenger": {
+        "am": "መዠንገር ዞን",
+        "woredas": {
+          "Godere": "ጎዴሬ",
+          "Mengeshi": "መንገሺ"
+        }
       },
-      {
-        "zone": {
-          "en": "Newer",
-          "am": "ኑዌር ዞን",
-          "raw_en": "Newer"
-        },
-        "woredas": [
-          {
-            "en": "Akobo",
-            "am": "አኮቦ"
-          },
-          {
-            "en": "Jikawo",
-            "am": "ጂካዎ"
-          },
-          {
-            "en": "Lare",
-            "am": "ላሬ"
-          },
-          {
-            "en": "Makoy",
-            "am": "ማኮይ"
-          },
-          {
-            "en": "Wantawo",
-            "am": "ዋንታዎ"
-          }
-        ]
+      "Newer": {
+        "am": "ኑዌር ዞን",
+        "woredas": {
+          "Akobo": "አኮቦ",
+          "Jikawo": "ጂካዎ",
+          "Lare": "ላሬ",
+          "Makoy": "ማኮይ",
+          "Wantawo": "ዋንታዎ"
+        }
       }
-    ]
+    }
   },
-  {
-    "region": {
-      "en": "Hareri",
-      "am": "ሐረሪ ክልል"
-    },
-    "zones": [
-      {
-        "zone": {
-          "en": "Hareri",
-          "am": "ሐረሪ",
-          "raw_en": "Hareri"
-        },
-        "woredas": [
-          {
-            "en": "Abadir",
-            "am": "አባድር"
-          },
-          {
-            "en": "Aboker",
-            "am": "አቦከር"
-          },
-          {
-            "en": "Amir Nur",
-            "am": "አሚር ኑር"
-          },
-          {
-            "en": "Dire Teyara",
-            "am": "ዲሬ ጠያራ"
-          },
-          {
-            "en": "Errer",
-            "am": "ኤረር"
-          },
-          {
-            "en": "Hakim",
-            "am": "ሀኪም"
-          },
-          {
-            "en": "Jinela",
-            "am": "ጂነላ"
-          },
-          {
-            "en": "Shenkor",
-            "am": "ሸንኮር"
-          },
-          {
-            "en": "Sofi",
-            "am": "ሶፊ"
-          }
-        ]
+  "Hareri": {
+    "am": "ሐረሪ ክልል",
+    "zones": {
+      "Hareri": {
+        "am": "ሐረሪ",
+        "woredas": {
+          "Abadir": "አባድር",
+          "Aboker": "አቦከር",
+          "Amir Nur": "አሚር ኑር",
+          "Dire Teyara": "ዲሬ ጠያራ",
+          "Errer": "ኤረር",
+          "Hakim": "ሀኪም",
+          "Jinela": "ጂነላ",
+          "Shenkor": "ሸንኮር",
+          "Sofi": "ሶፊ"
+        }
       }
-    ]
+    }
   },
-  {
-    "region": {
-      "en": "Sidama",
-      "am": "ሲዳማ ክልል"
-    },
-    "zones": [
-      {
-        "zone": {
-          "en": "Hawassa City Admnistration",
-          "am": "ሀዋሳ ከተማ",
-          "raw_en": "Hawassa City Admnistration"
+  "Sidama": {
+    "am": "ሲዳማ ክልል",
+    "zones": {
+      "Hawassa City Admnistration": {
+        "am": "ሀዋሳ ከተማ",
+        "woredas": {
+          "Adiss Ketema": "",
+          "Bahel Adarash": "",
+          "Haik Dar": "",
+          "Hawela Tula": "",
+          "Mehal Ketema": "መሃል ከተማ",
+          "Meneharya": "መነሃሪያ",
+          "Misrak": "ምስራቅ",
+          "Tabor": "ታቦር"
+        }
+      },
+      "Sidama Debubawi Zone": {
+        "am": "ደቡባዊ ዞን",
+        "woredas": {
+          "Aleta Chuko": "አለታ ጩቆ",
+          "Aleta Wondo": "አለታ ወንዶ",
+          "Aleta Wondo City Administration": "አለታ ወንዶ ከተማ",
+          "Bursa": "ቡርሳ",
+          "Chirone": "ጪሮ",
+          "Chuko Ketema Asetedader": "ጩቆ ከተማ",
+          "Dara": "ዳራ",
+          "Dara Otilcho": "ዳራ ኦቲልጮ",
+          "Hula": "ሁላ",
+          "Teticha": "ተቲቻ"
+        }
+      },
+      "Sidama Mehal Zone": {
+        "am": "መሃል ዞን",
+        "woredas": {
+          "Arbegona": "አርቤጎና",
+          "Dale": "ዳሌ",
+          "Darara": "ዳራራ",
+          "Loko Abaya": "ሎቆ አባያ",
+          "Shafamo": "ሻፋሞ",
+          "Wonsho": "ወንሾ",
+          "Yirgalem City Admin": "ይርጋለም ከተማ"
+        }
+      },
+      "Sidama Misrakawi Zone": {
+        "am": "ምስራቃዊ ዞን",
+        "woredas": {
+          "Aroresa": "አሮሬሳ",
+          "Bensa": "ቤንሳ",
+          "Bona Zuria": "ቦና ዙሪያ",
+          "Bura": "ቡራ",
+          "Chebe Gambeltu": "ጨቤ ገምበልቱ",
+          "Chire": "ጪሬ",
+          "Daela": "ዳኤላ",
+          "Daye Ketema Astedader": "ዳዬ ከተማ",
+          "Hoko": "ሆቆ"
+        }
+      },
+      "Sidama Semenawi Zone": {
+        "am": "ሰሜናዊ ዞን",
+        "woredas": {
+          "Bilate Zuriya": "ብላቴ ዙሪያ",
+          "Boricha": "ቦሪቻ",
+          "Chuko Ketema Asetedader": "",
+          "Gorche": "",
+          "Hawassa Zuriya": "",
+          "Hawla Lida": "",
+          "Leku Ketema Asetedader": "",
+          "Malga": "",
+          "Shebedino": "",
+          "Wendo Genet": ""
+        }
+      },
+      "Mehal Sidama Zone": {
+        "am": "መሃል ሲዳማ ዞን",
+        "woredas": {
+          "Dale": "ዳሌ",
+          "Yirgalem Town": "ይርጋለም ከተማ"
         },
-        "woredas": [
-          {
-            "en": "Adiss Ketema",
-            "am": ""
-          },
-          {
-            "en": "Bahel Adarash",
-            "am": ""
-          },
-          {
-            "en": "Haik Dar",
-            "am": ""
-          },
-          {
-            "en": "Hawela Tula",
-            "am": ""
-          },
-          {
-            "en": "Mehal Ketema",
-            "am": "መሃል ከተማ"
-          },
-          {
-            "en": "Meneharya",
-            "am": "መነሃሪያ"
-          },
-          {
-            "en": "Misrak",
-            "am": "ምስራቅ"
-          },
-          {
-            "en": "Tabor",
-            "am": "ታቦር"
-          }
+        "aliases": [
+          "Mehal Sidama"
         ]
       },
-      {
-        "zone": {
-          "en": "Sidama Debubawi Zone",
-          "am": "ደቡባዊ ዞን",
-          "raw_en": "Sidama Debubawi Zone"
+      "Hawassa Citiy Administration": {
+        "am": "ሀዋሳ ከተማ አስተዳደር",
+        "woredas": {
+          "Hawassa": "ሀዋሳ"
         },
-        "woredas": [
-          {
-            "en": "Aleta Chuko",
-            "am": "አለታ ጩቆ"
-          },
-          {
-            "en": "Aleta Wondo",
-            "am": "አለታ ወንዶ"
-          },
-          {
-            "en": "Aleta Wondo City Administration",
-            "am": "አለታ ወንዶ ከተማ"
-          },
-          {
-            "en": "Bursa",
-            "am": "ቡርሳ"
-          },
-          {
-            "en": "Chirone",
-            "am": "ጪሮ"
-          },
-          {
-            "en": "Chuko Ketema Asetedader",
-            "am": "ጩቆ ከተማ"
-          },
-          {
-            "en": "Dara",
-            "am": "ዳራ"
-          },
-          {
-            "en": "Dara Otilcho",
-            "am": "ዳራ ኦቲልጮ"
-          },
-          {
-            "en": "Hula",
-            "am": "ሁላ"
-          },
-          {
-            "en": "Teticha",
-            "am": "ተቲቻ"
-          }
-        ]
-      },
-      {
-        "zone": {
-          "en": "Sidama Mehal Zone",
-          "am": "መሃል ዞን",
-          "raw_en": "Sidama Mehal Zone"
-        },
-        "woredas": [
-          {
-            "en": "Arbegona",
-            "am": "አርቤጎና"
-          },
-          {
-            "en": "Dale",
-            "am": "ዳሌ"
-          },
-          {
-            "en": "Darara",
-            "am": "ዳራራ"
-          },
-          {
-            "en": "Loko Abaya",
-            "am": "ሎቆ አባያ"
-          },
-          {
-            "en": "Shafamo",
-            "am": "ሻፋሞ"
-          },
-          {
-            "en": "Wonsho",
-            "am": "ወንሾ"
-          },
-          {
-            "en": "Yirgalem City Admin",
-            "am": "ይርጋለም ከተማ"
-          }
-        ]
-      },
-      {
-        "zone": {
-          "en": "Sidama Misrakawi Zone",
-          "am": "ምስራቃዊ ዞን",
-          "raw_en": "Sidama Misrakawi Zone"
-        },
-        "woredas": [
-          {
-            "en": "Aroresa",
-            "am": "አሮሬሳ"
-          },
-          {
-            "en": "Bensa",
-            "am": "ቤንሳ"
-          },
-          {
-            "en": "Bona Zuria",
-            "am": "ቦና ዙሪያ"
-          },
-          {
-            "en": "Bura",
-            "am": "ቡራ"
-          },
-          {
-            "en": "Chebe Gambeltu",
-            "am": "ጨቤ ገምበልቱ"
-          },
-          {
-            "en": "Chire",
-            "am": "ጪሬ"
-          },
-          {
-            "en": "Daela",
-            "am": "ዳኤላ"
-          },
-          {
-            "en": "Daye Ketema Astedader",
-            "am": "ዳዬ ከተማ"
-          },
-          {
-            "en": "Hoko",
-            "am": "ሆቆ"
-          }
-        ]
-      },
-      {
-        "zone": {
-          "en": "Sidama Semenawi Zone",
-          "am": "ሰሜናዊ ዞን",
-          "raw_en": "Sidama Semenawi Zone"
-        },
-        "woredas": [
-          {
-            "en": "Bilate Zuriya",
-            "am": "ብላቴ ዙሪያ"
-          },
-          {
-            "en": "Boricha",
-            "am": "ቦሪቻ"
-          },
-          {
-            "en": "Chuko Ketema Asetedader",
-            "am": ""
-          },
-          {
-            "en": "Gorche",
-            "am": ""
-          },
-          {
-            "en": "Hawassa Zuriya",
-            "am": ""
-          },
-          {
-            "en": "Hawla Lida",
-            "am": ""
-          },
-          {
-            "en": "Leku Ketema Asetedader",
-            "am": ""
-          },
-          {
-            "en": "Malga",
-            "am": ""
-          },
-          {
-            "en": "Shebedino",
-            "am": ""
-          },
-          {
-            "en": "Wendo Genet",
-            "am": ""
-          }
+        "aliases": [
+          "Hawassa"
         ]
       }
-    ]
+    }
   },
-  {
-    "region": {
-      "en": "South Ethiopia",
-      "am": "ደቡብ ኢትዮጵያ ክልል"
-    },
-    "zones": [
-      {
-        "zone": {
-          "en": "Alle",
-          "am": "",
-          "raw_en": "Alle"
-        },
-        "woredas": [
-          {
-            "en": "Kolango Ketema Astedader",
-            "am": ""
-          },
-          {
-            "en": "Kolango Zuriya",
-            "am": ""
-          }
-        ]
+  "South Ethiopia": {
+    "am": "ደቡብ ኢትዮጵያ ክልል",
+    "zones": {
+      "Alle": {
+        "am": "",
+        "woredas": {
+          "Kolango Ketema Astedader": "",
+          "Kolango Zuriya": ""
+        }
       },
-      {
-        "zone": {
-          "en": "Ari Zone",
-          "am": "",
-          "raw_en": "Ari Zone"
-        },
-        "woredas": [
-          {
-            "en": "Baka Dawela Ari",
-            "am": ""
-          },
-          {
-            "en": "Debub Ari",
-            "am": ""
-          },
-          {
-            "en": "Gelila Ketema Astedader",
-            "am": ""
-          },
-          {
-            "en": "Jinka Ketema Astedader",
-            "am": ""
-          },
-          {
-            "en": "Semen Ari",
-            "am": ""
-          },
-          {
-            "en": "Woba Ari",
-            "am": ""
-          }
-        ]
+      "Ari Zone": {
+        "am": "",
+        "woredas": {
+          "Baka Dawela Ari": "",
+          "Debub Ari": "",
+          "Gelila Ketema Astedader": "",
+          "Jinka Ketema Astedader": "",
+          "Semen Ari": "",
+          "Woba Ari": ""
+        }
       },
-      {
-        "zone": {
-          "en": "Basketo Special",
-          "am": "",
-          "raw_en": "Basketo Special"
-        },
-        "woredas": [
-          {
-            "en": "Basketo",
-            "am": ""
-          }
-        ]
+      "Basketo Special": {
+        "am": "",
+        "woredas": {
+          "Basketo": ""
+        }
       },
-      {
-        "zone": {
-          "en": "Burji",
-          "am": "",
-          "raw_en": "Burji"
-        },
-        "woredas": [
-          {
-            "en": "Burji",
-            "am": ""
-          }
-        ]
+      "Burji": {
+        "am": "",
+        "woredas": {
+          "Burji": ""
+        }
       },
-      {
-        "zone": {
-          "en": "Debub Omo",
-          "am": "ደቡብ ኦሞ ዞን",
-          "raw_en": "Debub Omo"
-        },
-        "woredas": [
-          {
-            "en": "Bena Tsemay",
-            "am": ""
-          },
-          {
-            "en": "Dasenech",
-            "am": ""
-          },
-          {
-            "en": "Hamer",
-            "am": ""
-          },
-          {
-            "en": "Malle",
-            "am": ""
-          },
-          {
-            "en": "Nyangatom",
-            "am": "ኛንጋቶም"
-          },
-          {
-            "en": "Salamago",
-            "am": "ሰላማጎ"
-          },
-          {
-            "en": "Turmi Ketema Astedader",
-            "am": "ቱርሚ ከተማ"
-          }
-        ]
+      "Debub Omo": {
+        "am": "ደቡብ ኦሞ ዞን",
+        "woredas": {
+          "Bena Tsemay": "",
+          "Dasenech": "",
+          "Hamer": "",
+          "Malle": "",
+          "Nyangatom": "ኛንጋቶም",
+          "Salamago": "ሰላማጎ",
+          "Turmi Ketema Astedader": "ቱርሚ ከተማ"
+        }
       },
-      {
-        "zone": {
-          "en": "Dilla City Admin",
-          "am": "ዲላ ከተማ",
-          "raw_en": "Dilla City Admin"
-        },
-        "woredas": [
-          {
-            "en": "Dilla Bedecha Town",
-            "am": "ዲላ በዴቻ"
-          },
-          {
-            "en": "Dilla Harowelabo Town",
-            "am": "ዲላ ሀሮወላቡ"
-          },
-          {
-            "en": "Dilla Sessa Town",
-            "am": "ዲላ ሴሳ"
-          }
-        ]
+      "Dilla": {
+        "am": "ዲላ ከተማ",
+        "woredas": {
+          "Dilla Bedecha Town": "ዲላ በዴቻ",
+          "Dilla Harowelabo Town": "ዲላ ሀሮወላቡ",
+          "Dilla Sessa Town": "ዲላ ሴሳ"
+        }
       },
-      {
-        "zone": {
-          "en": "Gamo",
-          "am": "ጋሞ ዞን",
-          "raw_en": "Gamo"
-        },
-        "woredas": [
-          {
-            "en": "Arba Minch Ketema Astededader",
-            "am": "አርባ ምንጭ ከተማ"
-          },
-          {
-            "en": "Arbaminch Zuriya",
-            "am": "አርባ ምንጭ ዙሪያ"
-          },
-          {
-            "en": "Bonke",
-            "am": "ቦንኬ"
-          },
-          {
-            "en": "Boreda",
-            "am": "ቦሬዳ"
-          },
-          {
-            "en": "Chencha Ketema Asetedader",
-            "am": "ጬንቻ ከተማ"
-          },
-          {
-            "en": "Chencha Zuriya",
-            "am": "ጬንቻ ዙሪያ"
-          },
-          {
-            "en": "Deremalo",
-            "am": "ደረማሎ"
-          },
-          {
-            "en": "Dita",
-            "am": "ዲታ"
-          },
-          {
-            "en": "Gacho_Baba",
-            "am": "ጋጮ ባባ"
-          },
-          {
-            "en": "Garda Marta",
-            "am": "ጋርዳ ማርታ"
-          },
-          {
-            "en": "Geresse",
-            "am": "ገረሴ"
-          },
-          {
-            "en": "Geresse Ketema Astedader",
-            "am": "ገረሴ ከተማ"
-          },
-          {
-            "en": "Kemba",
-            "am": "ከምባ"
-          },
-          {
-            "en": "Kemba Ketema Astedader",
-            "am": "ከምባ ከተማ"
-          },
-          {
-            "en": "Mirab Abaya",
-            "am": "ምዕራብ አባያ"
-          },
-          {
-            "en": "Qogota",
-            "am": "ቆጎታ"
-          },
-          {
-            "en": "Qucha",
-            "am": "ቁቻ"
-          },
-          {
-            "en": "Qucha Alfa",
-            "am": "ቁቻ አልፋ"
-          },
-          {
-            "en": "Selam Ber Ketema Asetedader",
-            "am": "ሰላም በር ከተማ"
-          }
-        ]
+      "Gamo": {
+        "am": "ጋሞ ዞን",
+        "woredas": {
+          "Arba Minch Ketema Astededader": "አርባ ምንጭ ከተማ",
+          "Arbaminch Zuriya": "አርባ ምንጭ ዙሪያ",
+          "Bonke": "ቦንኬ",
+          "Boreda": "ቦሬዳ",
+          "Chencha Ketema Asetedader": "ጬንቻ ከተማ",
+          "Chencha Zuriya": "ጬንቻ ዙሪያ",
+          "Deremalo": "ደረማሎ",
+          "Dita": "ዲታ",
+          "Gacho_Baba": "ጋጮ ባባ",
+          "Garda Marta": "ጋርዳ ማርታ",
+          "Geresse": "ገረሴ",
+          "Geresse Ketema Astedader": "ገረሴ ከተማ",
+          "Kemba": "ከምባ",
+          "Kemba Ketema Astedader": "ከምባ ከተማ",
+          "Mirab Abaya": "ምዕራብ አባያ",
+          "Qogota": "ቆጎታ",
+          "Qucha": "ቁቻ",
+          "Qucha Alfa": "ቁቻ አልፋ",
+          "Selam Ber Ketema Asetedader": "ሰላም በር ከተማ"
+        }
       },
-      {
-        "zone": {
-          "en": "Gardula",
-          "am": "ጋርዱላ ዞን",
-          "raw_en": "Gardula"
-        },
-        "woredas": [
-          {
-            "en": "Derashe",
-            "am": "ደራሼ"
-          }
-        ]
+      "Gardula": {
+        "am": "ጋርዱላ ዞን",
+        "woredas": {
+          "Derashe": "ደራሼ"
+        }
       },
-      {
-        "zone": {
-          "en": "Gedeo",
-          "am": "ጌዴኦ ዞን",
-          "raw_en": "Gedeo"
-        },
-        "woredas": [
-          {
-            "en": "Bule",
-            "am": "ቡሌ"
-          },
-          {
-            "en": "Dilla Zuria",
-            "am": "ዲላ ዙሪያ"
-          },
-          {
-            "en": "Gedeb",
-            "am": "ገደብ"
-          },
-          {
-            "en": "Kochore",
-            "am": "ኮቸሬ"
-          },
-          {
-            "en": "Wonago",
-            "am": "ወናጎ"
-          },
-          {
-            "en": "Yirga Chefe",
-            "am": "ይርጋ ጨፌ"
-          },
-          {
-            "en": "Yirga Chefe City Admin",
-            "am": "ይርጋ ጨፌ ከተማ"
-          }
-        ]
+      "Gedeo": {
+        "am": "ጌዴኦ ዞን",
+        "woredas": {
+          "Bule": "ቡሌ",
+          "Dilla Zuria": "ዲላ ዙሪያ",
+          "Gedeb": "ገደብ",
+          "Kochore": "ኮቸሬ",
+          "Wonago": "ወናጎ",
+          "Yirga Chefe": "ይርጋ ጨፌ",
+          "Yirga Chefe City Admin": "ይርጋ ጨፌ ከተማ"
+        }
       },
-      {
-        "zone": {
-          "en": "Gofa",
-          "am": "ጎፋ ዞን",
-          "raw_en": "Gofa"
-        },
-        "woredas": [
-          {
-            "en": "Beto Ketema Astedader",
-            "am": "ቤቶ ከተማ"
-          },
-          {
-            "en": "Bulki Ketema Asetedader",
-            "am": "ቡልኪ ከተማ"
-          },
-          {
-            "en": "Denba Gofa",
-            "am": "ደንባ ጎፋ"
-          },
-          {
-            "en": "Geze Gofa",
-            "am": ""
-          },
-          {
-            "en": "Melo Gada",
-            "am": ""
-          },
-          {
-            "en": "Melo Koza",
-            "am": ""
-          },
-          {
-            "en": "Oyida",
-            "am": ""
-          },
-          {
-            "en": "Sawula",
-            "am": ""
-          },
-          {
-            "en": "Uba Debretsehay",
-            "am": ""
-          },
-          {
-            "en": "Zala",
-            "am": ""
-          }
-        ]
+      "Gofa": {
+        "am": "ጎፋ ዞን",
+        "woredas": {
+          "Beto Ketema Astedader": "ቤቶ ከተማ",
+          "Bulki Ketema Asetedader": "ቡልኪ ከተማ",
+          "Denba Gofa": "ደንባ ጎፋ",
+          "Geze Gofa": "",
+          "Melo Gada": "",
+          "Melo Koza": "",
+          "Oyida": "",
+          "Sawula": "",
+          "Uba Debretsehay": "",
+          "Zala": ""
+        }
       },
-      {
-        "zone": {
-          "en": "Konso",
-          "am": "",
-          "raw_en": "Konso"
-        },
-        "woredas": [
-          {
-            "en": "Karate_City_Admin",
-            "am": ""
-          },
-          {
-            "en": "Karate_Zuria",
-            "am": ""
-          },
-          {
-            "en": "Kena",
-            "am": ""
-          },
-          {
-            "en": "Kolme Cluster",
-            "am": ""
-          },
-          {
-            "en": "Segen_Zuriya",
-            "am": ""
-          }
-        ]
+      "Konso": {
+        "am": "",
+        "woredas": {
+          "Karate_City_Admin": "",
+          "Karate_Zuria": "",
+          "Kena": "",
+          "Kolme Cluster": "",
+          "Segen_Zuriya": ""
+        }
       },
-      {
-        "zone": {
-          "en": "Korey",
-          "am": "",
-          "raw_en": "Korey"
-        },
-        "woredas": [
-          {
-            "en": "Amaro",
-            "am": ""
-          }
-        ]
+      "Korey": {
+        "am": "",
+        "woredas": {
+          "Amaro": ""
+        }
       },
-      {
-        "zone": {
-          "en": "Welayta",
-          "am": "ወላይታ ዞን",
-          "raw_en": "Welayta"
-        },
-        "woredas": [
-          {
-            "en": "Abala Abaya",
-            "am": ""
-          },
-          {
-            "en": "Areka Ketema Astedader",
-            "am": ""
-          },
-          {
-            "en": "Bayra Koysha",
-            "am": ""
-          },
-          {
-            "en": "Bele Ketema Astedader",
-            "am": ""
-          },
-          {
-            "en": "Boditi Town",
-            "am": ""
-          },
-          {
-            "en": "Boloso Sore",
-            "am": ""
-          },
-          {
-            "en": "Bolosobombe",
-            "am": ""
-          },
-          {
-            "en": "Damot Sore",
-            "am": ""
-          },
-          {
-            "en": "Damot Weyde",
-            "am": ""
-          },
-          {
-            "en": "Damotgale",
-            "am": ""
-          },
-          {
-            "en": "Damotpulasa",
-            "am": ""
-          },
-          {
-            "en": "Duguna Fango",
-            "am": "ዱጉና ፋንጎ"
-          },
-          {
-            "en": "Gesuba Ketema Astedader",
-            "am": "ገሱባ ከተማ"
-          },
-          {
-            "en": "Gununo Hamuse Ketema Astedader",
-            "am": "ጉኑኖ ሀሙስ ከተማ"
-          },
-          {
-            "en": "Hobicha Abaya",
-            "am": "ሆቢቻ አባያ"
-          },
-          {
-            "en": "Humbo",
-            "am": "ሁምቦ"
-          },
-          {
-            "en": "Kawo Koyisha",
-            "am": "ካዎ ኮይሻ"
-          },
-          {
-            "en": "Kindo Didaye",
-            "am": "ኪንዶ ዲዳዬ"
-          },
-          {
-            "en": "Kindo Koisha",
-            "am": "ኪንዶ ኮይሻ"
-          },
-          {
-            "en": "Ofa",
-            "am": "ኦፋ"
-          },
-          {
-            "en": "Sodo Ketema Astedader",
-            "am": "ሶዶ ከተማ"
-          },
-          {
-            "en": "Sodo Zuria",
-            "am": "ሶዶ ዙሪያ"
-          },
-          {
-            "en": "Tebela Ketema Astedader",
-            "am": "ተበላ ከተማ"
-          }
-        ]
+      "Welayta": {
+        "am": "ወላይታ ዞን",
+        "woredas": {
+          "Abala Abaya": "",
+          "Areka Ketema Astedader": "",
+          "Bayra Koysha": "",
+          "Bele Ketema Astedader": "",
+          "Boditi Town": "",
+          "Boloso Sore": "",
+          "Bolosobombe": "",
+          "Damot Sore": "",
+          "Damot Weyde": "",
+          "Damotgale": "",
+          "Damotpulasa": "",
+          "Duguna Fango": "ዱጉና ፋንጎ",
+          "Gesuba Ketema Astedader": "ገሱባ ከተማ",
+          "Gununo Hamuse Ketema Astedader": "ጉኑኖ ሀሙስ ከተማ",
+          "Hobicha Abaya": "ሆቢቻ አባያ",
+          "Humbo": "ሁምቦ",
+          "Kawo Koyisha": "ካዎ ኮይሻ",
+          "Kindo Didaye": "ኪንዶ ዲዳዬ",
+          "Kindo Koisha": "ኪንዶ ኮይሻ",
+          "Ofa": "ኦፋ",
+          "Sodo Ketema Astedader": "ሶዶ ከተማ",
+          "Sodo Zuria": "ሶዶ ዙሪያ",
+          "Tebela Ketema Astedader": "ተበላ ከተማ"
+        }
       }
-    ]
+    }
   },
-  {
-    "region": {
-      "en": "South West Ethiopia People",
-      "am": "ደቡብ ምዕራብ ኢትዮጵያ ክልል"
-    },
-    "zones": [
-      {
-        "zone": {
-          "en": "Bench Sheko",
-          "am": "ቤንች ሸኮ ዞን",
-          "raw_en": "Bench Sheko"
-        },
-        "woredas": [
-          {
-            "en": "Debub Bench",
-            "am": "ደቡብ ቤንች"
-          },
-          {
-            "en": "Dizu-Gedi",
-            "am": "ዲዙ ገዲ"
-          },
-          {
-            "en": "Guraferda",
-            "am": "ጉራፈርዳ"
-          },
-          {
-            "en": "Mizan Aman Ketema Astedader",
-            "am": "ሚዛን አማን ከተማ"
-          },
-          {
-            "en": "Semen Benchmaji",
-            "am": "ሰሜን ቤንችማጂ"
-          },
-          {
-            "en": "Shay Bench",
-            "am": "ሻይ ቤንች"
-          },
-          {
-            "en": "Sheko",
-            "am": "ሸኮ"
-          }
-        ]
+  "South West Ethiopia People": {
+    "am": "ደቡብ ምዕራብ ኢትዮጵያ ክልል",
+    "zones": {
+      "Bench Sheko": {
+        "am": "ቤንች ሸኮ ዞን",
+        "woredas": {
+          "Debub Bench": "ደቡብ ቤንች",
+          "Dizu-Gedi": "ዲዙ ገዲ",
+          "Guraferda": "ጉራፈርዳ",
+          "Mizan Aman Ketema Astedader": "ሚዛን አማን ከተማ",
+          "Semen Benchmaji": "ሰሜን ቤንችማጂ",
+          "Shay Bench": "ሻይ ቤንች",
+          "Sheko": "ሸኮ"
+        }
       },
-      {
-        "zone": {
-          "en": "Dawro",
-          "am": "ዳውሮ ዞን",
-          "raw_en": "Dawro"
-        },
-        "woredas": [
-          {
-            "en": "Disa",
-            "am": "ዲሳ"
-          },
-          {
-            "en": "Esera",
-            "am": "እሰራ"
-          },
-          {
-            "en": "Gena",
-            "am": "ገና"
-          },
-          {
-            "en": "Gena Bosa",
-            "am": "ገና ቦሳ"
-          },
-          {
-            "en": "Gesa Chare Ketema Astedader",
-            "am": "ገሳ ጫሬ ከተማ"
-          },
-          {
-            "en": "Kechi",
-            "am": "ቀጪ"
-          },
-          {
-            "en": "Loma",
-            "am": "ሎማ"
-          },
-          {
-            "en": "Maraka",
-            "am": "ማረካ"
-          },
-          {
-            "en": "Mari Mansa",
-            "am": "ማሪ መንሳ"
-          },
-          {
-            "en": "Tarcha Ketema Astedader",
-            "am": "ታርጫ ከተማ"
-          },
-          {
-            "en": "Tarcha Zuriya",
-            "am": "ታርጫ ዙሪያ"
-          },
-          {
-            "en": "Tocha",
-            "am": ""
-          }
-        ]
+      "Dawro": {
+        "am": "ዳውሮ ዞን",
+        "woredas": {
+          "Disa": "ዲሳ",
+          "Esera": "እሰራ",
+          "Gena": "ገና",
+          "Gena Bosa": "ገና ቦሳ",
+          "Gesa Chare Ketema Astedader": "ገሳ ጫሬ ከተማ",
+          "Kechi": "ቀጪ",
+          "Loma": "ሎማ",
+          "Maraka": "ማረካ",
+          "Mari Mansa": "ማሪ መንሳ",
+          "Tarcha Ketema Astedader": "ታርጫ ከተማ",
+          "Tarcha Zuriya": "ታርጫ ዙሪያ",
+          "Tocha": ""
+        }
       },
-      {
-        "zone": {
-          "en": "Kefa",
-          "am": "",
-          "raw_en": "Kefa"
-        },
-        "woredas": [
-          {
-            "en": "Adiyo",
-            "am": ""
-          },
-          {
-            "en": "Bita",
-            "am": ""
-          },
-          {
-            "en": "Bonga",
-            "am": ""
-          },
-          {
-            "en": "Chena",
-            "am": ""
-          },
-          {
-            "en": "Cheta",
-            "am": ""
-          },
-          {
-            "en": "Decha",
-            "am": ""
-          },
-          {
-            "en": "Gesha Deka",
-            "am": ""
-          },
-          {
-            "en": "Gewata",
-            "am": ""
-          },
-          {
-            "en": "Gimbo",
-            "am": ""
-          },
-          {
-            "en": "Goba",
-            "am": ""
-          },
-          {
-            "en": "Saylem",
-            "am": ""
-          },
-          {
-            "en": "Sheshoendey",
-            "am": ""
-          },
-          {
-            "en": "Telo",
-            "am": ""
-          },
-          {
-            "en": "Wacha City Administrator",
-            "am": ""
-          }
-        ]
+      "Kefa": {
+        "am": "",
+        "woredas": {
+          "Adiyo": "",
+          "Bita": "",
+          "Bonga": "",
+          "Chena": "",
+          "Cheta": "",
+          "Decha": "",
+          "Gesha Deka": "",
+          "Gewata": "",
+          "Gimbo": "",
+          "Goba": "",
+          "Saylem": "",
+          "Sheshoendey": "",
+          "Telo": "",
+          "Wacha City Administrator": ""
+        }
       },
-      {
-        "zone": {
-          "en": "Konta",
-          "am": "",
-          "raw_en": "Konta"
-        },
-        "woredas": [
-          {
-            "en": "Konta Liyu",
-            "am": ""
-          }
-        ]
+      "Konta": {
+        "am": "",
+        "woredas": {
+          "Konta Liyu": ""
+        }
       },
-      {
-        "zone": {
-          "en": "Merab Omo",
-          "am": "ምዕራብ ኦሞ ዞን",
-          "raw_en": "Merab Omo"
-        },
-        "woredas": [
-          {
-            "en": "Bero",
-            "am": ""
-          },
-          {
-            "en": "Gachit",
-            "am": ""
-          },
-          {
-            "en": "Gori Gesha",
-            "am": ""
-          },
-          {
-            "en": "Maji",
-            "am": "ማጂ"
-          },
-          {
-            "en": "Menit Goldia",
-            "am": "ሜኒት ጎልዲያ"
-          },
-          {
-            "en": "Menit Shasha",
-            "am": "ሜኒት ሻሻ"
-          },
-          {
-            "en": "Surma",
-            "am": "ሱርማ"
-          }
-        ]
+      "Merab Omo": {
+        "am": "ምዕራብ ኦሞ ዞን",
+        "woredas": {
+          "Bero": "",
+          "Gachit": "",
+          "Gori Gesha": "",
+          "Maji": "ማጂ",
+          "Menit Goldia": "ሜኒት ጎልዲያ",
+          "Menit Shasha": "ሜኒት ሻሻ",
+          "Surma": "ሱርማ"
+        }
       },
-      {
-        "zone": {
-          "en": "Sheka",
-          "am": "ሸካ ዞን",
-          "raw_en": "Sheka"
-        },
-        "woredas": [
-          {
-            "en": "Andracha",
-            "am": "አንድራቻ"
-          },
-          {
-            "en": "Masha",
-            "am": "ማሻ"
-          },
-          {
-            "en": "Masha Ketema",
-            "am": "ማሻ ከተማ"
-          },
-          {
-            "en": "Tepi City Admin",
-            "am": "ቴፒ ከተማ"
-          },
-          {
-            "en": "Yeki",
-            "am": "የኪ"
-          }
-        ]
+      "Sheka": {
+        "am": "ሸካ ዞን",
+        "woredas": {
+          "Andracha": "አንድራቻ",
+          "Masha": "ማሻ",
+          "Masha Ketema": "ማሻ ከተማ",
+          "Tepi City Admin": "ቴፒ ከተማ",
+          "Yeki": "የኪ"
+        }
       }
-    ]
+    }
   },
-  {
-    "region": {
-      "en": "Tigray",
-      "am": "ትግራይ ክልል"
-    },
-    "zones": [
-      {
-        "zone": {
-          "en": "Debub Misrak",
-          "am": "ደቡብ ምስራቅ ዞን",
-          "raw_en": "Debub Misrak"
-        },
-        "woredas": [
-          {
-            "en": "Degua Temben",
-            "am": "ደጓ ተምቤን"
-          },
-          {
-            "en": "Enderta",
-            "am": "እንደርታ"
-          },
-          {
-            "en": "Hintalo Wajirat",
-            "am": "ህንጣሎ ወጅራት"
-          },
-          {
-            "en": "Seharti Samre",
-            "am": "ሰሐርቲ ሳምረ"
-          }
-        ]
+  "Tigray": {
+    "am": "ትግራይ ክልል",
+    "zones": {
+      "Debub Misrak": {
+        "am": "ደቡብ ምስራቅ ዞን",
+        "woredas": {
+          "Degua Temben": "ደጓ ተምቤን",
+          "Enderta": "እንደርታ",
+          "Hintalo Wajirat": "ህንጣሎ ወጅራት",
+          "Seharti Samre": "ሰሐርቲ ሳምረ"
+        }
       },
-      {
-        "zone": {
-          "en": "Debubawi",
-          "am": "ደቡባዊ ዞን",
-          "raw_en": "Debubawi"
-        },
-        "woredas": [
-          {
-            "en": "Alaje",
-            "am": "አላጄ"
-          },
-          {
-            "en": "Alamata",
-            "am": ""
-          },
-          {
-            "en": "Alamata Town",
-            "am": ""
-          },
-          {
-            "en": "Endamehoni",
-            "am": ""
-          },
-          {
-            "en": "Korem",
-            "am": ""
-          },
-          {
-            "en": "Maychew",
-            "am": ""
-          },
-          {
-            "en": "Ofla",
-            "am": ""
-          },
-          {
-            "en": "Raya Azebo",
-            "am": ""
-          }
-        ]
+      "Debubawi": {
+        "am": "ደቡባዊ ዞን",
+        "woredas": {
+          "Alaje": "አላጄ",
+          "Alamata": "",
+          "Alamata Town": "",
+          "Endamehoni": "",
+          "Korem": "",
+          "Maychew": "",
+          "Ofla": "",
+          "Raya Azebo": ""
+        }
       },
-      {
-        "zone": {
-          "en": "Mehakelawi",
-          "am": "ማዕከላዊ ዞን",
-          "raw_en": "Mehakelawi"
-        },
-        "woredas": [
-          {
-            "en": "Abbi Addy",
-            "am": ""
-          },
-          {
-            "en": "Adwa",
-            "am": ""
-          },
-          {
-            "en": "Adwa Town",
-            "am": ""
-          },
-          {
-            "en": "Ahiferom",
-            "am": "አህፈሮም"
-          },
-          {
-            "en": "Axum",
-            "am": "አክሱም"
-          },
-          {
-            "en": "Kola Tembyen",
-            "am": "ቆላ ተምቤን"
-          },
-          {
-            "en": "Laelay Maychew",
-            "am": "ላዕላይ ማይጨው"
-          },
-          {
-            "en": "Mereb Leke",
-            "am": "መረብ ለከ"
-          },
-          {
-            "en": "Nader Adet",
-            "am": "ናዴር አዴት"
-          },
-          {
-            "en": "Tahtaymaychew",
-            "am": "ታህታይ ማይጨው"
-          },
-          {
-            "en": "Tanqua Abergele",
-            "am": "ታንቋ አበርገሌ"
-          },
-          {
-            "en": "Were Lehe",
-            "am": "ወረ ለኸ"
-          }
-        ]
+      "Mehakelawi": {
+        "am": "ማዕከላዊ ዞን",
+        "woredas": {
+          "Abbi Addy": "",
+          "Adwa": "",
+          "Adwa Town": "",
+          "Ahiferom": "አህፈሮም",
+          "Axum": "አክሱም",
+          "Kola Tembyen": "ቆላ ተምቤን",
+          "Laelay Maychew": "ላዕላይ ማይጨው",
+          "Mereb Leke": "መረብ ለከ",
+          "Nader Adet": "ናዴር አዴት",
+          "Tahtaymaychew": "ታህታይ ማይጨው",
+          "Tanqua Abergele": "ታንቋ አበርገሌ",
+          "Were Lehe": "ወረ ለኸ"
+        }
       },
-      {
-        "zone": {
-          "en": "Mekele",
-          "am": "መቀሌ ዞን",
-          "raw_en": "Mekele"
-        },
-        "woredas": [
-          {
-            "en": "Adihaki",
-            "am": "ዓዲ ሐቂ"
-          },
-          {
-            "en": "Ayder",
-            "am": "አይደር"
-          },
-          {
-            "en": "Hadnet",
-            "am": "ሀድነት"
-          },
-          {
-            "en": "Hawelti",
-            "am": "ሐወልቲ"
-          },
-          {
-            "en": "Kedamay Weyane",
-            "am": "ቀዳማይ ወያነ"
-          },
-          {
-            "en": "Quiha",
-            "am": "ኩይሃ"
-          },
-          {
-            "en": "Semen",
-            "am": "ሰሜን"
-          }
-        ]
+      "Mekele": {
+        "am": "መቀሌ ዞን",
+        "woredas": {
+          "Adihaki": "ዓዲ ሐቂ",
+          "Ayder": "አይደር",
+          "Hadnet": "ሀድነት",
+          "Hawelti": "ሐወልቲ",
+          "Kedamay Weyane": "ቀዳማይ ወያነ",
+          "Quiha": "ኩይሃ",
+          "Semen": "ሰሜን"
+        }
       },
-      {
-        "zone": {
-          "en": "Mirabawi",
-          "am": "ምዕራባዊ ዞን",
-          "raw_en": "Mirabawi"
-        },
-        "woredas": [
-          {
-            "en": "Kafta Humera",
-            "am": "ቃፍታ ሁመራ"
-          },
-          {
-            "en": "Setit Humera",
-            "am": "ሰቲት ሁመራ"
-          },
-          {
-            "en": "Tsegede",
-            "am": "ፀገዴ"
-          },
-          {
-            "en": "Welkayit",
-            "am": "ወልቃይት"
-          }
-        ]
+      "Mirabawi": {
+        "am": "ምዕራባዊ ዞን",
+        "woredas": {
+          "Kafta Humera": "ቃፍታ ሁመራ",
+          "Setit Humera": "ሰቲት ሁመራ",
+          "Tsegede": "ፀገዴ",
+          "Welkayit": "ወልቃይት"
+        }
       },
-      {
-        "zone": {
-          "en": "Misrakawi",
-          "am": "ምስራቃዊ ዞን",
-          "raw_en": "Misrakawi"
-        },
-        "woredas": [
-          {
-            "en": "Adigrat",
-            "am": "ዓዲግራት"
-          },
-          {
-            "en": "Atsbi Wenberta",
-            "am": "አፅቢ"
-          },
-          {
-            "en": "Erob",
-            "am": ""
-          },
-          {
-            "en": "Ganta Afeshum",
-            "am": ""
-          },
-          {
-            "en": "Gulo Meheda",
-            "am": ""
-          },
-          {
-            "en": "Hawuzen",
-            "am": ""
-          },
-          {
-            "en": "Kilte Awlalo",
-            "am": ""
-          },
-          {
-            "en": "Saesi Tsadamba",
-            "am": ""
-          },
-          {
-            "en": "Wukro",
-            "am": ""
-          }
-        ]
+      "Misrakawi": {
+        "am": "ምስራቃዊ ዞን",
+        "woredas": {
+          "Adigrat": "ዓዲግራት",
+          "Atsbi Wenberta": "አፅቢ",
+          "Erob": "",
+          "Ganta Afeshum": "",
+          "Gulo Meheda": "",
+          "Hawuzen": "",
+          "Kilte Awlalo": "",
+          "Saesi Tsadamba": "",
+          "Wukro": ""
+        }
       },
-      {
-        "zone": {
-          "en": "Semen Mirab",
-          "am": "",
-          "raw_en": "Semen Mirab"
-        },
-        "woredas": [
-          {
-            "en": "Asegede Tsimbila",
-            "am": ""
-          },
-          {
-            "en": "Laelay Adiyabo",
-            "am": ""
-          },
-          {
-            "en": "Medebay Zana",
-            "am": ""
-          },
-          {
-            "en": "Shiraro",
-            "am": ""
-          },
-          {
-            "en": "Shire Enda Silassie",
-            "am": ""
-          },
-          {
-            "en": "Tahtay Adiyabo",
-            "am": ""
-          },
-          {
-            "en": "Tahtay Qoraro",
-            "am": ""
-          },
-          {
-            "en": "Tselemt",
-            "am": ""
-          }
-        ]
+      "Semen Mirab": {
+        "am": "",
+        "woredas": {
+          "Asegede Tsimbila": "",
+          "Laelay Adiyabo": "",
+          "Medebay Zana": "",
+          "Shiraro": "",
+          "Shire Enda Silassie": "",
+          "Tahtay Adiyabo": "",
+          "Tahtay Qoraro": "",
+          "Tselemt": ""
+        }
       }
-    ]
-  },
-  {
-    "region": {
-      "en": "Sidama",
-      "am": "ሲዳማ ክልል"
-    },
-    "zones": [
-      {
-        "zone": {
-          "en": "Mehal Sidama Zone",
-          "am": "መሃል ሲዳማ ዞን",
-          "raw_en": "Mehal Sidama"
-        },
-        "woredas": [
-          {
-            "en": "Dale",
-            "am": "ዳሌ"
-          },
-          {
-            "en": "Yirgalem Town",
-            "am": "ይርጋለም ከተማ"
-          }
-        ]
-      },
-      {
-        "zone": {
-          "en": "Hawassa Citiy Administration",
-          "am": "ሀዋሳ ከተማ አስተዳደር",
-          "raw_en": "Hawassa"
-        },
-        "woredas": [
-          {
-            "en": "Hawassa",
-            "am": "ሀዋሳ"
-          }
-        ]
-      }
-    ]
+    }
   }
-]
+}
