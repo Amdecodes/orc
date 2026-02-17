@@ -1,0 +1,7 @@
+
+🔍 Testing Name Extraction for: ./samples/front/image copy 4.png
+📏 Dimensions: 576x1280
+⏳ Running Full OCR for anchor detection...
+DEBUG: source is object but source.lines is undefined. Keys: text, hocr, tsv, box, unlv, osd, pdf, imageColor, imageGrey, imageBinary, confidence, blocks, layoutBlocks, psm, oem, version, debug, rotateRadians
+DEBUG: findBestAnchor processing 0 lines. isDataObj: false
+❌ No suitable anchor found in the full text.

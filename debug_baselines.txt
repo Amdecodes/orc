@@ -1,0 +1,109 @@
+
+--- Searching for phone near label at y=2400 ---
+No strong candidates for phone. Fallback to generous crop.
+
+--- Searching for fin near label at y=2415 ---
+Candidate: y=2438 score=55 text="5492"
+Candidate: y=2438 score=55 text="0869"
+Candidate: y=2438 score=55 text="4803"
+Best for fin: y=2438 score=55
+
+--- Searching for phone near label at y=2400 ---
+Candidate: y=2433 score=205 text="0900477956"
+Best for phone: y=2433 score=205
+
+--- Searching for fin near label at y=2415 ---
+Candidate: y=2433 score=85 text="0900477956"
+Candidate: y=2438 score=55 text="8746"
+Candidate: y=2439 score=55 text="1739"
+Candidate: y=2438 score=55 text="5075"
+Best for fin: y=2433 score=85
+
+--- Searching for phone near label at y=2400 ---
+Candidate: y=2476 score=205 text="0942194380"
+Best for phone: y=2476 score=205
+
+--- Searching for fin near label at y=2415 ---
+Candidate: y=2476 score=85 text="0942194380"
+Candidate: y=2438 score=55 text="3275"
+Candidate: y=2438 score=55 text="2806"
+Candidate: y=2438 score=55 text="1203"
+Best for fin: y=2476 score=85
+
+--- Searching for phone near label at y=2400 ---
+Candidate: y=2476 score=205 text="0903908121"
+Best for phone: y=2476 score=205
+
+--- Searching for fin near label at y=2415 ---
+Candidate: y=2476 score=85 text="0903908121"
+Candidate: y=2438 score=55 text="4304"
+Candidate: y=2438 score=55 text="9129"
+Candidate: y=2438 score=55 text="5724"
+Best for fin: y=2476 score=85
+
+--- Searching for phone near label at y=2400 ---
+Candidate: y=2476 score=205 text="0947668997"
+Candidate: y=2438 score=105 text="0716"
+Best for phone: y=2476 score=205
+
+--- Searching for fin near label at y=2411 ---
+Candidate: y=2476 score=85 text="0947668997"
+Candidate: y=2438 score=55 text="9379"
+Candidate: y=2438 score=55 text="2018"
+Candidate: y=2438 score=55 text="0716"
+Best for fin: y=2476 score=85
+
+--- Searching for phone near label at y=2400 ---
+Candidate: y=2433 score=205 text="0911165318"
+Best for phone: y=2433 score=205
+
+--- Searching for fin near label at y=2415 ---
+Candidate: y=2433 score=85 text="0911165318"
+Candidate: y=2439 score=55 text="7095"
+Candidate: y=2438 score=55 text="6153"
+Candidate: y=2438 score=55 text="9047"
+Best for fin: y=2433 score=85
+
+--- Searching for phone near label at y=2400 ---
+Candidate: y=2476 score=205 text="0928907293"
+Best for phone: y=2476 score=205
+
+--- Searching for fin near label at y=2415 ---
+Candidate: y=2476 score=85 text="0928907293"
+Candidate: y=2438 score=55 text="5629"
+Candidate: y=2438 score=55 text="0498"
+Candidate: y=2439 score=55 text="3571"
+Best for fin: y=2476 score=85
+
+--- Searching for phone near label at y=2400 ---
+Candidate: y=2476 score=205 text="0973054336"
+Best for phone: y=2476 score=205
+
+--- Searching for fin near label at y=2415 ---
+Candidate: y=2476 score=85 text="0973054336"
+Candidate: y=2438 score=55 text="8609"
+Candidate: y=2438 score=55 text="7325"
+Candidate: y=2438 score=55 text="3483"
+Best for fin: y=2476 score=85
+
+--- Searching for phone near label at y=2400 ---
+Candidate: y=2476 score=205 text="0944391294"
+Best for phone: y=2476 score=205
+
+--- Searching for fin near label at y=2415 ---
+Candidate: y=2476 score=85 text="0944391294"
+Candidate: y=2438 score=55 text="2459"
+Candidate: y=2438 score=55 text="4038"
+Candidate: y=2438 score=55 text="6582"
+Best for fin: y=2476 score=85
+
+--- Searching for phone near label at y=2400 ---
+Candidate: y=2476 score=205 text="0980827763"
+Best for phone: y=2476 score=205
+
+--- Searching for fin near label at y=2411 ---
+Candidate: y=2476 score=85 text="0980827763"
+Candidate: y=2438 score=55 text="7617"
+Candidate: y=2438 score=55 text="3478"
+Candidate: y=2438 score=55 text="0186"
+Best for fin: y=2476 score=85

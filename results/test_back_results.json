@@ -1,0 +1,312 @@
+[
+  {
+    "image": "image copy 2.png",
+    "results": {
+      "fin": "549208694803",
+      "phone": "0953907003",
+      "nationality": {
+        "value": "Ethiopian",
+        "confidence": 1,
+        "raw": "306 BS © ¥ all all 375% &\n€ Card Details\n\nPALE bo 0;\nEthiopian Digital ID Card\n\nPERRET wit |FIN 5492 0869 4803\n0953907003\n\nV* | Nationality\n(TARO BA | Set Detoree)\n\nntPRE | Ethiopian\n£04 | Address\n\nwR AND\nAddis Ababa\ngh\n\nYeka\n\nO22 10\nWoreda 10\n\n"
+      },
+      "address": {
+        "region": "Addis Ababa",
+        "region_am": "አዲስ አበባ",
+        "zone": "Yeka",
+        "zone_am": "የካ",
+        "woreda": "Woreda 10",
+        "woreda_am": "ወረዳ 10",
+        "raw_text": "306 BS © ¥ all all 375% &\n€ Card Details\n\nPALE bo 0;\nEthiopian Digital ID Card\n\nPERRET wit |FIN 5492 0869 4803\n0953907003\n\nV* | Nationality\n(TARO BA | Set Detoree)\n\nntPRE | Ethiopian\n£04 | Address\n\nwR AND\nAddis Ababa\ngh\n\nYeka\n\nO22 10\nWoreda 10\n\n",
+        "normalized": "Addis Ababa, Yeka, Woreda 10",
+        "confidence": 1
+      },
+      "vid": null,
+      "_status": "Extracted (Safe Mode)",
+      "_source": "Safe Mode Architecture",
+      "_confidence": {
+        "fin": 0.95,
+        "phone": 0.95,
+        "address": 1
+      }
+    }
+  },
+  {
+    "image": "image copy 3.png",
+    "results": {
+      "fin": "874617395075",
+      "phone": "0900477956",
+      "nationality": {
+        "value": "Ethiopian",
+        "confidence": 1,
+        "raw": "2:03 B® - © LAF all all 50%\n€ Card Details\n\nEthiopian Digital ID Card\n\n‘han | Phone Number\n\n0900477956\n\nAN | Nationality\n(TARO NC |S Dw\n\nPRE | Ethiopian\n£04 | Address\n\nrR AND\nAddis Ababa\n\nnine [FIN 8746 1739 5075\n\ngh\n\nYeka\n\nO22, 02\nWoreda 02\n\n"
+      },
+      "address": {
+        "region": "Addis Ababa",
+        "region_am": "አዲስ አበባ",
+        "zone": "Yeka",
+        "zone_am": "የካ",
+        "woreda": "Woreda 02",
+        "woreda_am": "ወረዳ 02",
+        "raw_text": "2:03 B® - © LAF all all 50%\n€ Card Details\n\nEthiopian Digital ID Card\n\n‘han | Phone Number\n\n0900477956\n\nAN | Nationality\n(TARO NC |S Dw\n\nPRE | Ethiopian\n£04 | Address\n\nrR AND\nAddis Ababa\n\nnine [FIN 8746 1739 5075\n\ngh\n\nYeka\n\nO22, 02\nWoreda 02\n\n",
+        "normalized": "Addis Ababa, Yeka, Woreda 02",
+        "confidence": 1
+      },
+      "vid": null,
+      "_status": "Extracted (Safe Mode)",
+      "_source": "Safe Mode Architecture",
+      "_confidence": {
+        "fin": 0.95,
+        "phone": 0.9,
+        "address": 1
+      }
+    }
+  },
+  {
+    "image": "image copy 4.png",
+    "results": {
+      "fin": "327528061203",
+      "phone": "0942194380",
+      "nationality": {
+        "value": "Ethiopian",
+        "confidence": 1,
+        "raw": "11:43 A@as 9 @ LAF all ll 61%\n€ Card Details\n\nPA go J\nEthiopian Digital ID Card\n\nAan 1Or\noes wit |FIN 3275 2806 1203\n0942194380\n\nHIV+ | Nationality\n(N1AKO enc | Salt Declares)\n\nPRE | Ethiopian\n£64 | Address\n\nrR AND\nAddis Ababa\ngh\n\nYeka\n\nO22, 02\nWoreda 02\n\n"
+      },
+      "address": {
+        "region": "Addis Ababa",
+        "region_am": "አዲስ አበባ",
+        "zone": "Yeka",
+        "zone_am": "የካ",
+        "woreda": "Woreda 02",
+        "woreda_am": "ወረዳ 02",
+        "raw_text": "11:43 A@as 9 @ LAF all ll 61%\n€ Card Details\n\nPA go J\nEthiopian Digital ID Card\n\nAan 1Or\noes wit |FIN 3275 2806 1203\n0942194380\n\nHIV+ | Nationality\n(N1AKO enc | Salt Declares)\n\nPRE | Ethiopian\n£64 | Address\n\nrR AND\nAddis Ababa\ngh\n\nYeka\n\nO22, 02\nWoreda 02\n\n",
+        "normalized": "Addis Ababa, Yeka, Woreda 02",
+        "confidence": 1
+      },
+      "vid": null,
+      "_status": "Extracted (Safe Mode)",
+      "_source": "Safe Mode Architecture",
+      "_confidence": {
+        "fin": 0.95,
+        "phone": 0.95,
+        "address": 1
+      }
+    }
+  },
+  {
+    "image": "image copy 5.png",
+    "results": {
+      "fin": "430491295724",
+      "phone": "0903908121",
+      "nationality": {
+        "value": "Ethiopian",
+        "confidence": 1,
+        "raw": "705 BA * ® $F ail all 32% 8\n€ Card Details\n\nAan 1or\news. mite FIN 4304 9129 5724\n0903908121\n\nAV | Nationality\n(TAR A | Set Detorea)\n\nnxtPRE | Ethiopian\n£04 | Address\n\nheer\n\nSidama\n\nOYA A207 BY\nMehal Sidama Zone\n\nSho\nDale\n\n"
+      },
+      "address": {
+        "region": "Sidama",
+        "region_am": "ሲዳማ ክልል",
+        "zone": "Mehal Sidama Zone",
+        "zone_am": "መሃል ሲዳማ ዞን",
+        "woreda": "Dale",
+        "woreda_am": "ዳሌ",
+        "raw_text": "705 BA * ® $F ail all 32% 8\n€ Card Details\n\nAan 1or\news. mite FIN 4304 9129 5724\n0903908121\n\nAV | Nationality\n(TAR A | Set Detorea)\n\nnxtPRE | Ethiopian\n£04 | Address\n\nheer\n\nSidama\n\nOYA A207 BY\nMehal Sidama Zone\n\nSho\nDale\n\n",
+        "normalized": "Sidama, Mehal Sidama Zone, Dale",
+        "confidence": 1
+      },
+      "vid": null,
+      "_status": "Extracted (Safe Mode)",
+      "_source": "Safe Mode Architecture",
+      "_confidence": {
+        "fin": 0.95,
+        "phone": 0.95,
+        "address": 1
+      }
+    }
+  },
+  {
+    "image": "image copy 6.png",
+    "results": {
+      "fin": "937920180716",
+      "phone": "0947668997",
+      "nationality": {
+        "value": "Ethiopian",
+        "confidence": 1,
+        "raw": "522BX4° © WF all ll 33% B\n€ Card Details\n\nH¢\\ 00;\nEthiopian Digital ID Card\n\nAan 1Or\news: wit |FIN 9379 2018 0716\n0947668997\n\nHeIV* | Nationality\n(N#1AKO enc | Saf Declares)\n\nnxtPRE | Ethiopian\n£04 | Address\n\nrR AND\nAddis Ababa\nPr\n\nBole\n\nO22 08\nWoreda 08\n\n"
+      },
+      "address": {
+        "region": "Addis Ababa",
+        "region_am": "አዲስ አበባ",
+        "zone": "Bole",
+        "zone_am": "ቦሌ",
+        "woreda": "Woreda 08",
+        "woreda_am": "ወረዳ 08",
+        "raw_text": "522BX4° © WF all ll 33% B\n€ Card Details\n\nH¢\\ 00;\nEthiopian Digital ID Card\n\nAan 1Or\news: wit |FIN 9379 2018 0716\n0947668997\n\nHeIV* | Nationality\n(N#1AKO enc | Saf Declares)\n\nnxtPRE | Ethiopian\n£04 | Address\n\nrR AND\nAddis Ababa\nPr\n\nBole\n\nO22 08\nWoreda 08\n\n",
+        "normalized": "Addis Ababa, Bole, Woreda 08",
+        "confidence": 1
+      },
+      "vid": null,
+      "_status": "Extracted (Safe Mode)",
+      "_source": "Safe Mode Architecture",
+      "_confidence": {
+        "fin": 0.95,
+        "phone": 0.95,
+        "address": 1
+      }
+    }
+  },
+  {
+    "image": "image copy 7.png",
+    "results": {
+      "fin": "709561539047",
+      "phone": "0911165318",
+      "nationality": {
+        "value": "Ethiopian",
+        "confidence": 1,
+        "raw": "7:36 BD es © AF al wll 26% 8\n€ Card Details\n\nS¢\\ 00;\nEthiopian Digital ID Card\n\nPERRET wiht |FIN 7095 6153 9047\n0911165318\n\nHIV+ | Nationality\n(N+1AKO enc | Saf Declarec)\n\nnxPRE | Ethiopian\n£04 | Address\n\nwR AND\nAddis Ababa\nACR\n\nArada\n\nO22 05\nWoreda 05\n\n"
+      },
+      "address": {
+        "region": "Addis Ababa",
+        "region_am": "አዲስ አበባ",
+        "zone": "Arada",
+        "zone_am": "አራዳ",
+        "woreda": "Woreda 05",
+        "woreda_am": "ወረዳ 05",
+        "raw_text": "7:36 BD es © AF al wll 26% 8\n€ Card Details\n\nS¢\\ 00;\nEthiopian Digital ID Card\n\nPERRET wiht |FIN 7095 6153 9047\n0911165318\n\nHIV+ | Nationality\n(N+1AKO enc | Saf Declarec)\n\nnxPRE | Ethiopian\n£04 | Address\n\nwR AND\nAddis Ababa\nACR\n\nArada\n\nO22 05\nWoreda 05\n\n",
+        "normalized": "Addis Ababa, Arada, Woreda 05",
+        "confidence": 1
+      },
+      "vid": null,
+      "_status": "Extracted (Safe Mode)",
+      "_source": "Safe Mode Architecture",
+      "_confidence": {
+        "fin": 0.95,
+        "phone": 0.9,
+        "address": 1
+      }
+    }
+  },
+  {
+    "image": "image copy 8.png",
+    "results": {
+      "fin": "562904983571",
+      "phone": "0928907293",
+      "nationality": {
+        "value": "Ethiopian",
+        "confidence": 1,
+        "raw": "245A @w « © 24 all all 47%\n€ Card Details\n\nPaste bo 0;\nEthiopian Digital ID Card\n\nOS wiht |FIN 5629 0498 3571\n0928907293\n\nHIV+ | Nationality\n(N#7AKO enc | Saif Declarec)\n\nAERP | Ethiopian\n£04 | Address\n\nrR AND\nAddis Ababa\nAgs\n\nLideta\n\nO22 07\nWoreda 07\n\n"
+      },
+      "address": {
+        "region": "Addis Ababa",
+        "region_am": "አዲስ አበባ",
+        "zone": "Lideta",
+        "zone_am": "ልደታ",
+        "woreda": "Woreda 07",
+        "woreda_am": "ወረዳ 07",
+        "raw_text": "245A @w « © 24 all all 47%\n€ Card Details\n\nPaste bo 0;\nEthiopian Digital ID Card\n\nOS wiht |FIN 5629 0498 3571\n0928907293\n\nHIV+ | Nationality\n(N#7AKO enc | Saif Declarec)\n\nAERP | Ethiopian\n£04 | Address\n\nrR AND\nAddis Ababa\nAgs\n\nLideta\n\nO22 07\nWoreda 07\n\n",
+        "normalized": "Addis Ababa, Lideta, Woreda 07",
+        "confidence": 1
+      },
+      "vid": null,
+      "_status": "Extracted (Safe Mode)",
+      "_source": "Safe Mode Architecture",
+      "_confidence": {
+        "fin": 0.95,
+        "phone": 0.95,
+        "address": 1
+      }
+    }
+  },
+  {
+    "image": "image copy 9.png",
+    "results": {
+      "fin": "860973253483",
+      "phone": "0973054336",
+      "nationality": {
+        "value": "Ethiopian",
+        "confidence": 1,
+        "raw": "10:41 85 @ + TAF all al 32%\n€ Card Details\n\nOES. wit |FIN 609 7325 3483\n0973054336\n\nAY | Nationality\n(nr tARo anc St Deca\nREPRE | Ethiopian\nneGt | Address\n\nrR AND\n\nAddis Ababa\n\ngh\n\nYeka\n\nO22 02\n\nWoreda 02\n\n"
+      },
+      "address": {
+        "region": "Addis Ababa",
+        "region_am": "አዲስ አበባ",
+        "zone": "Yeka",
+        "zone_am": "የካ",
+        "woreda": "Woreda 02",
+        "woreda_am": "ወረዳ 02",
+        "raw_text": "10:41 85 @ + TAF all al 32%\n€ Card Details\n\nOES. wit |FIN 609 7325 3483\n0973054336\n\nAY | Nationality\n(nr tARo anc St Deca\nREPRE | Ethiopian\nneGt | Address\n\nrR AND\n\nAddis Ababa\n\ngh\n\nYeka\n\nO22 02\n\nWoreda 02\n\n",
+        "normalized": "Addis Ababa, Yeka, Woreda 02",
+        "confidence": 1
+      },
+      "vid": null,
+      "_status": "Extracted (Safe Mode)",
+      "_source": "Safe Mode Architecture",
+      "_confidence": {
+        "fin": 0.95,
+        "phone": 0.95,
+        "address": 1
+      }
+    }
+  },
+  {
+    "image": "image copy.png",
+    "results": {
+      "fin": "245940386582",
+      "phone": "0944391294",
+      "nationality": {
+        "value": "Ethiopian",
+        "confidence": 1,
+        "raw": "650R 45° GE TE all sll 39%\n\n€ Card Details\n\nAan }or\nes nite |FIN 2459 4038 6582\n0944391294\n\nHIV | Nationality\n(N#1AKO enc | Saf Declarec)\n\nAERP | Ethiopian\n£04 | Address\n\nrR AND\nAddis Ababa\ngh\n\nYeka\n\nO22 02\nWoreda 02\n\n"
+      },
+      "address": {
+        "region": "Addis Ababa",
+        "region_am": "አዲስ አበባ",
+        "zone": "Yeka",
+        "zone_am": "የካ",
+        "woreda": "Woreda 02",
+        "woreda_am": "ወረዳ 02",
+        "raw_text": "650R 45° GE TE all sll 39%\n\n€ Card Details\n\nAan }or\nes nite |FIN 2459 4038 6582\n0944391294\n\nHIV | Nationality\n(N#1AKO enc | Saf Declarec)\n\nAERP | Ethiopian\n£04 | Address\n\nrR AND\nAddis Ababa\ngh\n\nYeka\n\nO22 02\nWoreda 02\n\n",
+        "normalized": "Addis Ababa, Yeka, Woreda 02",
+        "confidence": 1
+      },
+      "vid": null,
+      "_status": "Extracted (Safe Mode)",
+      "_source": "Safe Mode Architecture",
+      "_confidence": {
+        "fin": 0.95,
+        "phone": 0.9,
+        "address": 1
+      }
+    }
+  },
+  {
+    "image": "image.png",
+    "results": {
+      "fin": "761734780186",
+      "phone": "0980827763",
+      "nationality": {
+        "value": "Ethiopian",
+        "confidence": 1,
+        "raw": "2:46 OD @® * ail all 40%\n€ Card Details\n\nPA ge\nEthiopian Digital ID Card\n\nAan 1Or\noes: nist |FIN 7617 3478 0186\n0980827763\n\n1+ | Nationality\n(traAto 0 [St Ow\nAPRS | Ethiopian\n£04 | Address\n\nrR AND\nAddis Ababa\nACR Thee\n\nLemi Kura\nO22, 02\nWoreda 02\n\n"
+      },
+      "address": {
+        "region": "Addis Ababa",
+        "region_am": "አዲስ አበባ",
+        "zone": "Lemi Kura",
+        "zone_am": "ለሚ ኩራ",
+        "woreda": "Woreda 02",
+        "woreda_am": "ወረዳ 02",
+        "raw_text": "2:46 OD @® * ail all 40%\n€ Card Details\n\nPA ge\nEthiopian Digital ID Card\n\nAan 1Or\noes: nist |FIN 7617 3478 0186\n0980827763\n\n1+ | Nationality\n(traAto 0 [St Ow\nAPRS | Ethiopian\n£04 | Address\n\nrR AND\nAddis Ababa\nACR Thee\n\nLemi Kura\nO22, 02\nWoreda 02\n\n",
+        "normalized": "Addis Ababa, Lemi Kura, Woreda 02",
+        "confidence": 1
+      },
+      "vid": null,
+      "_status": "Extracted (Safe Mode)",
+      "_source": "Safe Mode Architecture",
+      "_confidence": {
+        "fin": 0.95,
+        "phone": 0.95,
+        "address": 1
+      }
+    }
+  }
+]

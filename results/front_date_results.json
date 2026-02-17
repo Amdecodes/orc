@@ -1,0 +1,448 @@
+[
+  {
+    "image": "image copy 2.png",
+    "validity": {
+      "issue": {
+        "gc": "2026/Feb/09",
+        "ec": "2018/06/02"
+      },
+      "expiry": {
+        "gc": "2034/Feb/07",
+        "ec": "2026/05/30"
+      },
+      "method": "pass_1_strict",
+      "confidence": 0.98
+    },
+    "ocrLines": [
+      {
+        "text": "5:22 AX « ©) SO GE ull ll 33%B",
+        "x": 1004
+      },
+      {
+        "text": "€ Card Details",
+        "x": 454
+      },
+      {
+        "text": "PATEAE LEAN PIObP Nee",
+        "x": 1003
+      },
+      {
+        "text": "Ethiopian Digital ID Card",
+        "x": 1004.5
+      },
+      {
+        "text": "FAYDA DIGITAL COPY       Or APF",
+        "x": 922
+      },
+      {
+        "text": "Full Name FASLEIA HEC ALATIC LP",
+        "x": 721
+      },
+      {
+        "text": "Tasfayinesh Kadir Ayilamaram",
+        "x": 810
+      },
+      {
+        "text": "I+ MAL $7",
+        "x": 463
+      },
+      {
+        "text": "Date of Birth 21/03/1993 |2000/Nov/30 Pt",
+        "x": 733
+      },
+      {
+        "text": "Sex f>+| Female PALINSN+ $3",
+        "x": 538.5
+      },
+      {
+        "text": "Date of Expiry 2026/05/30 |2034/Feb/07 PHAMN? >",
+        "x": 1039
+      },
+      {
+        "text": "Date of Issue 2018/06/02",
+        "x": 1696
+      },
+      {
+        "text": "2026/Feb/09 nce 95642837610467 91",
+        "x": 1073
+      },
+      {
+        "text": "em IML",
+        "x": 838.5
+      },
+      {
+        "text": "FAN",
+        "x": 483.5
+      }
+    ]
+  },
+  {
+    "image": "image copy 3.png",
+    "validity": {
+      "issue": {
+        "gc": "2026/Feb/09",
+        "ec": "2018/06/02"
+      },
+      "expiry": {
+        "gc": "2034/Feb/07",
+        "ec": "2026/05/30"
+      },
+      "method": "pass_3_twin_check",
+      "confidence": 0.95
+    },
+    "ocrLines": [
+      {
+        "text": "7:05 47@° @) FF all wll S2%Q",
+        "x": 1002.5
+      },
+      {
+        "text": "€ Card Details",
+        "x": 454
+      },
+      {
+        "text": "PATPRE AE AA PIObE Ne",
+        "x": 1003
+      },
+      {
+        "text": "Ethiopian Digital ID Card",
+        "x": 1005
+      },
+      {
+        "text": "FAYDA DIGITAL COPY       OO AF",
+        "x": 922
+      },
+      {
+        "text": "Full Name MNMh ANN AC",
+        "x": 591.5
+      },
+      {
+        "text": "Tibebu Abebe Arigo",
+        "x": 662
+      },
+      {
+        "text": "7+ HAL $7",
+        "x": 463.5
+      },
+      {
+        "text": "Date of Birth 02/01/2000",
+        "x": 595
+      },
+      {
+        "text": "2007/Sep/13 Pt",
+        "x": 733
+      },
+      {
+        "text": "Sex Oye",
+        "x": 444.5
+      },
+      {
+        "text": "Male P7LINSNt $).| Date of Expiry PHAMN +)",
+        "x": 1038.5
+      },
+      {
+        "text": "Date of Issue 2018/06/02 |} 2026/Feb/09 2026/05/30 |2034/Feb/07",
+        "x": 1054.5
+      }
+    ]
+  },
+  {
+    "image": "image copy 4.png",
+    "validity": {
+      "issue": {
+        "gc": "2026/Feb/10",
+        "ec": "2018/06/03"
+      },
+      "expiry": {
+        "gc": "2034/Feb/08",
+        "ec": "2026/06/01"
+      },
+      "method": "pass_1_strict",
+      "confidence": 0.98
+    },
+    "ocrLines": [
+      {
+        "text": "11:43 fee a",
+        "x": 288.5
+      },
+      {
+        "text": "©} ° 9 @) ‘ret UF wlll ull 61%%",
+        "x": 1189.5
+      },
+      {
+        "text": "€ Card Details",
+        "x": 454
+      },
+      {
+        "text": "PATPRE BAA POPP OCR",
+        "x": 1003
+      },
+      {
+        "text": "Ethiopian Digital ID Card",
+        "x": 1005
+      },
+      {
+        "text": "      Oo AF",
+        "x": 922
+      },
+      {
+        "text": "Full Name O25 APF LNA",
+        "x": 579
+      },
+      {
+        "text": "Wuditu Lemma Debele",
+        "x": 702
+      },
+      {
+        "text": "7+ HAL 7",
+        "x": 463.5
+      },
+      {
+        "text": "Date of Birth 06/07/1958",
+        "x": 595
+      },
+      {
+        "text": "1966/Mar/15 P+",
+        "x": 733
+      },
+      {
+        "text": "Sex f>+| Female PALIN SN >).| Date of Expiry 2026/06/01 |2034/Feb/08 nce",
+        "x": 725
+      },
+      {
+        "text": "ATT",
+        "x": 838
+      },
+      {
+        "text": "FAN",
+        "x": 483.5
+      },
+      {
+        "text": "PHAMN +)",
+        "x": 1686.5
+      },
+      {
+        "text": "Date of Issue 2018/06/03",
+        "x": 1696.5
+      },
+      {
+        "text": "2026/Feb/ 10",
+        "x": 1694
+      }
+    ]
+  },
+  {
+    "image": "image copy 5.png",
+    "validity": {
+      "issue": {
+        "gc": "2026/Feb/11",
+        "ec": "2018/06/04"
+      },
+      "expiry": {
+        "gc": "2034/Feb/09",
+        "ec": "2026/06/02"
+      },
+      "method": "pass_1_strict",
+      "confidence": 0.98
+    },
+    "ocrLines": [
+      {
+        "text": "2:03 FH @ <4 @ v2 7E will will 50% B",
+        "x": 1003
+      },
+      {
+        "text": "€ Card Details",
+        "x": 454
+      },
+      {
+        "text": "PATPRE FB AA IOP HCL",
+        "x": 1003
+      },
+      {
+        "text": "Ethiopian Digital ID Card",
+        "x": 1005
+      },
+      {
+        "text": "FAYDA DIGITAL COPY       OoA AF",
+        "x": 922
+      },
+      {
+        "text": "Full Name AZAAAI? NCUY WN",
+        "x": 669.5
+      },
+      {
+        "text": "Addisalem Birhanu Seboka",
+        "x": 768.5
+      },
+      {
+        "text": "7+ HAL $7",
+        "x": 463.5
+      },
+      {
+        "text": "Date of Birth 09/01/2001",
+        "x": 595
+      },
+      {
+        "text": "2008/Sep/19 P+",
+        "x": 733
+      },
+      {
+        "text": "Sex f>+| Female PAIN SN >).| Date of Expiry PhAMM*",
+        "x": 1038.5
+      },
+      {
+        "text": "Dateof Issue 2018/06/04",
+        "x": 1695.5
+      },
+      {
+        "text": "2026/Feb/ 11 2026/06/02 |2034/Feb/09",
+        "x": 1045
+      }
+    ]
+  },
+  {
+    "image": "image copy.png",
+    "validity": {
+      "issue": {
+        "gc": "2026/Feb/06",
+        "ec": "2018/05/29"
+      },
+      "expiry": {
+        "gc": "2034/Feb/04",
+        "ec": "2026/05/27"
+      },
+      "method": "pass_1_strict",
+      "confidence": 0.98
+    },
+    "ocrLines": [
+      {
+        "text": "7:36 @ - @ - M®) GATE all ll 26% B",
+        "x": 1005
+      },
+      {
+        "text": "€< Card Details",
+        "x": 454
+      },
+      {
+        "text": "PATPRE AE AA PI-OhP OCk",
+        "x": 1003
+      },
+      {
+        "text": "Ethiopian Digital ID Card",
+        "x": 1004.5
+      },
+      {
+        "text": "      Vv Or AF",
+        "x": 1043.5
+      },
+      {
+        "text": "Full Name TONAT APF LNA",
+        "x": 603.5
+      },
+      {
+        "text": "Tigist Lema Debelie",
+        "x": 661
+      },
+      {
+        "text": "I+ HAL >)",
+        "x": 463.5
+      },
+      {
+        "text": "Date of Birth 01/04/1983",
+        "x": 595
+      },
+      {
+        "text": "1990/Dec/10 Pt",
+        "x": 735
+      },
+      {
+        "text": "Sex f>t+| Female PTINSNt $).| Date of Expiry PhnMM %",
+        "x": 1038.5
+      },
+      {
+        "text": "Dateof Issue 2018/05/29",
+        "x": 1693.5
+      },
+      {
+        "text": "2026/Feb/06 2026/05/27 |2034/Feb/04",
+        "x": 1045
+      }
+    ]
+  },
+  {
+    "image": "image.png",
+    "validity": {
+      "issue": {
+        "gc": "2026/Feb/06",
+        "ec": "2018/05/29"
+      },
+      "expiry": {
+        "gc": "2034/Feb/04",
+        "ec": "2026/05/27"
+      },
+      "method": "pass_1_strict",
+      "confidence": 0.98
+    },
+    "ocrLines": [
+      {
+        "text": "2:45 @ @ @ « O) GUE wall will 47% ©",
+        "x": 1002
+      },
+      {
+        "text": "€ Card Details",
+        "x": 454
+      },
+      {
+        "text": "PATPRE FB AA IOP HCL:",
+        "x": 1003
+      },
+      {
+        "text": "Ethiopian Digital ID Card",
+        "x": 1005
+      },
+      {
+        "text": "FAYDA DIGITAL COPY       Vv Or AF",
+        "x": 1043.5
+      },
+      {
+        "text": "Full Name NcZnt A°VFO: 14H",
+        "x": 646.5
+      },
+      {
+        "text": "Bereket Simachew Basazin",
+        "x": 770
+      },
+      {
+        "text": "PHAMN +)",
+        "x": 1686.5
+      },
+      {
+        "text": "Date of Issue 2018/05/29",
+        "x": 1696.5
+      },
+      {
+        "text": "2026/Feb/06 7+ HAL 7",
+        "x": 1044
+      },
+      {
+        "text": "Date of Birth 04/11/1996 |2004/Jul/11 P+",
+        "x": 715.5
+      },
+      {
+        "text": "Sex Oye",
+        "x": 444.5
+      },
+      {
+        "text": "Male PIN SNt ).| Date of Expiry 2026/05/27 |2034/Feb/04 62807469 nce .",
+        "x": 725
+      },
+      {
+        "text": "aa A",
+        "x": 700
+      },
+      {
+        "text": "FAN",
+        "x": 483.5
+      }
+    ]
+  }
+]

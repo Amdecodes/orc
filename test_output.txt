@@ -1,0 +1,16 @@
+
+Running: Standard Issue (Expiry derived)
+✅ PASS
+
+Running: Real ID Scenario (EC vs GC priority)
+✅ PASS
+
+Running: Multiple Candidates Conflict Resolution (Latest picked for GC priority)
+❌ FAIL
+  Expected: issue=2018-03-14 expiry=2026-03-12
+  Actual:   issue=2015-01-01 expiry=2022-12-30
+
+Running: Leap Year Awareness (2016 Feb 29)
+✅ PASS
+
+━━━ Results: 3/4 passed ━━━

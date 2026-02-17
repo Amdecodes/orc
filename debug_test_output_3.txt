@@ -1,0 +1,14 @@
+
+Running: Standard Issue (Expiry derived)
+✅ PASS
+
+Running: Real ID Scenario (EC vs GC priority)
+✅ PASS
+
+Running: Multiple Candidates Conflict Resolution (Latest picked for GC priority)
+✅ PASS
+
+Running: Leap Year Awareness (2016 Feb 29)
+✅ PASS
+
+━━━ Results: 4/4 passed ━━━

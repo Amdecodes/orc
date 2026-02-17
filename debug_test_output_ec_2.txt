@@ -1,0 +1,12 @@
+
+Running: Standard ID Flow (EC 2010-09-25 -> GC 2018-06-02)
+✅ PASS
+
+Running: EC Leap Year Scenario
+❌ FAIL
+  Issue Expected: ec=2007-13-01 gc=2015-09-06
+  Issue Actual:   ec=2007-13-01 gc=2015-09-06
+  Expiry Expected: gc=2023-09-05 ec=2015-12-30
+  Expiry Actual:   gc=2023-09-04 ec=2015-12-29
+
+━━━ Results: 1/2 passed ━━━

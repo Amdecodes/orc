@@ -49,17 +49,14 @@ export function buildDynamicCrop(anchor, meta) {
   if (anchor.type === 'primary') {
     // Primary: Name is BELOW or ON THE SAME LINE.
     // Tesseract often merges "Full Name" detection with the value.
-    // So we must capture the ANCHOR LINE itself + the line below.
-    // Start 50% of a line height ABOVE the detected anchor Y to be safe.
-    top = anchor.approxY - (EST_LINE_H * 0.5); 
-    // Capture ~3 lines to be safe (Anchor + 2 lines below)
-    height = EST_LINE_H * 3.0; 
+    // Start slightly higher to catch the top of symbols
+    top = anchor.approxY - (EST_LINE_H * 0.8); 
+    height = EST_LINE_H * 3.5; 
   } else {
     // Secondary: DOB is below name.
-    // We want the lines ABOVE DOB.
-    // Go up ~2.5 lines.
-    top = anchor.approxY - (EST_LINE_H * 2.5);
-    height = EST_LINE_H * 2.5;
+    // Go up further to ensure we catch the name line
+    top = anchor.approxY - (EST_LINE_H * 3.2);
+    height = EST_LINE_H * 3.2;
   }
 
   const left = Math.floor(meta.width * LEFT_PCT);

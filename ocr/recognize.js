@@ -1,4 +1,5 @@
 import { createWorker } from "tesseract.js";
+import sharp from "sharp";
 
 // Helper: Score a single line of text
 function scoreLine(rawLine, variantName) {
@@ -50,12 +51,10 @@ async function recognizeVariant(imagePath, crop, psm, options = {}, externalWork
   const worker = externalWorker || await createWorker("amh"); // Base language
   try {
     const params = {
-      // tessedit_pageseg_mode: psm, // Commented out to test default
+      tessedit_pageseg_mode: psm || "3",
       preserve_interword_spaces: "1",
-      tessedit_char_whitelist: options.whitelist || "" // Explicitly clear if not provided
+      tessedit_char_whitelist: options.whitelist || "" 
     };
-
-    if (psm) console.log(`DEBUG: Ignoring PSM ${psm} to test default.`);
 
     await worker.setParameters(params);
     
@@ -66,7 +65,10 @@ async function recognizeVariant(imagePath, crop, psm, options = {}, externalWork
       box: true,
       ...options
     };
-    if (crop) recognizeOptions.rectangle = crop;
+
+    if (crop) {
+      recognizeOptions.rectangle = crop;
+    }
     
     const { data } = await worker.recognize(imagePath, recognizeOptions);
 
@@ -203,7 +205,7 @@ async function recognizeVariant(imagePath, crop, psm, options = {}, externalWork
 }
 
 // Main function: Multi-Pass Line-based Scoring
-export async function recognizeName(imagePath, crop) {
+export async function recognizeName(imagePath, crop, externalWorker = null) {
   const variants = [
     { psm: "6", name: "Block" },
     { psm: "7", name: "Line" }, 
@@ -214,7 +216,7 @@ export async function recognizeName(imagePath, crop) {
   const allCandidates = [];
 
   for (const v of variants) {
-    const lines = await recognizeVariant(imagePath, crop, v.psm);
+    const lines = await recognizeVariant(imagePath, crop, v.psm, {}, externalWorker);
     
     for (const line of lines) {
       const result = scoreLine(line, v.name);

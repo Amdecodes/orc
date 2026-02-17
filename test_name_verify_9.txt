@@ -1,0 +1,5 @@
+
+🔍 Testing Name Extraction for: ./samples/front/image copy 4.png
+📏 Dimensions: 576x1280
+⏳ Running Full OCR for anchor detection...
+❌ No suitable anchor found in the full text.

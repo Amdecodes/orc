@@ -48,10 +48,36 @@ export function isInQRZone(y, x, meta) {
   return isBottom && isRight;
 }
 
+// Helper to flatten Tesseract blocks/paragraphs into lines
+function flattenLines(source) {
+  if (!source || typeof source !== 'object') return [];
+  if (Array.isArray(source.lines)) return source.lines;
+  if (Array.isArray(source.blocks)) {
+    const lines = [];
+    source.blocks.forEach((block, bi) => {
+      console.log(`  Block ${bi} type: ${block.blocktype}`);
+      if (block.paragraphs) {
+        block.paragraphs.forEach((p, pi) => {
+          if (p.lines) {
+            console.log(`    Para ${pi} has ${p.lines.length} lines`);
+            lines.push(...p.lines);
+          } else {
+            console.log(`    Para ${pi} has no lines`);
+          }
+        });
+      } else {
+        console.log(`  Block ${bi} has no paragraphs`);
+      }
+    });
+    return lines;
+  }
+  return [];
+}
+
 export function findBestAnchor(text, imageMeta) {
   if (!text) return null;
 
-  const lines = text.split('\n'); // Keep empty lines for index checks
+  const lines = text.split('\n');
   const candidates = [];
 
   for (let i = 0; i < lines.length; i++) {
@@ -59,37 +85,24 @@ export function findBestAnchor(text, imageMeta) {
     if (!line) continue;
 
     let score = 0;
-    let type = null; // Initialize type once
+    let type = null;
 
-    // 2. Keyword Match Score (Primary vs Secondary)
     const normalized = line.replace(/\s+/g, " ");
 
-    if (/ሙሉ.?ስም|Full.?Name/i.test(normalized)) {
+    if (/ሙ[ሉሱ].?ስም|Full.?Name/i.test(normalized)) {
       score += 10;
       type = 'primary';
-    } else if (/የትውልድ.?ቀን|Date.?of.?Birth/i.test(normalized)) {
+    } else if (/የ?ትውልድ.?ቀን|Date.?of.?Birth/i.test(normalized)) {
       score += 5;
-      // Boost if BOTH parts match (stronger signal)
       if (/Date/i.test(normalized) && /Birth/i.test(normalized)) score += 3;
       type = 'secondary';
     } else {
-      // Skip irrelevant lines early to save processing
       continue;
     }
 
-    // 3. Context Score: Position
-    // Full Name is usually in the top 30-60% of lines?
-    // Let's just penalize very bottom lines for Primary
     const relativePos = i / lines.length;
     if (type === 'primary' && relativePos < 0.6) score += 2;
-    
-    // 4. Content Score: Amharic Density (Bonus)
-    // If the identifying line ITSELF has Amharic, it's more likely a valid label
     if (/[\u1200-\u137F]/.test(line)) score += 1;
-
-    // 5. Noise Penalty
-    // If line has digits, it might be a noisy read (e.g. "40 Full Name")
-    // or a different field (Date). "Full Name" label shouldn't have digits.
     if (/\d/.test(line)) score -= 2;
     
     candidates.push({
@@ -100,17 +113,13 @@ export function findBestAnchor(text, imageMeta) {
     });
   }
 
-  // Sort by Score DESC
   candidates.sort((a, b) => b.score - a.score);
-
   if (candidates.length === 0) return null;
 
   const best = candidates[0];
-  const lineHeight = imageMeta.height / lines.length;
   
-  // Calculate approxY
-  // For 'primary', the name is below. For 'secondary', it's above.
-  // We'll return the anchor Y, and let crop.js handle the offset.
+  // Calculate approxY using relative line index (Resolution Independent)
+  const lineHeight = imageMeta.height / lines.length;
   const y = Math.floor(best.lineIndex * lineHeight);
 
   return {

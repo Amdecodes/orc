@@ -4,10 +4,10 @@ import { createWorker } from "tesseract.js";
 import { findBestAnchor } from "./ocr/anchor.js";
 import { buildDynamicCrop } from "./ocr/crop.js";
 import { recognizeName } from "./ocr/recognize.js";
-import { getPngDimensions } from "./ocr/image_meta.js";
+import { getImageDimensions } from "./ocr/image_meta.js";
 
 const startBatch = async () => {
-  const images = fs.readdirSync("./samples/front").filter(f => f.match(/^image.*\.png$/) || f.endsWith(".png"));
+  const images = fs.readdirSync("./samples/front").filter(f => f.match(/^image.*\.png$/) || f.endsWith(".png") || f.endsWith(".jpg"));
   console.log(`Found ${images.length} images to process.`);
 
   const worker = await createWorker(["amh", "eng"]); // Bilingual detection
@@ -20,8 +20,8 @@ const startBatch = async () => {
     console.log(`\nProcessing: ${img}`);
 
     try {
-      // 1. Get Dimensions (Manual)
-      const meta = getPngDimensions(imagePath);
+      // 1. Get Dimensions
+      const meta = await getImageDimensions(imagePath);
       
       // 2. Full OCR to find layout
       const result = await worker.recognize(imagePath);

@@ -1,0 +1,6 @@
+
+🔍 Testing Name Extraction for: ./samples/front/image copy 4.png
+📏 Dimensions: 576x1280
+⏳ Running Full OCR for anchor detection...
+DEBUG: source is object but has no lines/blocks. Keys: text, hocr, tsv, box, unlv, osd, pdf, imageColor, imageGrey, imageBinary, confidence, blocks, layoutBlocks, psm, oem, version, debug, rotateRadians
+❌ No suitable anchor found in the full text.

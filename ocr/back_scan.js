@@ -6,10 +6,11 @@ import fs from "fs";
 import { scanQR } from "./qr.js";
 import { findBackAnchors, getDynamicCrop, findLabelsInTSV } from "./anchor.js";
 import { matchLocation, NUMERIC_WOREDA_REGIONS } from "./location_index.js";
+import { extractValidityDates } from "./date_extraction.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-import { toTitleCase } from './ocr_utils.js';
+import { toTitleCase, groupWordsIntoLines } from './ocr_utils.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -656,6 +657,11 @@ export async function extractBackID(imagePath) {
     }
 
     const nationality = resolveNationality(fullTextRaw);
+ 
+    // --- Validity Date Extraction ---
+    // Use semantic line grouping (splits on line_num OR | separators)
+    const ocrLines = groupWordsIntoLines(words);
+    const validity = extractValidityDates(ocrLines, W);
 
     // --- 6. Final Evaluation ---
     const isSuccess = !!fin; // At minimum, we want FIN correctly
@@ -733,13 +739,18 @@ export async function extractBackID(imagePath) {
       phone: phone || qrData?.phone || null,
       nationality,
       address,
+      validity,
       vid: qrData?.vid || null,
       _status: (fin && phone) ? "Extracted (Safe Mode)" : "Partial/Failed",
       _source: "Safe Mode Architecture",
       _confidence: {
           fin: finConfidence,
           phone: phoneConfidence,
-          address: address.confidence
+          address: address.confidence,
+          validity: {
+              issue_date: validity.issue_date.confidence,
+              expiry_date: validity.expiry_date.confidence
+          }
       }
     };
 

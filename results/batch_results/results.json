@@ -1,0 +1,146 @@
+[
+  {
+    "file": "photo_1_2026-02-16_09-45-11.jpg",
+    "status": "success",
+    "confidence": 1,
+    "data": {
+      "full_name_en": "Yihun Kifle Kechale",
+      "fan": "2579014304859356",
+      "dob_gc": "2000/09/11",
+      "dob_et": "1993-01-01",
+      "gender": {
+        "en": "Male",
+        "am": "ወንድ",
+        "confidence": 0.99
+      }
+    }
+  },
+  {
+    "file": "photo_2_2026-02-16_09-45-11.jpg",
+    "status": "success",
+    "confidence": 1,
+    "data": {
+      "full_name_en": "Abenezer Alemayehu Worku",
+      "fan": "5342738650694135",
+      "dob_gc": "2005/08/13",
+      "dob_et": "1997-12-07",
+      "gender": {
+        "en": "Male",
+        "am": "ወንድ",
+        "confidence": 0.99
+      }
+    }
+  },
+  {
+    "file": "photo_3_2026-02-16_09-45-11.jpg",
+    "status": "success",
+    "confidence": 1,
+    "data": {
+      "full_name_en": "Meseret Toske Torko",
+      "fan": "2431845125482963",
+      "dob_gc": "1990/04/20",
+      "dob_et": "1982-08-12",
+      "gender": {
+        "en": "Female",
+        "am": "ሴት",
+        "confidence": 0.99
+      }
+    }
+  },
+  {
+    "file": "photo_4_2026-02-16_09-45-11.jpg",
+    "status": "success",
+    "confidence": 1,
+    "data": {
+      "full_name_en": "Addisalem Birhanu Seboka",
+      "fan": "6019713094792704",
+      "dob_gc": "2008/09/19",
+      "dob_et": "2001-01-09",
+      "gender": {
+        "en": "Female",
+        "am": "ሴት",
+        "confidence": 0.99
+      }
+    }
+  },
+  {
+    "file": "photo_5_2026-02-16_09-45-11.jpg",
+    "status": "success",
+    "confidence": 1,
+    "data": {
+      "full_name_en": "Wuditu Lemma Debele",
+      "fan": "5470420815324801",
+      "dob_gc": "1966/03/15",
+      "dob_et": "1958-07-06",
+      "gender": {
+        "en": "Female",
+        "am": "ሴት",
+        "confidence": 0.99
+      }
+    }
+  },
+  {
+    "file": "photo_6_2026-02-16_09-45-11.jpg",
+    "status": "success",
+    "confidence": 1,
+    "data": {
+      "full_name_en": "Tibebu Abebe Arigo",
+      "fan": "4163927349702952",
+      "dob_gc": "2007/09/13",
+      "dob_et": "2000-01-02",
+      "gender": {
+        "en": "Male",
+        "am": "ወንድ",
+        "confidence": 0.99
+      }
+    }
+  },
+  {
+    "file": "photo_7_2026-02-16_09-45-11.jpg",
+    "status": "success",
+    "confidence": 1,
+    "data": {
+      "full_name_en": "Tasfayinesh Kadir Ayilamaram",
+      "fan": "9564283761046791",
+      "dob_gc": "2000/11/30",
+      "dob_et": "1993-03-21",
+      "gender": {
+        "en": "Female",
+        "am": "ሴት",
+        "confidence": 0.99
+      }
+    }
+  },
+  {
+    "file": "photo_8_2026-02-16_09-45-11.jpg",
+    "status": "success",
+    "confidence": 1,
+    "data": {
+      "full_name_en": "Tigist Lema Debelie",
+      "fan": "2673895370961748",
+      "dob_gc": "1990/12/10",
+      "dob_et": "1983-04-01",
+      "gender": {
+        "en": "Female",
+        "am": "ሴት",
+        "confidence": 0.99
+      }
+    }
+  },
+  {
+    "file": "photo_9_2026-02-16_09-45-11.jpg",
+    "status": "success",
+    "confidence": 1,
+    "data": {
+      "full_name_en": "Tomas Tariku Teni",
+      "fan": "5928574187032675",
+      "dob_gc": "2002/09/08",
+      "dob_et": "1994-13-03",
+      "gender": {
+        "en": "Male",
+        "am": "ወንድ",
+        "confidence": 0.99
+      }
+    }
+  }
+]
