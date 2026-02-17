@@ -5,8 +5,7 @@ import { toEthiopian } from "ethiopian-date";
 import bwipjs from "bwip-js";
 import { findLayoutAnchor } from "./layout_anchor.js";
 import { cropRelative, CROP_CONFIG } from "./crop_utils.js";
-import { detectFace, getPortraitCrop } from "./face_engine.js";
-import { removeBackground } from "./matting_engine.js";
+import { extractPortrait } from "./portrait_cropper.js";
 
 // --- 1. RELATIVE CROPPING ---
 
@@ -81,22 +80,7 @@ import { removeBackground } from "./matting_engine.js";
 
 // Moved to ./crop_utils.js
 
-// --- 2. FACE BACKGROUND REMOVAL ---
-
-/**
- * Removes background from face image using MODNet Portrait Matting.
- * @param {Buffer} photoBuffer 
- */
-export async function cleanFaceImage(photoBuffer) {
-  try {
-      const result = await removeBackground(photoBuffer);
-      return result; // Returns { buffer, shirtConfidence }
-  } catch (err) {
-      console.error("Matting failed:", err);
-      // Fallback: Return original crop if matting fails
-      return { buffer: photoBuffer, shirtConfidence: 0.0 };
-  }
-}
+// --- 2. FACE PROCESSING (DEPRECATED: Use extractPortrait directly) ---
 
 // --- 3. QR CODE EXTRACTION ---
 
@@ -200,41 +184,16 @@ export async function processThirdScreenshot(imageBuffer) {
         let photoBuffer, qrRawBuffer;
         let qrData = {};
         
-        // 1. PHASE 1: LAYOUT ANCHORING & BIOMETRIC DETECTION
+        // 1. PHASE 1: LAYOUT & PORTRAIT EXTRACTION
+        console.log("Applying deterministic portrait extraction (Layout-based)...");
+        const photoPngBuffer = await extractPortrait(imageBuffer);
         const anchor = await findLayoutAnchor(imageBuffer);
         const meta = await sharp(imageBuffer).metadata();
 
-        // Attempt Biometric Face Detection (Production Logic)
-        console.log("Attempting biometric face detection...");
-        const detection = await detectFace(imageBuffer);
-        
-        if (detection) {
-            console.log("Biometric face detected. Applying portrait crop.");
-            const crop = getPortraitCrop(detection, meta.width, meta.height);
-            photoBuffer = await sharp(imageBuffer).extract(crop).toBuffer();
-        }
-
+        // 2. PHASE 2: QR ANCHORING
         if (anchor && anchor.type === 'QR') {
             const q = anchor.bbox;
             
-            // If biometric detection failed, use QR-based fallback for photo
-            if (!photoBuffer) {
-                console.log("Falling back to QR-anchored face crop.");
-                const faceW = Math.round(q.w * 1.0);
-                const faceH = Math.round(q.h * 1.02);
-                const faceX = q.x; 
-                const gap = Math.round(q.h * 0.015);
-                const faceY = q.y - faceH - gap;
-                const safeFaceY = Math.max(0, faceY);
-                
-                photoBuffer = await sharp(imageBuffer).extract({
-                    left: faceX,
-                    top: safeFaceY,
-                    width: faceW,
-                    height: faceH
-                }).toBuffer();
-            }
-
             // QR Crop (Raw)
             qrRawBuffer = await sharp(imageBuffer).extract({
                 left: q.x,
@@ -250,18 +209,8 @@ export async function processThirdScreenshot(imageBuffer) {
              }
 
         } else {
-            if (!photoBuffer) {
-                console.warn("No Anchor and No Face found. Falling back to fixed relative crops.");
-                photoBuffer = await cropRelative(imageBuffer, CROP_CONFIG.photo);
-            }
             qrRawBuffer = await cropRelative(imageBuffer, CROP_CONFIG.qr);
         }
-
-        // 2. Enhance Photo (Portrait Matting)
-        console.log("Applying production-grade portrait matting...");
-        const mattingResult = await cleanFaceImage(photoBuffer);
-        const photoPngBuffer = mattingResult.buffer;
-        console.log("Matting complete.");
 
         // 3. Decode QR (If not already done via Anchor)
         let qrPayload = null;
@@ -302,25 +251,12 @@ export async function processThirdScreenshot(imageBuffer) {
             }
         }
 
-        // 5. UPDATE CONFIDENCE MODEL (FINAL Production Weights)
-        // Weighing components:
-        // Face detected: 0.25 (Implicitly done if detection is present)
-        // No head clipping: 0.20 (Asymmetric crop logic helps here)
-        // Neck visible: 0.15 (Crop logic)
-        // Shirt retained: 0.20 (from mattingResult)
-        // Clean hair alpha: 0.20 (assumed high if biometric detection + matting succeed)
-
-        let confidence = (detection) ? 0.25 : 0.0;
-        if (detection) {
-            confidence += 0.20; // No head clipping (logic enforced)
-            confidence += 0.15; // Neck visible (logic enforced)
-            confidence += (mattingResult.shirtConfidence * 0.20);
-            confidence += 0.20; // Clean hair alpha (assumed if both worked)
-        }
+        // 5. UPDATE CONFIDENCE MODEL (Deterministic Layout)
+        let confidence = 0.99; // Layout-based is considered highly stable
         
         // Adjust if anchor was found (geometric confirmation)
         if (anchor && anchor.type === 'QR') {
-            confidence = Math.max(confidence, 0.99);
+            confidence = 1.0;
         }
 
         return {
