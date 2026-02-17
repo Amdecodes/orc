@@ -1,6 +1,0 @@
-
-🔍 Testing Name Extraction for: ./samples/front/image copy 4.png
-📏 Dimensions: 576x1280
-⏳ Running Full OCR for anchor detection...
-DEBUG: findBestAnchor processing 0 lines. isDataObj: false
-❌ No suitable anchor found in the full text.

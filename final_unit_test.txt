@@ -1,8 +1,0 @@
-
-Running: Standard ID Flow (EC 2010-09-25 -> GC 2018-06-02)
-✅ PASS
-
-Running: EC Leap Year Scenario (Pagume 1)
-✅ PASS
-
-━━━ Results: 2/2 passed ━━━

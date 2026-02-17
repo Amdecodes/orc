@@ -1,8 +1,0 @@
-
-🔍 Testing Name Extraction for: ./samples/front/image copy 4.png
-📏 Dimensions: 576x1280
-⏳ Running Full OCR for anchor detection...
-
-❌ Error during testing: TypeError: rawText.split is not a function
-    at findBestAnchor (file:///home/amde/Documents/et-id-ocr-test/ocr/anchor.js:57:58)
-    at testSingle (file:///home/amde/Documents/et-id-ocr-test/tools/test_name.js:36:20)
