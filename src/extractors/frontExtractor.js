@@ -70,17 +70,16 @@ export async function extractFront(imagePath) {
         await workerEng.terminate();
     }
 
-    // --- Pass 5: Global Validity Date Search ---
-    let ocrDates = null;
-    const tempPath = path.join(os.tmpdir(), `front_ocr_validity_${Date.now()}.png`);
+    // --- Pass 5: Global OCR (Returned for Pipeline Validity Search) ---
+    let ocrLines = [];
+    const tempPath = path.join(os.tmpdir(), `front_ocr_lines_${Date.now()}.png`);
     try {
         await fs.writeFile(tempPath, imageBuffer);
         const tsv = runTesseractCLI(tempPath, 'tsv', { psm: 3 });
         const words = parseTSV(tsv);
-        const lines = groupWordsIntoLines(words);
-        ocrDates = extractValidityDates(lines, meta.width);
+        ocrLines = groupWordsIntoLines(words);
     } catch (err) {
-        console.warn(`[Extractor:Front] Validity search failed: ${err.message}`);
+        console.warn(`[Extractor:Front] Global OCR failed: ${err.message}`);
     } finally {
         await fs.unlink(tempPath).catch(() => {});
     }
@@ -100,12 +99,7 @@ export async function extractFront(imagePath) {
             en: "",
             confidence: bestOverall ? 0.95 : 0
         },
-        validity: ocrDates?.validity || {
-            issue: { gc: "", ec: "" },
-            expiry: { gc: "", ec: "" },
-            method: "none",
-            confidence: 0
-        },
-        _raw: { candidates, dobText: dobGc, ocrDates }
+        ocrLines, // Expose for centralized date extraction
+        _raw: { candidates, dobText: dobGc }
     };
 }

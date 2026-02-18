@@ -54,28 +54,25 @@ export async function extractThird(imagePath) {
         }
     }
 
-    // 3. Date Extraction (Fallback/Authoritative if not in QR)
-    // We run a quick OCR on the third image to find dates if QR fails to provide them
-    let ocrDates = null;
-    if (!qrData?.issueDate) {
-        const tempPath = path.join(os.tmpdir(), `third_ocr_${Date.now()}.png`);
-        await fs.writeFile(tempPath, imgBuffer);
-        const tsv = runTesseractCLI(tempPath, 'tsv', { psm: 3 });
-        const words = parseTSV(tsv);
-        const lines = groupWordsIntoLines(words);
-        
-        // Get image width for column-based logic
-        const { width } = await sharp(imgBuffer).metadata();
-        ocrDates = extractValidityDates(lines, width);
-        await fs.unlink(tempPath).catch(() => {});
-    }
+    // 3. Validity (Minimal QR fallback)
+    const validity = {
+        issue: { 
+            gc: qrData?.issueDate || "",
+            ec: ""
+        },
+        expiry: { 
+            gc: qrData?.expiryDate || "",
+            ec: ""
+        },
+        method: qrData?.issueDate ? "QR" : "none",
+        confidence: qrData?.issueDate ? 1.0 : 0
+    };
 
     return {
         personal: {
             name: { en: qrData?.name || "" },
             dob: {
                 gc: qrData?.dob || "",
-                // EC conversion will happen in validator/transformer
                 ec: "",
                 source: qrData ? "QR" : "OCR"
             },
@@ -83,19 +80,7 @@ export async function extractThird(imagePath) {
                 en: qrData?.gender || ""
             }
         },
-        validity: ocrDates?.validity || {
-            issue: { 
-                gc: qrData?.issueDate || "",
-                ec: ""
-            },
-            expiry: {
-                gc: qrData?.expiryDate || "",
-                ec: ""
-            },
-            source: qrData?.issueDate ? "QR" : "OCR",
-            method: qrData?.issueDate ? "QR" : "none",
-            confidence: qrData?.issueDate ? 1.0 : 0
-        },
+        validity,
         identifiers: {
             fan: qrData?.vid || "",
             fin: qrData?.uin || ""
@@ -124,6 +109,6 @@ export async function extractThird(imagePath) {
             parsed: qrData || {},
             confidence: qrData ? 1.0 : 0
         },
-        _raw: { qr: qrData, ocr: ocrDates }
+        _raw: { qr: qrData }
     };
 }

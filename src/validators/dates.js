@@ -38,8 +38,8 @@ export function calculateValidity(issueGcDate) {
         
         const date = new Date(Date.UTC(y, m - 1, d));
         
-        // Add 2921 days as per user specification (7 years, 11 months, 30 days)
-        date.setUTCDate(date.getUTCDate() + 2921);
+        // Add 2920 days as per user specification
+        date.setUTCDate(date.getUTCDate() + 2920);
         
         const expiryGc = date.toISOString().split("T")[0];
         

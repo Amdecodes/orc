@@ -5,6 +5,7 @@ import { validatePhone } from "../validators/phone.js";
 import { validateFIN } from "../validators/fin.js";
 import { calculateValidity, gcToEc, formatGcWithMonth } from "../validators/dates.js";
 import { calculateCompositionalConfidence } from "../utils/confidence.js";
+import { extractValidityDates } from "../utils/date_engine.js";
 
 /**
  * DATA TRUTH HIERARCHY
@@ -19,8 +20,8 @@ const FIELD_PRIORITY = {
     phone: ["back", "third"],
     address: ["back", "third"],
     nationality: ["back", "third"],
-    issue_date: ["third", "front", "back"],
-    expiry_date: ["third", "front", "back"]
+    issue_date: ["front"],
+    expiry_date: ["front"]
 };
 
 /**
@@ -46,50 +47,29 @@ export async function runPipeline(frontImg, backImg, thirdImg) {
     // 3. Declarative Conflict Resolution
     const resolved = resolveConflicts(data);
 
-    // 4. Validation & Date Processing
-    const phoneVal = validatePhone(resolved.phone);
-    const finVal = validateFIN(resolved.fin);
-    
-    // 4. Deterministic Validity & Date processing
-    let finalValidity = {
-        issue: { gc: "", ec: "" },
-        expiry: { gc: "", ec: "" },
-        method: "none"
-    };
-
-    // Rule: Use OCR-extracted validity if available (any method except failure)
-    const confirmedSource = [data.third.validity, data.front.validity]
-        .find(v => v && v.method && v.method !== "failure" && v.method !== "none" && v.issue?.gc);
-    
-    if (confirmedSource) {
-        finalValidity = {
-            issue: { 
-                gc: formatGcWithMonth(confirmedSource.issue.gc), 
-                ec: confirmedSource.issue.ec 
-            },
-            expiry: { 
-                gc: formatGcWithMonth(confirmedSource.expiry.gc), 
-                ec: confirmedSource.expiry.ec 
-            },
-            method: confirmedSource.method
-        };
-        console.log(`[Pipeline] Using OCR-direct validity (method=${confirmedSource.method})`);
-    } else if (resolved.issue_date) {
-        // Fallback to calculation ONLY if OCR found nothing
-        const calc = calculateValidity(resolved.issue_date);
-        finalValidity = {
-            ...calc,
-            method: "derived_from_issue"
-        };
-        console.log(`[Pipeline] Falling back to derived validity from issue_date`);
-    }
-
-    // Process DOB (QR > Front) + EC Conversion
+    // 4. Resolve DOB Truth (QR > Front) for filtering
     let finalDobGc = resolved.dob;
     if (finalDobGc) finalDobGc = finalDobGc.replace(/\//g, "-");
     const finalDobEc = gcToEc(finalDobGc);
 
-    // 5. Confidence Scoring
+    // 5. Centralized Validity Extraction (High Confidence, DOB-Filtered)
+    const frontOcrLines = data.front.ocrLines || [];
+    const extractionResult = extractValidityDates(frontOcrLines, finalDobGc, finalDobEc);
+    
+    let finalValidity = extractionResult.validity;
+
+    // Format for output if found
+    if (finalValidity.issue.gc) {
+        finalValidity.issue.gc = formatGcWithMonth(finalValidity.issue.gc);
+        finalValidity.expiry.gc = formatGcWithMonth(finalValidity.expiry.gc);
+        console.log(`[Pipeline] Centralized Validity Extraction Success: ${finalValidity.method}`);
+    }
+
+    // 6. Validation & Date Processing
+    const phoneVal = validatePhone(resolved.phone);
+    const finVal = validateFIN(resolved.fin);
+    
+    // 7. Confidence Scoring
     const confidence = calculateCompositionalConfidence({
         qrDecoded: !!thirdRaw.qr_payload?.raw,
         finValid: finVal.valid,
@@ -97,7 +77,7 @@ export async function runPipeline(frontImg, backImg, thirdImg) {
         datesValid: !!finalValidity.issue.gc
     });
 
-    // 6. Final Transformation (Immutable JSON Contract)
+    // 8. Final Transformation (Immutable JSON Contract)
     return {
         personal: {
             name: { 
@@ -124,7 +104,7 @@ export async function runPipeline(frontImg, backImg, thirdImg) {
             issue: finalValidity.issue,
             expiry: finalValidity.expiry,
             method: finalValidity.method,
-            confidence: finalValidity.method === "anchored_dual_date_confirmed" ? 1.0 : 0.8
+            confidence: finalValidity.method === "deterministic_confirmed" ? 1.0 : 0.8
         },
         identifiers: {
             fan: thirdRaw.identifiers.fan,
@@ -147,8 +127,8 @@ export async function runPipeline(frontImg, backImg, thirdImg) {
         },
         qr_payload: thirdRaw.qr_payload,
         system: {
-            version: "1.0.1",
-            pipeline: "deterministic_v1_dates"
+            version: "1.0.2",
+            pipeline: "deterministic_v2_centralized"
         },
         _confidence: confidence
     };
@@ -218,11 +198,9 @@ function resolveConflicts(data) {
         third: "" 
     }).value;
 
-    // --- Validity Logic (Strict 2921-day rule) ---
+    // --- Validity Logic (Front OCR Only) ---
     resolved.issue_date = pick("issue_date", { 
-        third: data.third.validity.issue.gc, 
-        front: data.front.validity.issue.gc,
-        back: data.back.validity?.issue?.gc || "" 
+        front: data.front?.validity?.issue?.gc || ""
     }).value;
 
     console.log(`[Pipeline] Final Issue Date Found: ${resolved.issue_date}`);
@@ -247,4 +225,3 @@ if (process.argv[1] && process.argv[1].endsWith("runPipeline.js")) {
             process.exit(1);
         });
 }
-
