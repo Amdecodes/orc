@@ -38,11 +38,15 @@ export async function extractThird(imagePath) {
         const cropW = Math.min(imgWidth - cropX, Math.ceil(width + padding * 2));
         const cropH = Math.min(imgHeight - cropY, Math.ceil(height + padding * 2));
 
-        const qrBuffer = await sharp(imgBuffer)
-            .extract({ left: cropX, top: cropY, width: cropW, height: cropH })
-            .png({ compressionLevel: 0 }) // Lossless
-            .toBuffer();
-        qrImageBase64 = qrBuffer.toString('base64');
+        if (cropW > 0 && cropH > 0) {
+            const qrBuffer = await sharp(imgBuffer)
+                .extract({ left: cropX, top: cropY, width: cropW, height: cropH })
+                .png({ compressionLevel: 0 }) // Lossless
+                .toBuffer();
+            qrImageBase64 = qrBuffer.toString('base64');
+        } else {
+            console.warn(`[Extractor:Third] Invalid QR crop dimensions: ${cropW}x${cropH}`);
+        }
     }
 
     // 2.2 Barcode Image Generation (1D from FAN)

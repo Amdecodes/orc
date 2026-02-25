@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                String              @id @default(uuid()) @db.Uuid
+  telegramId        BigInt?             @unique @map("telegram_id")
+  email             String?             @unique
+  role              String              @default("user")
+  credits           Int                 @default(0)
+  createdAt         DateTime            @default(now()) @map("created_at")
+  jobs              IDJob[]
+  creditTransactions CreditTransaction[]
+
+  @@map("users")
+}
+
+model CreditTransaction {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  user      User     @relation(fields: [userId], references: [id])
+  amount    Int
+  reason    String
+  refId     String?  @map("ref_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("credit_transactions")
+}
+
+model IDJob {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  user      User     @relation(fields: [userId], references: [id])
+  status    String   // pending | success | failed
+  frontPath String?  @map("front_path")
+  backPath  String?  @map("back_path")
+  finalPath String?  @map("final_path")
+  cost      Int      @default(1)
+  error     String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("id_jobs")
+}

@@ -14,7 +14,7 @@ export async function generateBarcode(text) {
             text: text,            // Text to encode
             scale: 3,              // 3x scaling factor
             height: 10,            // Bar height, in millimeters
-            includetext: true,     // Show human-readable text
+            includetext: false,    // Hide human-readable text
             textxalign: 'center',  // Center-aligned text
         }, (err, png) => {
             if (err) {

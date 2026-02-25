@@ -27,6 +27,14 @@ export async function scanQR(imagePath) {
         .threshold(128); 
     
     result = await decodeWithZXing(upscaled);
+    if (result && result._bbox) {
+        // Scale back coordinates
+        result._bbox.left = Math.floor(result._bbox.left / 2);
+        result._bbox.top = Math.floor(result._bbox.top / 2);
+        result._bbox.width = Math.ceil(result._bbox.width / 2);
+        result._bbox.height = Math.ceil(result._bbox.height / 2);
+        return result;
+    }
     if (result) return result;
 
     // 3. Last Resort: jsQR on raw

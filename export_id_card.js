@@ -152,7 +152,7 @@ function mixedLine(ctx, text, x, y, opts = {}) {
 
 // ─── FRONT ───────────────────────────────────────────────────────────────────
 export async function renderFront(data, bgPath, outPath) {
-  console.log('[Front] rendering…');
+  console.log('[Front] rendering…', { hasData: !!data, personal: !!data?.personal });
 
   const p  = data.personal    || {};
   const v  = data.validity    || {};
@@ -298,24 +298,26 @@ export async function renderBack(data, bgPath, outPath) {
 }
 
 // ─── Main ────────────────────────────────────────────────────────────────────
-(async () => {
-  const jsonPath = process.argv[2] || path.join(ROOT, 'verification_result.json');
-  const frontBg  = path.join(ROOT, 'front v3.0.png');
-  const backBg   = path.join(ROOT, 'back V3.0.png');
-  const outDir   = path.join(ROOT, 'output');
+if (import.meta.url === `file://${process.argv[1]}` || (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url))) {
+  (async () => {
+    const jsonPath = process.argv[2] || path.join(ROOT, 'verification_result.json');
+    const frontBg  = path.join(ROOT, 'front v3.0.png');
+    const backBg   = path.join(ROOT, 'back V3.0.png');
+    const outDir   = path.join(ROOT, 'output');
 
-  if (!fs.existsSync(jsonPath)) { console.error('❌ JSON not found:', jsonPath); process.exit(1); }
-  if (!fs.existsSync(frontBg))  { console.error('❌ front v3.0.png not found');  process.exit(1); }
-  if (!fs.existsSync(backBg))   { console.error('❌ back V3.0.png not found');   process.exit(1); }
+    if (!fs.existsSync(jsonPath)) { console.error('❌ JSON not found:', jsonPath); process.exit(1); }
+    if (!fs.existsSync(frontBg))  { console.error('❌ front v3.0.png not found');  process.exit(1); }
+    if (!fs.existsSync(backBg))   { console.error('❌ back V3.0.png not found');   process.exit(1); }
 
-  if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
+    if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
 
-  const data = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
+    const data = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
 
-  await renderFront(data, frontBg, path.join(outDir, 'id-export-front.png'));
-  await renderBack (data, backBg,  path.join(outDir, 'id-export-back.png'));
+    await renderFront(data, frontBg, path.join(outDir, 'id-export-front.png'));
+    await renderBack (data, backBg,  path.join(outDir, 'id-export-back.png'));
 
-  console.log('\n✅ Done!');
-  console.log('   output/id-export-front.png');
-  console.log('   output/id-export-back.png');
-})();
+    console.log('\n✅ Done!');
+    console.log('   output/id-export-front.png');
+    console.log('   output/id-export-back.png');
+  })();
+}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #fff;
+  }
+
+  .canvas {
+    position: relative;
+    width: 2102px;
+    height: 638px;
+    background: white;
+  }
+
+  .front {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1011px;
+    height: 638px;
+  }
+
+  .back {
+    position: absolute;
+    left: 1091px; /* 1011 + 80 margin */
+    top: 0;
+    width: 1011px;
+    height: 638px;
+  }
+
+  .front img,
+  .back img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+</style>
+</head>
+<body>
+  <div class="canvas">
+    <div class="front">
+      <img src="{{FRONT_IMAGE}}" />
+    </div>
+
+    <div class="back">
+      <img src="{{BACK_IMAGE}}" />
+    </div>
+  </div>
+</body>
+</html>
