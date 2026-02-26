@@ -1,0 +1,9 @@
+{
+  "name": "@et-id-ocr/credit-engine",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "src/index.js",
+  "dependencies": {
+    "@prisma/client": "^7.4.1"
+  }
+}

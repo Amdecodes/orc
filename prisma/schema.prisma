@@ -7,41 +7,164 @@ datasource db {
 }
 
 model User {
-  id                String              @id @default(uuid()) @db.Uuid
-  telegramId        BigInt?             @unique @map("telegram_id")
-  email             String?             @unique
-  role              String              @default("user")
-  credits           Int                 @default(0)
-  createdAt         DateTime            @default(now()) @map("created_at")
-  jobs              IDJob[]
-  creditTransactions CreditTransaction[]
+  id            String    @id @default(uuid())
+  name          String?
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  image         String?
+  telegramId    String?   @unique
+  username      String?
+  passwordHash  String?
+  credits       Int       @default(0)
+  role          Role      @default(USER)
+  state         UserState @default(IDLE)
+  
+  sessions      Session[]
+  accounts      Account[]
+  
+  pendingPackageId String?
+  jobs            Job[]
+  transactions    Transaction[]
+  payments        Payment[]
+  tempUpload      TempUpload?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  @@map("users")
+  @@map("user")
 }
 
-model CreditTransaction {
-  id        String   @id @default(uuid()) @db.Uuid
-  userId    String   @map("user_id") @db.Uuid
+model Session {
+  id        String   @id @default(uuid())
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(uuid())
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id @default(uuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+
+  @@map("verification")
+}
+
+model TempUpload {
+  id        String @id @default(uuid())
+  userId    String @unique
+  user      User   @relation(fields: [userId], references: [id])
+  frontPath String?
+  backPath  String?
+  thirdPath String?
+}
+
+model Job {
+  id        String   @id @default(uuid())
+  userId    String
+  status    JobStatus
+  cost      Int
+  output    String?
+  createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
+}
+
+model Transaction {
+  id        String   @id @default(uuid())
+  userId    String
+  type      TransactionType
   amount    Int
-  reason    String
-  refId     String?  @map("ref_id")
-  createdAt DateTime @default(now()) @map("created_at")
-
-  @@map("credit_transactions")
+  jobId     String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
 }
 
-model IDJob {
-  id        String   @id @default(uuid()) @db.Uuid
-  userId    String   @map("user_id") @db.Uuid
-  user      User     @relation(fields: [userId], references: [id])
-  status    String   // pending | success | failed
-  frontPath String?  @map("front_path")
-  backPath  String?  @map("back_path")
-  finalPath String?  @map("final_path")
-  cost      Int      @default(1)
-  error     String?
-  createdAt DateTime @default(now()) @map("created_at")
+model CreditPackage {
+  id        String    @id @default(uuid())
+  name      String
+  credits   Int
+  priceETB  Int
+  active    Boolean   @default(true)
+  payments  Payment[]
+}
 
-  @@map("id_jobs")
+model Payment {
+  id            String        @id @default(uuid())
+  userId        String
+  packageId     String
+  amount        Int
+  credits       Int
+  method        PaymentMethod
+  proofUrl      String?
+  referenceText String?
+  status        PaymentStatus @default(PENDING)
+  adminId       String?
+  createdAt     DateTime      @default(now())
+  approvedAt    DateTime?
+  user          User          @relation(fields: [userId], references: [id])
+  package       CreditPackage @relation(fields: [packageId], references: [id])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum UserState {
+  IDLE
+  WAIT_FRONT
+  WAIT_BACK
+  WAIT_THIRD
+  PROCESSING
+  WAIT_PAYMENT_PROOF
+}
+
+enum JobStatus {
+  SUCCESS
+  FAILED
+}
+
+enum TransactionType {
+  TOPUP
+  DEDUCT
+  REFUND
+}
+
+enum PaymentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum PaymentMethod {
+  MANUAL
+  AUTO
 }

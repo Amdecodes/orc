@@ -1,0 +1,26 @@
+{
+  "name": "@et-id-ocr/id-engine",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "src/core/generateID.js",
+  "dependencies": {
+    "@imgly/background-removal-node": "^1.4.5",
+    "@mediapipe/face_detection": "^0.4.1646425229",
+    "@mediapipe/face_mesh": "^0.4.1633559619",
+    "@tensorflow-models/face-detection": "^1.0.3",
+    "@tensorflow/tfjs-backend-wasm": "^4.22.0",
+    "@tensorflow/tfjs-core": "^4.22.0",
+    "@tensorflow/tfjs-node": "^4.22.0",
+    "@zxing/library": "^0.21.3",
+    "bwip-js": "^4.8.0",
+    "canvas": "^3.2.1",
+    "ethiopian-date": "^0.0.6",
+    "jimp": "^1.6.0",
+    "jsqr": "^1.4.0",
+    "onnxruntime-node": "^1.24.1",
+    "pngjs": "^7.0.0",
+    "qrcode-reader": "^1.0.4",
+    "sharp": "^0.34.5",
+    "tesseract.js": "^7.0.0"
+  }
+}

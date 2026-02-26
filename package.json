@@ -3,15 +3,26 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
+  "workspaces": [
+    "apps/*",
+    "services/*"
+  ],
   "main": "index.js",
   "scripts": {
-    "server": "node src/api_server.js",
+    "dev": "npm run dev --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present",
+    "start": "npm run start --workspaces --if-present",
+    "prisma:generate": "npx prisma generate",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@fastify/cors": "^11.2.0",
+    "@fastify/jwt": "^10.0.0",
+    "@fastify/multipart": "^9.4.0",
+    "@fastify/static": "^9.0.0",
     "@imgly/background-removal-node": "^1.4.5",
     "@mediapipe/face_detection": "^0.4.1646425229",
     "@mediapipe/face_mesh": "^0.4.1633559619",
@@ -22,12 +33,14 @@
     "@tensorflow/tfjs-core": "^4.22.0",
     "@tensorflow/tfjs-node": "^4.22.0",
     "@zxing/library": "^0.21.3",
+    "better-auth": "^1.4.19",
     "bwip-js": "^4.8.0",
     "canvas": "^3.2.1",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "ethiopian-date": "^0.0.6",
     "express": "^5.2.1",
+    "fastify": "^5.7.4",
     "jimp": "^1.6.0",
     "jsqr": "^1.4.0",
     "multer": "^2.0.2",
@@ -41,6 +54,8 @@
   },
   "devDependencies": {
     "@types/pg": "^8.16.0",
+    "axios": "^1.13.5",
+    "form-data": "^4.0.5",
     "prisma": "^7.4.1"
   }
 }

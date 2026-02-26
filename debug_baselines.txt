@@ -42,3 +42,64 @@ Candidate: y=2438 score=55 text="7617"
 Candidate: y=2438 score=55 text="3478"
 Candidate: y=2438 score=55 text="0186"
 Best for fin: y=2476 score=85
+
+--- Searching for phone near label at y=3 ---
+No strong candidates for phone. Fallback to generous crop.
+
+--- Searching for fin near label at y=1083 ---
+No strong candidates for fin. Fallback to generous crop.
+
+--- Searching for phone near label at y=2432 ---
+Candidate: y=2502 score=205 text="0943023404"
+Best for phone: y=2502 score=205
+
+--- Searching for fin near label at y=2465 ---
+Candidate: y=2469 score=55 text="4082"
+Candidate: y=2469 score=55 text="3056"
+Candidate: y=2469 score=55 text="2784"
+Candidate: y=2502 score=85 text="0943023404"
+Best for fin: y=2502 score=85
+
+--- Searching for phone near label at y=2432 ---
+Candidate: y=2502 score=205 text="0943023404"
+Best for phone: y=2502 score=205
+
+--- Searching for fin near label at y=2465 ---
+Candidate: y=2469 score=55 text="4082"
+Candidate: y=2469 score=55 text="3056"
+Candidate: y=2469 score=55 text="2784"
+Candidate: y=2502 score=85 text="0943023404"
+Best for fin: y=2502 score=85
+
+--- Searching for phone near label at y=2432 ---
+Candidate: y=2502 score=205 text="0943023404"
+Best for phone: y=2502 score=205
+
+--- Searching for fin near label at y=2465 ---
+Candidate: y=2469 score=55 text="4082"
+Candidate: y=2469 score=55 text="3056"
+Candidate: y=2469 score=55 text="2784"
+Candidate: y=2502 score=85 text="0943023404"
+Best for fin: y=2502 score=85
+
+--- Searching for phone near label at y=2432 ---
+Candidate: y=2502 score=205 text="0943023404"
+Best for phone: y=2502 score=205
+
+--- Searching for fin near label at y=2465 ---
+Candidate: y=2469 score=55 text="4082"
+Candidate: y=2469 score=55 text="3056"
+Candidate: y=2469 score=55 text="2784"
+Candidate: y=2502 score=85 text="0943023404"
+Best for fin: y=2502 score=85
+
+--- Searching for phone near label at y=2432 ---
+Candidate: y=2502 score=205 text="0943023404"
+Best for phone: y=2502 score=205
+
+--- Searching for fin near label at y=2465 ---
+Candidate: y=2469 score=55 text="4082"
+Candidate: y=2469 score=55 text="3056"
+Candidate: y=2469 score=55 text="2784"
+Candidate: y=2502 score=85 text="0943023404"
+Best for fin: y=2502 score=85
