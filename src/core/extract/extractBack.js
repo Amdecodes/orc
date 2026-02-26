@@ -1,20 +1,20 @@
 /**
  * BACK SIDE EXTRACTOR
- * 
- * Logic copied verbatim from ground-truth source: ocr/back_scan.js
- * No renaming of internal variables.
- * No regex changes.
- * No OCR parameter changes.
+ *
+ * Accepts: imagePath (string) OR imageBuffer (Buffer)
+ *
+ * Logic delegated verbatim to back_engine. No regex changes.
  */
 
-import { extractBackID } from "../utils/back_engine.js";
+import { extractBackID } from "../../utils/back_engine.js";
 
-export async function extractBack(imagePath) {
-    console.log(`[Extractor:Back] Processing ${imagePath}`);
-    
-    // Wrapping existing logic as requested.
-    const result = await extractBackID(imagePath);
-    
+export async function extractBack(input) {
+    const label = Buffer.isBuffer(input) ? '<buffer>' : input;
+    console.log(`[Extractor:Back] Processing ${label}`);
+
+    // Wrapping existing logic — back_engine now accepts Buffer | string
+    const result = await extractBackID(input);
+
     return {
         identifiers: {
             fin: result.fin || ""
@@ -33,7 +33,7 @@ export async function extractBack(imagePath) {
             }
         },
         validity: {
-            issue: result.validity?.validity?.issue || { gc: "", ec: "" },
+            issue:  result.validity?.validity?.issue  || { gc: "", ec: "" },
             expiry: result.validity?.validity?.expiry || { gc: "", ec: "" }
         },
         _raw: result

@@ -1,12 +1,17 @@
 /**
- * export_id_card.js  — single-file ID card renderer
+ * renderCards.js  — ID card canvas renderer (core module)
  *
- * Run:  node export_id_card.js [path/to/verification_result.json]
- * Out:  output/id-export-front.png
- *       output/id-export-back.png
+ * Moved from: export_id_card.js (project root)
+ * Now lives:  src/core/image/renderCards.js
  *
  * Canvas: 1011 × 638 (fixed)
- * Fonts:  Droid Sans Ethiopic  +  Liberation Sans/Mono
+ * Fonts:  Noto Serif Ethiopic  +  Roboto
+ *
+ * Exports:
+ *   renderFront(data, bgPath, outPath)    — writes PNG to disk (used by api_server)
+ *   renderBack(data, bgPath, outPath)     — writes PNG to disk
+ *   renderFrontBuffer(data, bgPath)       — returns PNG Buffer (used by generateID)
+ *   renderBackBuffer(data, bgPath)        — returns PNG Buffer
  */
 
 import { createCanvas, loadImage, registerFont } from 'canvas';
@@ -18,7 +23,8 @@ import { spawnSync } from 'child_process';
 
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const ROOT      = __dirname;                          // project root
+// Project root is 3 levels up: src/core/image → src/core → src → project root
+const ROOT      = path.resolve(__dirname, '../../..');
 
 // ─── Fonts ───────────────────────────────────────────────────────────────────
 registerFont(path.join(ROOT, 'fonts', 'NotoSerifEthiopic-Bold.ttf'),
@@ -68,7 +74,7 @@ async function autocropPortrait(b64, w, h, facePercent = 60) {
 
   // ── Step 1: face-detect + crop via Python ──────────────────────────────
   let croppedBuf;
-  const pyScript = path.join(ROOT, 'src', 'utils', 'autocrop_face.py');
+  const pyScript = path.join(ROOT, 'src', 'utils', 'autocrop_face.py'); // always relative to project root
   const py = spawnSync(
     'python3', [pyScript, String(w), String(h), String(facePercent)],
     { input: b64, encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }
@@ -150,10 +156,8 @@ function mixedLine(ctx, text, x, y, opts = {}) {
   });
 }
 
-// ─── FRONT ───────────────────────────────────────────────────────────────────
-export async function renderFront(data, bgPath, outPath) {
-  console.log('[Front] rendering…', { hasData: !!data, personal: !!data?.personal });
-
+// ─── FRONT (shared render logic) ─────────────────────────────────────────────
+async function _buildFrontCanvas(data, bgPath) {
   const p  = data.personal    || {};
   const v  = data.validity    || {};
   const id = data.identifiers || {};
@@ -175,7 +179,7 @@ export async function renderFront(data, bgPath, outPath) {
   const ctx    = canvas.getContext('2d');
   ctx.drawImage(bg, 0, 0, W, H);
 
-  // Portrait — X:89 Y:151 W:273 H:405  (autocrop: head+neck, transparent bg)
+  // Portrait — X:89 Y:151 W:273 H:405
   const portraitB64 = (data.media?.portrait?.png) || null;
   if (portraitB64) {
     const buf = await autocropPortrait(portraitB64, 273, 405, 60);
@@ -184,16 +188,12 @@ export async function renderFront(data, bgPath, outPath) {
 
   // Amharic name — X:412 Y:201
   txt(ctx, namAm, 412, 201, { size: FS_MAIN, weight: 'bold', ethiopic: true });
-
   // English name — X:412 Y:235
   txt(ctx, namEn, 412, 235, { size: FS_MAIN, weight: 'bold' });
-
   // DOB — X:412 Y:335
   mixedLine(ctx, `${dobEc} |${dobGc}`, 412, 335, { size: FS_MAIN, weight: 'bold'});
-
   // Sex — X:412 Y:401
   mixedLine(ctx, `${sexAm} |${sexEn}`, 412, 401, { size: FS_MAIN, weight: 'bold'});
-
   // Expiry — X:412 Y:468
   mixedLine(ctx, `${expEc} |${expGc}`, 412, 468, { size: FS_MAIN, weight: 'bold'});
 
@@ -201,19 +201,18 @@ export async function renderFront(data, bgPath, outPath) {
   const fanFmt = fan.replace(/(\d{4})(?=\d)/g, '$1 ');
   txt(ctx, fanFmt, 482, 526, { size: FS_MAIN, weight: 'bold', color: CLR_PRIMARY, mono: true });
 
-  // FAN barcode — X:478 Y:500
+  // FAN barcode — X:478 Y:530
   const barcodeB64 = (data.media?.barcode?.png) || null;
   if (barcodeB64) {
     const buf = await sharp(b64buf(barcodeB64)).resize(280, 55, { fit: 'fill' }).png().toBuffer();
     ctx.drawImage(await loadImage(buf), 478, 530, 280, 55);
   }
 
-  // Issue date EC (rotated vertical) — X:12 Y:381
+  // Issue date EC (rotated vertical)
   ctx.save(); ctx.translate(26, 462); ctx.rotate(-Math.PI / 2);
-  txt(ctx, issEc, 0, 0, { size: FS_ISSUE, weight: 'bold'}); 
+  txt(ctx, issEc, 0, 0, { size: FS_ISSUE, weight: 'bold'});
   ctx.restore();
-
-  // Issue date GC (rotated vertical) — X:12 Y:95
+  // Issue date GC (rotated vertical)
   ctx.save(); ctx.translate(26, 225); ctx.rotate(-Math.PI / 2);
   txt(ctx, issGc, 0, 0, { size: FS_ISSUE, weight: 'bold'});
   ctx.restore();
@@ -224,24 +223,35 @@ export async function renderFront(data, bgPath, outPath) {
     ctx.drawImage(await loadImage(buf), 821, 457, 84, 123);
   }
 
+  return canvas;
+}
+
+/** File-writing variant (used by api_server.js and CLI) */
+export async function renderFront(data, bgPath, outPath) {
+  console.log('[Front] rendering…', { hasData: !!data, personal: !!data?.personal });
+  const canvas = await _buildFrontCanvas(data, bgPath);
   fs.writeFileSync(outPath, canvas.toBuffer('image/png'));
   console.log('[Front] ✅', outPath);
 }
 
-// ─── BACK ────────────────────────────────────────────────────────────────────
-export async function renderBack(data, bgPath, outPath) {
-  console.log('[Back] rendering…');
+/** Buffer-returning variant (used by generateID — no file I/O) */
+export async function renderFrontBuffer(data, bgPath) {
+  const canvas = await _buildFrontCanvas(data, bgPath);
+  return canvas.toBuffer('image/png');
+}
 
+// ─── BACK (shared render logic) ──────────────────────────────────────────────
+async function _buildBackCanvas(data, bgPath) {
   const c  = data.contact     || {};
   const p  = data.personal    || {};
   const id = data.identifiers || {};
 
-  const phone = (c.phone        || {}).value || '';
-  const natAm = (p.nationality  || {}).am    || 'ኢትዮጵያዊ';
-  const natEn = (p.nationality  || {}).en    || 'Ethiopian';
+  const phone  = (c.phone       || {}).value || '';
+  const natAm  = (p.nationality || {}).am    || 'ኢትዮጵያዊ';
+  const natEn  = (p.nationality || {}).en    || 'Ethiopian';
   const addrAm = (c.address || {}).am || '';
   const addrEn = (c.address || {}).en || '';
-  const fin  = id.fin || '';
+  const fin    = id.fin || '';
 
   const amP = addrAm.split(',').map(s => s.trim());
   const enP = addrEn.split(',').map(s => s.trim());
@@ -251,53 +261,51 @@ export async function renderBack(data, bgPath, outPath) {
   const ctx    = canvas.getContext('2d');
   ctx.drawImage(bg, 0, 0, W, H);
 
-  // Phone — X:22 Y:78
   txt(ctx, phone, 22, 78, { size: FS_MAIN, weight: 'bold', mono: true });
-
-  // Nationality — X:22 Y:177
   mixedLine(ctx, `${natAm} |${natEn}`, 22, 177, { size: FS_NAT, weight: 'bold' });
 
-  // Region amh — X:22 Y:253
   txt(ctx, amP[0] || '', 22, 253, { size: FS_ADDR_AM, ethiopic: true });
-  // Region eng — X:22 Y:290
   txt(ctx, enP[0] || '', 22, 290, { size: FS_ADDR_EN, weight: 'bold' });
-
-  // Zone/Subcity amh — X:22 Y:335
   txt(ctx, amP[1] || '', 22, 335, { size: FS_ADDR_AM, ethiopic: true });
-  // Zone/Subcity eng — X:22 Y:372
   txt(ctx, enP[1] || '', 22, 372, { size: FS_ADDR_EN, weight: 'bold' });
-
-  // Woreda amh — X:22 Y:416
   txt(ctx, amP[2] || '', 22, 416, { size: FS_ADDR_AM, ethiopic: true });
-  // Woreda eng — X:22 Y:454
   txt(ctx, enP[2] || '', 22, 454, { size: FS_ADDR_EN, weight: 'bold' });
 
-  // FIN — X:156 Y:560
   txt(ctx, fin, 156, 560, { size: FS_FIN, weight: 'bold', color: CLR_PRIMARY, mono: true });
 
-  // QR — X:461 Y:13 W:509 H:553  (from pipeline media.qr.png base64)
   const qrB64 = (data.media?.qr?.png) || null;
   if (qrB64) {
-    const pad = 12;                        // white border thickness (px)
+    const pad = 12;
     const qw = 509, qh = 553;
     const buf = await sharp(b64buf(qrB64))
-      .trim({ background: '#ffffff', threshold: 80 })  // strip JPEG off-white quiet-zone
-      .resize(qw - pad * 2, qh - pad * 2, { fit: 'fill' }) // slightly smaller to leave room for border
+      .trim({ background: '#ffffff', threshold: 80 })
+      .resize(qw - pad * 2, qh - pad * 2, { fit: 'fill' })
       .png().toBuffer();
-    // white background rect (the border)
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(461, 13, qw, qh);
-    // QR image inset by pad
     ctx.drawImage(await loadImage(buf), 461 + pad, 13 + pad, qw - pad * 2, qh - pad * 2);
   } else {
     console.warn('[Back]  ⚠️  No QR image in pipeline result (media.qr.png is empty)');
   }
 
+  return canvas;
+}
+
+/** File-writing variant (used by api_server.js and CLI) */
+export async function renderBack(data, bgPath, outPath) {
+  console.log('[Back] rendering…');
+  const canvas = await _buildBackCanvas(data, bgPath);
   fs.writeFileSync(outPath, canvas.toBuffer('image/png'));
   console.log('[Back]  ✅', outPath);
 }
 
-// ─── Main ────────────────────────────────────────────────────────────────────
+/** Buffer-returning variant (used by generateID — no file I/O) */
+export async function renderBackBuffer(data, bgPath) {
+  const canvas = await _buildBackCanvas(data, bgPath);
+  return canvas.toBuffer('image/png');
+}
+
+// ─── CLI (kept for direct invocation: node src/core/image/renderCards.js) ────
 if (import.meta.url === `file://${process.argv[1]}` || (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url))) {
   (async () => {
     const jsonPath = process.argv[2] || path.join(ROOT, 'verification_result.json');

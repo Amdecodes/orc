@@ -1,11 +1,11 @@
-import { extractFront } from "../extractors/frontExtractor.js";
-import { extractBack } from "../extractors/backExtractor.js";
-import { extractThird } from "../extractors/thirdExtractor.js";
+import { extractFront } from "../core/extract/extractFront.js";
+import { extractBack } from "../core/extract/extractBack.js";
+import { extractThird } from "../core/extract/extractThird.js";
 import { validatePhone } from "../validators/phone.js";
 import { validateFIN } from "../validators/fin.js";
-import { calculateValidity, gcToEc, formatGcWithMonth } from "../validators/dates.js";
+import { calculateValidity, gcToEc, formatGcWithMonth } from "../core/dates/dateUtils.js";
 import { calculateCompositionalConfidence } from "../utils/confidence.js";
-import { extractValidityDates } from "../utils/date_engine.js";
+import { extractValidityDates } from "../core/dates/issueDate.js";
 
 /**
  * DATA TRUTH HIERARCHY

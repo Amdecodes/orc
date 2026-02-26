@@ -1,5 +1,5 @@
 import { runPipeline } from "./src/pipeline/runPipeline.js";
-import { renderFront, renderBack } from "./export_id_card.js";
+import { renderFront, renderBack } from "./src/core/image/renderCards.js";
 import fs   from "fs";
 import path from "path";
 import { fileURLToPath } from "url";

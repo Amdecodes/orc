@@ -1,6 +1,8 @@
 /**
  * FRONT SIDE EXTRACTOR (Hardened)
- * 
+ *
+ * Accepts: imagePath (string) OR imageBuffer (Buffer)
+ *
  * Rules:
  * 1. Fixed positional crop (35-60% Y).
  * 2. Multi-pass OCR (Standard, Threshold 128, Threshold 160).
@@ -9,33 +11,37 @@
  */
 
 import { createWorker } from "tesseract.js";
-import { getFrontNameCrop, getFrontDobCrop } from "../utils/crop.js";
-import { findBestNameCandidate } from "../utils/name_validator.js";
-import { groupWordsIntoLines } from "../utils/ocr_utils.js";
-import { extractValidityDates } from "../utils/date_engine.js";
-import { runTesseractCLI, parseTSV } from "../utils/cli_ocr.js";
+import { getFrontNameCrop, getFrontDobCrop } from "../../utils/crop.js";
+import { findBestNameCandidate } from "../../utils/name_validator.js";
+import { groupWordsIntoLines } from "../../utils/ocr_utils.js";
+import { extractValidityDates } from "../dates/issueDate.js";
+import { runTesseractCLI, parseTSV } from "../../utils/cli_ocr.js";
 import sharp from "sharp";
 import fs from "fs/promises";
 import path from "path";
 import os from "os";
 
-export async function extractFront(imagePath) {
-    console.log(`[Extractor:Front] Hardened Extraction for ${imagePath}`);
+export async function extractFront(input) {
+    const imageBuffer = Buffer.isBuffer(input)
+        ? input
+        : await fs.readFile(input);
 
-    const meta = await sharp(imagePath).metadata();
+    const label = Buffer.isBuffer(input) ? '<buffer>' : input;
+    console.log(`[Extractor:Front] Hardened Extraction for ${label}`);
+
+    const meta = await sharp(imageBuffer).metadata();
     const nameCrop = getFrontNameCrop(meta);
     const dobCrop = getFrontDobCrop(meta);
 
-    const imageBuffer = await fs.readFile(imagePath);
     const workerAmh = await createWorker("amh");
     const workerEng = await createWorker("eng");
-    
+
     const candidates = [];
     let dobGc = "";
 
     try {
         const nameCroppedBuffer = await sharp(imageBuffer).extract(nameCrop).toBuffer();
-        
+
         // --- Pass 1-3: Amharic Name Scanning ---
         // Pass 1: Standard Grayscale
         const pass1Buf = await sharp(nameCroppedBuffer).grayscale().png().toBuffer();
@@ -58,7 +64,7 @@ export async function extractFront(imagePath) {
         // --- Pass 4: DOB Fallback (English Worker) ---
         const dobCroppedBuffer = await sharp(imageBuffer).extract(dobCrop).toBuffer();
         const { data: { text: dobText } } = await workerEng.recognize(dobCroppedBuffer);
-        
+
         // Strict GC Date Regex (YYYY/MM/DD)
         const dateMatch = dobText.match(/\b(19|20)\d{2}[\/\-](0[1-9]|1[0-2])[\/\-](0[1-9]|[12]\d|3[01])\b/);
         if (dateMatch) {
@@ -89,7 +95,7 @@ export async function extractFront(imagePath) {
     return {
         name: {
             am: bestOverall ? bestOverall.clean : "",
-            en: "" 
+            en: ""
         },
         dob: {
             gc: dobGc

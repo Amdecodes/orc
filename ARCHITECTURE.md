@@ -1,32 +1,45 @@
-# Ethiopian Digital ID OCR – Rules
+# Ethiopian Digital ID OCR – Architecture
 
-This document outlines the core principles and architectural rules of the Ethiopian Digital ID OCR project.
+This document outlines the modular architecture and core principles of the project.
 
 ## 🎯 Design Principles
-- **Deterministic First**: Prefer rule-based logic over AI/guessing where possible (e.g., cropping, validation).
+- **Deterministic First**: Prefer rule-based logic over AI/guessing where possible.
 - **Truth Hierarchy**: **QR > OCR** for English Name, DOB, and Gender.
-- **Isolate Logic**: No extraction or validation logic should exist in test files or the root directory.
-- **Immutable Contract**: The pipeline output must always follow the defined JSON schema.
+- **Buffer-First Core**: Core logic operates on image Buffers to ensure platform independence (API, Bot, Web).
+- **Zero Side Effects**: Core functions do not perform file I/O or console logging.
+- **Immutable Contract**: Output must always follow the defined JSON schema.
 
 ## 📂 Directory Structure
-- `src/extractors/`: Production logic for Front, Back, and Third image extraction.
-- `src/validators/`: Strict validation for Phone, FIN, and Dates.
+
+### 🏗️ Core Logic (`src/core/`)
+- `extract/`: Multi-pass extractors for Front, Back, and Third images.
+- `dates/`: Date normalization (GC/EC) and validity calculation.
+- `image/`: Canvas-based card rendering and layout composition.
+- `errors.js`: Standardized `IdentityExtractionError` classes.
+- `generateID.js`: **Primary Entry Point**. Orthogonal wrapper for the entire pipeline.
+
+### 🔌 Adapters & Utilities
+- `src/pipeline/`: Orchestration and CLI wrapper.
+- `src/api_server.js`: Express API integrating the core.
 - `src/utils/`: Shared OCR helpers, cropping logic, and conversion utilities.
-- `src/pipeline/`: Orchestration and conflict resolution.
-- `src/config/`: Static lookup data and configuration (e.g., `et.json`).
-- `tests/manual/`: Standalone scripts for manual debugging and validation.
-- `samples/`: Sample ID images for testing.
-- `output/`: Final JSON output directory.
+- `src/config/`: Static lookup data (e.g., `et.json`).
 
 ## 🛠️ Extraction Rules
-- **Date Conversion**: All dates are extracted as Gregorian (GC) and converted to Ethiopian Calendar (EC) using deterministic rules.
-- **Validity Dates**: Expiry is always derived as **Issue Date + 2921 days**, never guessed from OCR. issue date is extracted from the front image. and it taken ec date. value and convert it to gc date. value. then add 2921 days to it to get the expiry date in gc. value. then convert it to ec date. value.
+- **Date Conversion**: All dates are extracted as Gregorian (GC) and converted to Ethiopian Calendar (EC).
+- **Validity Dates**: Expiry is derived as **Issue Date + 2921 days**, calculated deterministically.
 - **Address Selection**: Address fields use a hierarchical lookup from `et.json` based on OCR text matches.
-- **Numeric Fields**: FIN and Phone numbers use position-based cropping and multi-pass voting for high reliability.
+- **Numeric Fields**: FIN and Phone numbers use position-based cropping and multi-pass voting.
 
-## 🚀 Usage
-The only production entry point is `src/pipeline/runPipeline.js`.
+## 🚀 Usage (Core API)
+
+The recommended entry point for developers is `src/core/generateID.js`.
+
 ```js
-import { runPipeline } from './src/pipeline/runPipeline.js';
-const results = await runPipeline(frontImg, backImg, thirdImg);
+import { generateID } from './src/core/generateID.js';
+
+// Takes 3 image Buffers
+const { image, data } = await generateID(frontBuf, backBuf, thirdBuf);
+
+// image: Buffer (Print-ready PNG)
+// data: object (Full extraction results)
 ```

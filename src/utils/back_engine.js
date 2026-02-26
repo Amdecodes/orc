@@ -6,7 +6,7 @@ import fs from "fs";
 import { scanQR } from "./qr_engine.js";
 import { findBackAnchors, getDynamicCrop, findLabelsInTSV } from "./anchor.js";
 import { matchLocation, NUMERIC_WOREDA_REGIONS } from "./location_index.js";
-import { extractValidityDates } from "./date_engine.js";
+import { extractValidityDates } from "../core/dates/issueDate.js";
 import { toTitleCase, groupWordsIntoLines } from './ocr_utils.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -274,8 +274,8 @@ async function getAdaptiveThreshold(buffer, defaultVal = 128) {
     }
 }
 
-// Stage 4D Cache
-const CACHE_FILE = './ocr_cache.json';
+// Cache lives in <project-root>/ocr_cache.json regardless of CWD
+const CACHE_FILE = path.join(__dirname, '../../ocr_cache.json');
 function getCache() {
     try {
         if (fs.existsSync(CACHE_FILE)) {
@@ -295,27 +295,39 @@ function getImageHash(buffer) {
     return crypto.createHash('md5').update(buffer).digest('hex');
 }
 
-export async function extractBackID(imagePath) {
-  console.log(`[extractBackID] 100% Safe Mode Start for ${imagePath}`);
-  
-  const imageBuffer = fs.readFileSync(imagePath);
+export async function extractBackID(input) {
+  // Accept Buffer (from generateID) or file path string (from api_server / CLI)
+  const imageBuffer = Buffer.isBuffer(input) ? input : fs.readFileSync(input);
+  const imagePath   = Buffer.isBuffer(input) ? null : input;
+
+  console.log(`[extractBackID] 100% Safe Mode Start for ${imagePath ?? '<buffer>'}`);
+
   const imgHash = getImageHash(imageBuffer);
   const cache = getCache();
 
-  const qrData = await scanQR(imagePath);
+  // For QR scan and tesseract we need a file path — write temp file if given a Buffer
+  let tempFilePath = null;
+  if (!imagePath) {
+    tempFilePath = `/tmp/back_engine_${Date.now()}.png`;
+    fs.writeFileSync(tempFilePath, imageBuffer);
+  }
+  const resolvedPath = imagePath || tempFilePath;
+
+  const qrData = await scanQR(resolvedPath);
   if (qrData && qrData.uin && qrData.uin.length === 12) {
       if (qrData.uin) cache[imgHash] = { fin: qrData.uin, phone: qrData.phone };
       saveCache(cache);
+      if (tempFilePath && fs.existsSync(tempFilePath)) { try { fs.unlinkSync(tempFilePath); } catch (_) {} }
       return { ...qrData, _source: "QR", _status: "Extracted" };
   }
 
   // --- 1. Preprocessing (Anchor Pass Resolution) ---
-  const metadata = await sharp(imagePath).metadata();
+  const metadata = await sharp(resolvedPath).metadata();
   const W_orig = metadata.width;
   const H_orig = metadata.height;
   
   // Use 2000px for anchor pass to get high detail on labels
-  const normalizedBuffer = await sharp(imagePath)
+  const normalizedBuffer = await sharp(resolvedPath)
     .resize(2000)
     .grayscale()
     .normalize()
@@ -465,11 +477,11 @@ export async function extractBackID(imagePath) {
         
         const passes = [];
         // Pass A: Standard
-        passes.push(await sharp(imagePath).extract(cropRect).threshold(128).png().toBuffer());
+        passes.push(await sharp(resolvedPath).extract(cropRect).threshold(128).png().toBuffer());
         // Pass B: High Contrast
-        passes.push(await sharp(imagePath).extract(cropRect).modulate({ contrast: 2.0 }).threshold(180).png().toBuffer());
+        passes.push(await sharp(resolvedPath).extract(cropRect).modulate({ contrast: 2.0 }).threshold(180).png().toBuffer());
         // Pass C: Sharpened
-        passes.push(await sharp(imagePath).extract(cropRect).sharpen().threshold(140).png().toBuffer());
+        passes.push(await sharp(resolvedPath).extract(cropRect).sharpen().threshold(140).png().toBuffer());
 
         const candidates = [];
         for (const buf of passes) {
@@ -536,11 +548,11 @@ export async function extractBackID(imagePath) {
 
         const recoveryPasses = [];
         // Layer A: Extreme Upscale (Separates touching digits)
-        recoveryPasses.push(await sharp(imagePath).extract(cropRect).resize(null, 400).threshold(128).png().toBuffer());
+        recoveryPasses.push(await sharp(resolvedPath).extract(cropRect).resize(null, 400).threshold(128).png().toBuffer());
         // Layer A: Inverted (Fixes low contrast)
-        recoveryPasses.push(await sharp(imagePath).extract(cropRect).negate().threshold(128).png().toBuffer());
+        recoveryPasses.push(await sharp(resolvedPath).extract(cropRect).negate().threshold(128).png().toBuffer());
         // Layer A: Blurred -> Sharpened (Breaks hallucination)
-        recoveryPasses.push(await sharp(imagePath).extract(cropRect).blur(1).sharpen().threshold(128).png().toBuffer());
+        recoveryPasses.push(await sharp(resolvedPath).extract(cropRect).blur(1).sharpen().threshold(128).png().toBuffer());
 
         for (const buf of recoveryPasses) {
             const tempPath = `/tmp/recovery_crop_${Date.now()}_${Math.floor(Math.random()*1000)}.png`;
@@ -583,7 +595,7 @@ export async function extractBackID(imagePath) {
         // If we see 10 digits in ANY of the raw OCR variants but it wasn't valid, 
         // we might have a minor misread. But the user rule is "If matches ANY seen candidate".
         // Let's add one more variant: Very High Threshold
-        const highThreshBuf = await sharp(imagePath).extract(cropRect).threshold(200).png().toBuffer();
+        const highThreshBuf = await sharp(resolvedPath).extract(cropRect).threshold(200).png().toBuffer();
         const tempPath = `/tmp/recovery_b_${Date.now()}.png`;
         fs.writeFileSync(tempPath, highThreshBuf);
         const text = runTesseractCLI(tempPath, 'txt', { psm: 7, params: { tessedit_char_whitelist: "0123456789" } });
@@ -623,7 +635,7 @@ export async function extractBackID(imagePath) {
     }
     if (!phone) {
         // Try the raw text from the address/nationality pass
-        fullTextRaw = runTesseractCLI(imagePath, 'txt', { psm: 3 });
+        fullTextRaw = runTesseractCLI(resolvedPath, 'txt', { psm: 3 });
         const phoneMatch = fullTextRaw.match(/(?:^|[^0-9])((?:09|07)\d{8})(?:[^0-9]|$)/);
         if (phoneMatch) {
             console.log(`[PhoneRecovery] Found phone in global text: ${phoneMatch[1]}`);
@@ -636,7 +648,7 @@ export async function extractBackID(imagePath) {
     // but a full English+Amharic pass is better for address.
     // fullTextRaw may have been initialized in 4E
     if (!fullTextRaw) {
-        fullTextRaw = runTesseractCLI(imagePath, 'txt', { psm: 3 });
+        fullTextRaw = runTesseractCLI(resolvedPath, 'txt', { psm: 3 });
     }
     const address = resolveAddress(fullTextRaw);
     
@@ -761,5 +773,10 @@ export async function extractBackID(imagePath) {
   } catch (e) {
     console.error(`[SafeMode] Fatal Error: ${e.message}`);
     return { fin: null, phone: null, _status: "Error", _error: e.message };
+  } finally {
+    // Clean up temp file if we created one
+    if (tempFilePath && fs.existsSync(tempFilePath)) {
+      try { fs.unlinkSync(tempFilePath); } catch (_) {}
+    }
   }
 }

@@ -4,9 +4,8 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import cors from 'cors';
-import { runPipeline } from './pipeline/runPipeline.js';
-import { renderFront, renderBack } from '../export_id_card.js';
-import { renderPrintReady } from './utils/renderPrintReady.js';
+import { generateID } from './core/generateID.js';
+import { IdentityExtractionError } from './core/errors.js';
 import prisma from './db.js';
 import { 
   getOrCreateUserByTelegramId, 
@@ -148,23 +147,25 @@ app.post('/api/process-id-photo', upload.fields([
 
     console.log(`[API Server] Processing job ${job.id} for user ${telegramId}...`);
 
-    // 3. Run Pipeline
-    const result = await runPipeline(frontPath, backPath, thirdPath);
+    // Read files as Buffers for generateID
+    const frontBuf = fs.readFileSync(frontPath);
+    const backBuf = fs.readFileSync(backPath);
+    const thirdBuf = fs.readFileSync(thirdPath);
 
-    // 4. Define Output Paths & Backgrounds
+    // 3. Run Core generateID
+    const { image, frontBuffer, backBuffer, data: result } = await generateID(frontBuf, backBuf, thirdBuf);
+
+    // 4. Define Output Paths
     const frontOutPath = `public/output/${job.id}_front.png`;
     const backOutPath = `public/output/${job.id}_back.png`;
     const printReadyPath = `public/output/${job.id}_print_ready.png`;
     
-    const bgFront = path.resolve('front v3.0.png');
-    const bgBack = path.resolve('back V3.0.png');
+    console.log(`[API Server] Saving rendered images for job ${job.id}...`);
 
-    console.log(`[API Server] Rendering job ${job.id}...`);
-
-    // 5. Render Exports
-    await renderFront(result, bgFront, frontOutPath);
-    await renderBack(result, bgBack, backOutPath);
-    await renderPrintReady(frontOutPath, backOutPath, printReadyPath);
+    // 5. Save buffers to disk for public serving
+    fs.writeFileSync(frontOutPath, frontBuffer);
+    fs.writeFileSync(backOutPath, backBuffer);
+    fs.writeFileSync(printReadyPath, image);
 
     // 6. Deduct Credits
     await deductCredits(user.id, job.id);
@@ -195,6 +196,8 @@ app.post('/api/process-id-photo', upload.fields([
   } catch (err) {
     console.error('[API Server] Error processing ID:', err);
     
+    const errorCode = err instanceof IdentityExtractionError ? err.code : 'UNKNOWN_ERROR';
+
     if (job) {
       await prisma.iDJob.update({
         where: { id: job.id },
@@ -211,10 +214,14 @@ app.post('/api/process-id-photo', upload.fields([
 
     // Only send error if headers haven't been sent
     if (!res.headersSent) {
-      return res.status(500).json({ error: err.message || 'Failed to process ID photo' });
+      return res.status(500).json({ 
+        error: err.message || 'Failed to process ID photo',
+        code: errorCode
+      });
     }
   }
 });
+
 
 app.listen(port, () => {
   console.log(`🚀 API Server running at http://localhost:${port}`);
