@@ -1,101 +1,214 @@
-/**
- * runPipeline.js — Orchestrates the three-image extraction pipeline.
- *
- * Accepts Buffer inputs (or file paths for backward compatibility).
- * Merges results from extractFront, extractBack, extractThird into
- * the canonical pipeline result shape expected by generateID and renderCards.
- */
-
 import { extractFront } from '../core/extract/extractFront.js';
 import { extractBack }  from '../core/extract/extractBack.js';
 import { extractThird } from '../core/extract/extractThird.js';
+import { validatePhone } from '../validators/phone.js';
+import { validateFIN } from '../validators/fin.js';
+import { calculateValidity, gcToEc, formatGcWithMonth } from '../core/dates/dateUtils.js';
+import { calculateCompositionalConfidence } from '../utils/confidence.js';
 import { extractValidityDates } from '../core/dates/issueDate.js';
 
-export async function runPipeline(front, back, third) {
-    // Run all three extractors in parallel
-    const [frontResult, backResult, thirdResult] = await Promise.all([
-        extractFront(front),
-        extractBack(back),
-        extractThird(third),
+/**
+ * DATA TRUTH HIERARCHY
+ * QR > OCR
+ */
+const FIELD_PRIORITY = {
+    name_en: ["third", "front"],
+    name_am: ["front", "third"],
+    dob: ["third", "front"],
+    gender: ["third", "front"],
+    fin: ["third", "back"],
+    phone: ["back", "third"],
+    address: ["back", "third"],
+    nationality: ["back", "third"],
+    issue_date: ["front"],
+    expiry_date: ["front"]
+};
+
+/**
+ * Main Orchestration Pipeline
+ */
+export async function runPipeline(frontImg, backImg, thirdImg) {
+    console.log("[Pipeline] Starting extraction sequence...");
+
+    // 1. Parallel Extraction
+    const [frontRaw, backRaw, thirdRaw] = await Promise.all([
+        extractFront(frontImg),
+        extractBack(backImg),
+        extractThird(thirdImg)
     ]);
 
-    // ── Personal ──────────────────────────────────────────────────────────────
-    // QR (third) is authoritative for English name, DOB, gender
-    // Front OCR supplies Amharic name
-    const namEn  = thirdResult.personal?.name?.en  || '';
-    const namAm  = frontResult.name?.am            || '';
-    const dobGc  = thirdResult.personal?.dob?.gc   || frontResult.dob?.gc || '';
-    const dobEc  = thirdResult.personal?.dob?.ec   || '';
-    const dobSrc = thirdResult.personal?.dob?.source || 'OCR';
-    const sexEn  = thirdResult.personal?.gender?.en || '';
-    const sexAm  = frontResult.gender?.am           || '';
+    // 2. Passive Merging
+    const data = {
+        front: frontRaw,
+        back: backRaw,
+        third: thirdRaw
+    };
 
-    // ── Nationality ───────────────────────────────────────────────────────────
-    const natAm = backResult.personal?.nationality?.am || '';
-    const natEn = backResult.personal?.nationality?.en || '';
+    // 3. Declarative Conflict Resolution
+    const resolved = resolveConflicts(data);
 
-    // ── Identifiers ───────────────────────────────────────────────────────────
-    const fan = thirdResult.identifiers?.fan || '';
-    const fin = backResult.identifiers?.fin  || thirdResult.identifiers?.fin || '';
+    // 4. Resolve DOB Truth (QR > Front) for filtering
+    let finalDobGc = resolved.dob;
+    if (finalDobGc) finalDobGc = finalDobGc.replace(/\//g, "-");
+    const finalDobEc = gcToEc(finalDobGc);
 
-    // ── Validity / Dates ──────────────────────────────────────────────────────
-    // QR gives issue + expiry; back OCR may also supply them.
-    // Use extractValidityDates on merged OCR lines as a fallback.
-    let validity = thirdResult.validity || { issue: { gc: '', ec: '' }, expiry: { gc: '', ec: '' } };
+    // 5. Centralized Validity Extraction (High Confidence, DOB-Filtered)
+    const frontOcrLines = data.front.ocrLines || [];
+    const extractionResult = extractValidityDates(frontOcrLines, finalDobGc, finalDobEc);
+    
+    let finalValidity = extractionResult.validity;
 
-    if (!validity.issue?.gc && frontResult.ocrLines) {
-        try {
-            const extracted = extractValidityDates(frontResult.ocrLines);
-            if (extracted) {
-                validity = extracted;
-            }
-        } catch (_) { /* ignore */ }
+    // Format for output if found
+    if (finalValidity.issue.gc) {
+        finalValidity.issue.gc = formatGcWithMonth(finalValidity.issue.gc);
+        finalValidity.expiry.gc = formatGcWithMonth(finalValidity.expiry.gc);
+        console.log(`[Pipeline] Centralized Validity Extraction Success: ${finalValidity.method}`);
     }
 
-    // Back may have a richer validity block
-    if (backResult.validity?.issue?.gc) {
-        validity = backResult.validity;
-    }
+    // 6. Validation & Date Processing
+    const phoneVal = validatePhone(resolved.phone);
+    const finVal = validateFIN(resolved.fin);
+    
+    // 7. Confidence Scoring
+    const confidence = calculateCompositionalConfidence({
+        qrDecoded: !!thirdRaw.qr_payload?.raw,
+        finValid: finVal.valid,
+        phoneValid: phoneVal.valid,
+        datesValid: !!finalValidity.issue.gc
+    });
 
-    // ── Contact ───────────────────────────────────────────────────────────────
-    const phone   = backResult.contact?.phone   || { value: '', confidence: 0 };
-    const address = backResult.contact?.address || { am: '', en: '' };
-
-    // ── Media ─────────────────────────────────────────────────────────────────
-    const media = thirdResult.media || {};
-
-    // ── Build canonical pipeline result ───────────────────────────────────────
+    // 8. Final Transformation (Immutable JSON Contract)
     return {
         personal: {
-            name: { am: namAm, en: namEn },
-            gender: {
-                am: sexAm,
-                en: sexEn,
-                confidence: frontResult.gender?.confidence || (sexEn ? 1 : 0),
+            name: { 
+                am: resolved.name_am, 
+                en: resolved.name_en 
             },
-            nationality: { am: natAm, en: natEn },
+            gender: { 
+                am: resolved.gender === "Male" ? "ወንድ" : (resolved.gender === "Female" ? "ሴት" : ""),
+                en: resolved.gender, 
+                confidence: 1 
+            },
+            nationality: { 
+                am: resolved.nationality_am, 
+                en: resolved.nationality_en 
+            },
             dob: {
-                gc:         dobGc,
-                ec:         dobEc,
-                source:     dobSrc,
-                confidence: dobGc ? 1 : 0,
-            },
+                gc: formatGcWithMonth(finalDobGc),
+                ec: finalDobEc,
+                source: resolved.dob_source,
+                confidence: 1
+            }
         },
         validity: {
-            issue:      validity.issue  || { gc: '', ec: '' },
-            expiry:     validity.expiry || { gc: '', ec: '' },
-            method:     validity.method || 'none',
-            confidence: validity.confidence ?? 0,
+            issue: finalValidity.issue,
+            expiry: finalValidity.expiry,
+            method: finalValidity.method,
+            confidence: finalValidity.method === "deterministic_confirmed" ? 1.0 : 0.8
         },
-        identifiers: { fan, fin },
-        contact:     { phone, address },
-        media,
-
-        // Expose raw per-extractor results for debugging / downstream consumers
+        identifiers: {
+            fan: thirdRaw.identifiers.fan,
+            fin: finVal.value || resolved.fin
+        },
+        contact: {
+            phone: { 
+                value: phoneVal.value || resolved.phone, 
+                confidence: 1 
+            },
+            address: { 
+                am: resolved.address_am, 
+                en: resolved.address_en 
+            }
+        },
+        media: {
+            portrait: thirdRaw.media.portrait,
+            qr: thirdRaw.media.qr,
+            barcode: thirdRaw.media.barcode
+        },
+        qr_payload: thirdRaw.qr_payload,
+        system: {
+            version: "1.0.2",
+            pipeline: "deterministic_v2_centralized"
+        },
+        _confidence: confidence,
         _raw: {
-            front: frontResult,
-            back:  backResult,
-            third: thirdResult,
-        },
+            front: frontRaw,
+            back: backRaw,
+            third: thirdRaw
+        }
     };
+}
+
+function resolveConflicts(data) {
+    const resolved = {};
+
+    // Helper: Pick value based on priority
+    const pick = (field, mapping) => {
+        for (const source of FIELD_PRIORITY[field]) {
+            const val = mapping[source];
+            if (val && val !== "") return { value: val, source };
+        }
+        return { value: "", source: "none" };
+    };
+
+    resolved.name_en = pick("name_en", { 
+        third: data.third.personal.name.en, 
+        front: data.front.name.en 
+    }).value;
+
+    resolved.name_am = pick("name_am", { 
+        front: data.front.name.am, 
+        third: "" 
+    }).value;
+
+    const dobPick = pick("dob", { 
+        third: data.third.personal.dob.gc, 
+        front: data.front.dob.gc 
+    });
+    resolved.dob = dobPick.value;
+    resolved.dob_source = dobPick.source === "third" ? "QR" : "OCR";
+
+    resolved.gender = pick("gender", { 
+        third: data.third.personal.gender.en, 
+        front: data.front.gender.en 
+    }).value;
+
+    resolved.fin = pick("fin", { 
+        third: data.third.identifiers.fin, 
+        back: data.back.identifiers.fin 
+    }).value;
+
+    resolved.phone = pick("phone", { 
+        back: data.back.contact.phone.value, 
+        third: "" 
+    }).value;
+    
+    resolved.address_en = pick("address", { 
+        back: data.back.contact.address.en, 
+        third: "" 
+    }).value;
+
+    resolved.address_am = pick("address", { 
+        back: data.back.contact.address.am, 
+        third: "" 
+    }).value;
+    
+    resolved.nationality_en = pick("nationality", { 
+        back: data.back.personal.nationality.en, 
+        third: "" 
+    }).value;
+
+    resolved.nationality_am = pick("nationality", { 
+        back: data.back.personal.nationality.am, 
+        third: "" 
+    }).value;
+
+    // --- Validity Logic (Front OCR Only) ---
+    resolved.issue_date = pick("issue_date", { 
+        front: data.front?.validity?.issue?.gc || ""
+    }).value;
+
+    console.log(`[Pipeline] Final Issue Date Found: ${resolved.issue_date}`);
+
+    return resolved;
 }

@@ -24,7 +24,7 @@ import { spawnSync } from 'child_process';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // Project root is 3 levels up: src/core/image → src/core → src → project root
-const ROOT      = path.resolve(__dirname, '../../..');
+const ROOT      = path.resolve(__dirname, '../../../../..');
 
 // ─── Fonts ───────────────────────────────────────────────────────────────────
 registerFont(path.join(ROOT, 'fonts', 'NotoSerifEthiopic-Bold.ttf'),
@@ -74,11 +74,12 @@ async function autocropPortrait(b64, w, h, facePercent = 60) {
 
   // ── Step 1: face-detect + crop via Python ──────────────────────────────
   let croppedBuf;
-  const pyScript = path.join(ROOT, 'src', 'utils', 'autocrop_face.py'); // always relative to project root
+  const pyScript = path.join(__dirname, '../../utils/autocrop_face.py');
   const py = spawnSync(
     'python3', [pyScript, String(w), String(h), String(facePercent)],
     { input: b64, encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }
   );
+
   if (py.status === 0 && py.stdout.trim()) {
     croppedBuf = Buffer.from(py.stdout.trim(), 'base64');
   } else {

@@ -17,10 +17,10 @@ import { composePrintBuffer } from './image/composePrint.js';
 import { IdentityExtractionError } from './errors.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-// Both template images live in the project root — 2 levels up from src/core/
-const PROJECT_ROOT = path.resolve(__dirname, '../..');
-const FRONT_TEMPLATE = path.join(PROJECT_ROOT, 'front v3.0.png');
-const BACK_TEMPLATE  = path.join(PROJECT_ROOT, 'back V3.0.png');
+// Both template images live in the id-engine package root — 2 levels up from src/core/
+const ENGINE_ROOT = path.resolve(__dirname, '../../');
+const FRONT_TEMPLATE = path.join(ENGINE_ROOT, 'front v3.0.png');
+const BACK_TEMPLATE  = path.join(ENGINE_ROOT, 'back V3.0.png');
 
 // Print-ready canvas size (front + back side by side)
 const PRINT_WIDTH  = 2102;

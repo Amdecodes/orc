@@ -4,8 +4,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-// Template lives in <project-root>/templates/ (2 levels up from src/core/image/)
-const TEMPLATE_PATH = path.resolve(__dirname, '../../../templates/id-print.html');
+// Template lives in <project-root>/templates/ (5 levels up from src/core/image/)
+const TEMPLATE_PATH = path.resolve(__dirname, '../../../../../templates/id-print.html');
 
 const CLIP = { x: 0, y: 0, width: 2102, height: 638 };
 

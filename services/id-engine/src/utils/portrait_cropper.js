@@ -3,6 +3,9 @@ import { removeBackground } from "@imgly/background-removal-node";
 import fs from "fs/promises";
 import path from "path";
 import os from "os";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /**
  * Deterministic portrait extraction for Ethiopian ID screenshots
@@ -44,9 +47,17 @@ export async function extractPortrait(inputBuffer) {
   const tmpOut = path.join(os.tmpdir(), `portrait_out_${Date.now()}.png`);
 
   await fs.writeFile(tmpIn, croppedBuffer);
+  
+  // Resolve absolute path to root node_modules for @imgly assets
+  const rootDir = path.resolve(__dirname, '../../../../');
+  const publicPath = `file://${path.join(rootDir, 'node_modules', '@imgly', 'background-removal-node', 'dist')}/`;
 
   try {
-    const result = await removeBackground(tmpIn);
+    const result = await removeBackground(tmpIn, {
+      publicPath,
+      debug: false,
+      model: 'small'
+    });
     
     // The result from @imgly/background-removal-node can be a Blob, Buffer, or other things depending on version/environment.
     // In node environment with @imgly/background-removal-node, it often returns a Blob or standard Buffer.

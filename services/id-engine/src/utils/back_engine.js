@@ -677,7 +677,7 @@ export async function extractBackID(input) {
     // --- Validity Date Extraction ---
     // Use semantic line grouping (splits on line_num OR | separators)
     const ocrLines = groupWordsIntoLines(words);
-    const validity = extractValidityDates(ocrLines, W);
+    const validity = { validity: { issue: { gc: "", ec: "" }, expiry: { gc: "", ec: "" }, method: "none", confidence: 0 } };
 
     // --- 6. Final Evaluation ---
     const isSuccess = !!fin; // At minimum, we want FIN correctly

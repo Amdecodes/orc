@@ -1,0 +1,10 @@
+console.log("DATABASE_URL:", process.env.DATABASE_URL);
+console.log("CWD:", process.cwd());
+const path = require("path");
+const dotenv = require("dotenv");
+const envPath = path.resolve(process.cwd(), "../../.env");
+console.log("Env Path:", envPath);
+const fs = require("fs");
+console.log("Env File Exists:", fs.existsSync(envPath));
+dotenv.config({ path: envPath });
+console.log("After dotenv.config, DATABASE_URL:", process.env.DATABASE_URL);

@@ -1,9 +1,11 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "./generated-client"
 }
 
 datasource db {
   provider = "postgresql"
+  // url      = env("DATABASE_URL") // Moved to prisma.config.js for Prisma v7
 }
 
 model User {
@@ -30,6 +32,9 @@ model User {
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  topUpRequests      TopUpRequest[]
+  creditTransactions CreditTransaction[]
 
   @@map("user")
 }
@@ -88,11 +93,38 @@ model TempUpload {
 }
 
 model Job {
+  id              String   @id @default(uuid())
+  userId          String
+  status          JobStatus
+  cost            Int
+  frontImagePath String?
+  backImagePath  String?
+  photoPath      String?
+  outputPath     String?
+  output          String?  // Keep for backward compatibility or direct access
+  createdAt       DateTime @default(now())
+  user            User     @relation(fields: [userId], references: [id])
+}
+
+model TopUpRequest {
+  id             String        @id @default(uuid())
+  userId         String
+  credits        Int
+  price          Int
+  screenshotPath String?
+  referenceText  String?
+  status         PaymentStatus @default(PENDING)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  user           User          @relation(fields: [userId], references: [id])
+}
+
+model CreditTransaction {
   id        String   @id @default(uuid())
   userId    String
-  status    JobStatus
-  cost      Int
-  output    String?
+  amount    Int
+  reason    String   // e.g., "TOPUP", "DEDUCT"
+  reference String?  // e.g., TopUpRequest ID or Job ID
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
 }
@@ -145,9 +177,12 @@ enum UserState {
   WAIT_THIRD
   PROCESSING
   WAIT_PAYMENT_PROOF
+  WAIT_PROOF_MODE
 }
 
 enum JobStatus {
+  PENDING
+  PROCESSING
   SUCCESS
   FAILED
 }

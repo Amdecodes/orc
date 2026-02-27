@@ -10,12 +10,28 @@ import { Loader2 } from "lucide-react";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Integrate with Better Auth
-    console.log("Login with", email, password);
+    setIsLoading(true);
+    setError("");
+    
+    await authClient.signIn.email({
+      email,
+      password,
+      callbackURL: "/dashboard",
+    }, {
+      onError: (ctx) => {
+        setError(ctx.error.message || "Invalid credentials");
+        setIsLoading(false);
+      },
+      onSuccess: () => {
+        // Redirect is handled by callbackURL or middleware
+      }
+    });
   };
 
   const handleGoogleLogin = async () => {
@@ -24,11 +40,10 @@ export default function LoginPage() {
       provider: "google",
       callbackURL: "/dashboard",
     });
-    // The redirect happens automatically
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-6 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-background px-6 relative overflow-hidden text-white">
       {/* Background Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-violet/5 blur-[120px] rounded-full pointer-events-none" />
 
@@ -52,6 +67,11 @@ export default function LoginPage() {
           </div>
 
           <form className="space-y-8" onSubmit={handleLogin}>
+            {error && (
+              <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-xl text-destructive text-xs font-bold text-center uppercase tracking-widest">
+                {error}
+              </div>
+            )}
             <div className="space-y-6">
               <div className="space-y-2">
                 <label className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-1" htmlFor="email">Identity Email</label>
@@ -88,8 +108,16 @@ export default function LoginPage() {
             </div>
 
             <div className="pt-2">
-              <Button type="submit" className="w-full h-16 text-lg font-black rounded-2xl bg-white text-black hover:bg-white/90 shadow-2xl transition-all transform hover:scale-[1.02] active:scale-95">
-                AUTHORIZE
+              <Button 
+                type="submit" 
+                className="w-full h-16 text-lg font-black rounded-2xl bg-white text-black hover:bg-white/90 shadow-2xl transition-all transform hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-3"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <Loader2 className="h-6 w-6 animate-spin" />
+                ) : (
+                  "AUTHORIZE"
+                )}
               </Button>
             </div>
 

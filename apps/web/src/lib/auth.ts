@@ -29,14 +29,30 @@ export const auth = betterAuth({
             },
             telegramId: {
                 type: "string",
-                optional: true,
+                required: false,
             }
         }
     },
-    rateLimit: {
-        enabled: true,
-    },
     session: {
-        storeSessionInDatabase: true,
+        cookieCache: {
+            enabled: true,
+            maxAge: 5 * 60,
+        },
+    },
+    advanced: {
+        cookies: {
+            sessionToken: {
+                attributes: {
+                    sameSite: "lax",
+                    // For localhost subdomains to work, we often need to NOT set a domain, 
+                    // or use a host-only cookie which is the default.
+                }
+            }
+        }
     }
 });
+
+export function validateBotSecret(req: Request) {
+    const secret = req.headers.get("x-bot-secret");
+    return secret === process.env.BOT_SECRET;
+}

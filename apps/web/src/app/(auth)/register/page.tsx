@@ -5,15 +5,36 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 
+import { authClient } from "@/lib/auth-client";
+import { Loader2 } from "lucide-react";
+
 export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Integrate with Better Auth
-    console.log("Register with", name, email, password);
+    setIsLoading(true);
+    setError("");
+
+    await authClient.signUp.email({
+        email,
+        password,
+        name,
+        telegramId: "",
+        callbackURL: "/dashboard"
+    }, {
+        onError: (ctx) => {
+            setError(ctx.error.message || "Registration failed");
+            setIsLoading(false);
+        },
+        onSuccess: () => {
+            // Redirect is handled by callbackURL or middleware
+        }
+    });
   };
 
   return (
@@ -41,6 +62,11 @@ export default function RegisterPage() {
           </div>
 
           <form className="space-y-8" onSubmit={handleRegister}>
+            {error && (
+              <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-xl text-destructive text-xs font-bold text-center uppercase tracking-widest">
+                {error}
+              </div>
+            )}
             <div className="space-y-6">
               <div className="space-y-2">
                 <label className="text-[10px] font-black text-text-secondary uppercase tracking-[0.2em] ml-1" htmlFor="name">Operator Name</label>
@@ -85,8 +111,16 @@ export default function RegisterPage() {
             </div>
 
             <div className="pt-2">
-              <Button type="submit" className="w-full h-16 text-lg font-black rounded-2xl bg-accent text-accent-text hover:bg-accent-hover shadow-xl transition-all transform hover:scale-[1.02] active:scale-95 uppercase tracking-widest">
-                Create Account
+              <Button 
+                type="submit" 
+                className="w-full h-16 text-lg font-black rounded-2xl bg-accent text-accent-text hover:bg-accent-hover shadow-xl transition-all transform hover:scale-[1.02] active:scale-95 uppercase tracking-widest flex items-center justify-center gap-3"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <Loader2 className="h-6 w-6 animate-spin" />
+                ) : (
+                  "Create Account"
+                )}
               </Button>
             </div>
           </form>

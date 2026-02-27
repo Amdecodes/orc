@@ -1,10 +1,7 @@
 import sharp from "sharp";
-import { createRequire } from "module";
 import fs from "fs";
-
-const require = createRequire(import.meta.url);
-const { MultiFormatReader, RGBLuminanceSource, BinaryBitmap, HybridBinarizer, DecodeHintType } = require("@zxing/library");
-const jsQR = require("jsqr");
+import { MultiFormatReader, RGBLuminanceSource, BinaryBitmap, HybridBinarizer, DecodeHintType } from "@zxing/library";
+import jsQR from "jsqr";
 
 /**
  * Scans an image for a QR code and returns parsed data.
