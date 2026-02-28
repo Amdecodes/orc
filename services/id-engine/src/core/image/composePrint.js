@@ -7,7 +7,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // Template lives in <project-root>/templates/ (5 levels up from src/core/image/)
 const TEMPLATE_PATH = path.resolve(__dirname, '../../../../../templates/id-print.html');
 
-const CLIP = { x: 0, y: 0, width: 2102, height: 638 };
+const CLIP = { x: 0, y: 0, width: 5944, height: 1778 };
 
 /** Shared: launch browser and take a screenshot, returning Buffer */
 async function _renderLayout(frontBase64, backBase64) {
@@ -28,7 +28,7 @@ async function _renderLayout(frontBase64, backBase64) {
   try {
     await page.setContent(html);
     await page.waitForTimeout(500);
-    const buf = await page.screenshot({ type: 'png', clip: CLIP });
+    const buf = await page.screenshot({ type: 'jpeg', quality: 95, clip: CLIP });
     return buf;
   } finally {
     await browser.close();

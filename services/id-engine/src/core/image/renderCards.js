@@ -35,18 +35,19 @@ registerFont(path.join(ROOT, 'fonts', 'Roboto-Medium.ttf'),
              { family: 'Roboto Mono', weight: '500' });
 
 // ─── Constants ───────────────────────────────────────────────────────────────
-const W = 1011, H = 638;
+const W = 2652, H = 1670;
 
 const CLR = '#000000';
 const CLR_PRIMARY = '#000000';
 
-// font sizes: point × 3.2 → pixels
-const FS_MAIN    = 8 * 3.2;  // 24.8
-const FS_ISSUE   = 5.2 * 3.2;  // 12.8
-const FS_NAT     = 7.3 * 3.2;  // 23.36
-const FS_ADDR_AM = 6.4 * 3.2;  // 20.48
-const FS_ADDR_EN = 7.1 * 3.2;  // 22.72
-const FS_FIN     = 7.1 * 3.2;  // 22.72
+// font sizes: point × (700 / 72) → pixels
+const PT_TO_PX = 700 / 72;
+const FS_MAIN    = 6.5 * PT_TO_PX;
+const FS_ISSUE   = 4.0 * PT_TO_PX;
+const FS_NAT     = 7.3 * PT_TO_PX;
+const FS_ADDR_AM = 6.4 * PT_TO_PX;
+const FS_ADDR_EN = 7.1 * PT_TO_PX;
+const FS_FIN     = 5.5 * PT_TO_PX;
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 function isEth(s) {
@@ -180,48 +181,49 @@ async function _buildFrontCanvas(data, bgPath) {
   const ctx    = canvas.getContext('2d');
   ctx.drawImage(bg, 0, 0, W, H);
 
-  // Portrait — X:89 Y:151 W:273 H:405
+  // Portrait — X:256 Y:432 W:730 H:1081
   const portraitB64 = (data.media?.portrait?.png) || null;
   if (portraitB64) {
-    const buf = await autocropPortrait(portraitB64, 273, 405, 60);
-    ctx.drawImage(await loadImage(buf), 89, 151, 273, 405);
+    const buf = await autocropPortrait(portraitB64, 730, 1081, 60);
+    ctx.drawImage(await loadImage(buf), 256, 412, 730, 1081);
   }
 
-  // Amharic name — X:412 Y:201
-  txt(ctx, namAm, 412, 201, { size: FS_MAIN, weight: 'bold', ethiopic: true });
-  // English name — X:412 Y:235
-  txt(ctx, namEn, 412, 235, { size: FS_MAIN, weight: 'bold' });
-  // DOB — X:412 Y:335
-  mixedLine(ctx, `${dobEc} |${dobGc}`, 412, 335, { size: FS_MAIN, weight: 'bold'});
-  // Sex — X:412 Y:401
-  mixedLine(ctx, `${sexAm} |${sexEn}`, 412, 401, { size: FS_MAIN, weight: 'bold'});
-  // Expiry — X:412 Y:468
-  mixedLine(ctx, `${expEc} |${expGc}`, 412, 468, { size: FS_MAIN, weight: 'bold'});
+  // Amharic name — X:1060 Y:479
+  txt(ctx, namAm, 1060, 494, { size: FS_MAIN, weight: 'bold', ethiopic: true });
+  // English name — X:1060 Y:568
+  txt(ctx, namEn, 1060, 583, { size: FS_MAIN, weight: 'bold' });
+  // DOB — X:1060 Y:828
+  mixedLine(ctx, `${dobEc} |${dobGc}`, 1060, 843, { size: FS_MAIN, weight: 'bold'});
+  // Sex — X:1060 Y:1010
+  mixedLine(ctx, `${sexAm} |${sexEn}`, 1060, 1025, { size: FS_MAIN, weight: 'bold'});
+  // Expiry — X:1060 Y:1191
+  mixedLine(ctx, `${expEc} |${expGc}`, 1060, 1206, { size: FS_MAIN, weight: 'bold'});
 
-  // FAN number — X:482 Y:526
+  // FAN number — X:1209 Y:1326
   const fanFmt = fan.replace(/(\d{4})(?=\d)/g, '$1 ');
-  txt(ctx, fanFmt, 482, 526, { size: FS_MAIN, weight: 'bold', color: CLR_PRIMARY, mono: true });
+  txt(ctx, fanFmt, 1215, 1355, { size: FS_MAIN, weight: 'bold', color: CLR_PRIMARY, mono: true });
 
-  // FAN barcode — X:478 Y:530
+  // FAN barcode — X:1195 Y:1389
   const barcodeB64 = (data.media?.barcode?.png) || null;
   if (barcodeB64) {
-    const buf = await sharp(b64buf(barcodeB64)).resize(280, 55, { fit: 'fill' }).png().toBuffer();
-    ctx.drawImage(await loadImage(buf), 478, 530, 280, 55);
+    const bw = 730, bh = 145;
+    const buf = await sharp(b64buf(barcodeB64)).resize(bw, bh, { fit: 'fill' }).png().toBuffer();
+    ctx.drawImage(await loadImage(buf), 1200, 1385, bw, bh);
   }
 
   // Issue date EC (rotated vertical)
-  ctx.save(); ctx.translate(26, 462); ctx.rotate(-Math.PI / 2);
+  ctx.save(); ctx.translate(80, 1250); ctx.rotate(-Math.PI / 2);
   txt(ctx, issEc, 0, 0, { size: FS_ISSUE, weight: 'bold'});
   ctx.restore();
   // Issue date GC (rotated vertical)
-  ctx.save(); ctx.translate(26, 225); ctx.rotate(-Math.PI / 2);
+  ctx.save(); ctx.translate(80, 650); ctx.rotate(-Math.PI / 2);
   txt(ctx, issGc, 0, 0, { size: FS_ISSUE, weight: 'bold'});
   ctx.restore();
 
-  // Thumbnail photo — X:821 Y:457 W:84 H:123
+  // Thumbnail photo — X:2209 Y:1247 W:226 H:330
   if (portraitB64) {
-    const buf = await autocropPortrait(portraitB64, 84, 123, 60);
-    ctx.drawImage(await loadImage(buf), 821, 457, 84, 123);
+    const buf = await autocropPortrait(portraitB64, 226, 330, 60);
+    ctx.drawImage(await loadImage(buf), 2209, 1230, 226, 330);
   }
 
   return canvas;
@@ -238,7 +240,7 @@ export async function renderFront(data, bgPath, outPath) {
 /** Buffer-returning variant (used by generateID — no file I/O) */
 export async function renderFrontBuffer(data, bgPath) {
   const canvas = await _buildFrontCanvas(data, bgPath);
-  return canvas.toBuffer('image/png');
+  return canvas.toBuffer('image/jpeg', { quality: 0.95 });
 }
 
 // ─── BACK (shared render logic) ──────────────────────────────────────────────
@@ -262,29 +264,30 @@ async function _buildBackCanvas(data, bgPath) {
   const ctx    = canvas.getContext('2d');
   ctx.drawImage(bg, 0, 0, W, H);
 
-  txt(ctx, phone, 22, 78, { size: FS_MAIN, weight: 'bold', mono: true });
-  mixedLine(ctx, `${natAm} |${natEn}`, 22, 177, { size: FS_NAT, weight: 'bold' });
+  txt(ctx, phone, 85, 255, { size: FS_MAIN, weight: 'bold', mono: true });
+  mixedLine(ctx, `${natAm} |${natEn}`, 85, 500, { size: FS_NAT, weight: 'bold' });
 
-  txt(ctx, amP[0] || '', 22, 253, { size: FS_ADDR_AM, ethiopic: true });
-  txt(ctx, enP[0] || '', 22, 290, { size: FS_ADDR_EN, weight: 'bold' });
-  txt(ctx, amP[1] || '', 22, 335, { size: FS_ADDR_AM, ethiopic: true });
-  txt(ctx, enP[1] || '', 22, 372, { size: FS_ADDR_EN, weight: 'bold' });
-  txt(ctx, amP[2] || '', 22, 416, { size: FS_ADDR_AM, ethiopic: true });
-  txt(ctx, enP[2] || '', 22, 454, { size: FS_ADDR_EN, weight: 'bold' });
+  txt(ctx, amP[0] || '', 85, 677, { size: FS_ADDR_AM, ethiopic: true });
+  txt(ctx, enP[0] || '', 85, 770, { size: FS_ADDR_EN, weight: 'bold' });
+  txt(ctx, amP[1] || '', 85, 914, { size: FS_ADDR_AM, ethiopic: true });
+  txt(ctx, enP[1] || '', 85, 976, { size: FS_ADDR_EN, weight: 'bold' });
+  txt(ctx, amP[2] || '', 85, 1089, { size: FS_ADDR_AM, ethiopic: true });
+  txt(ctx, enP[2] || '', 85, 1186, { size: FS_ADDR_EN, weight: 'bold' });
 
-  txt(ctx, fin, 156, 560, { size: FS_FIN, weight: 'bold', color: CLR_PRIMARY, mono: true });
+  txt(ctx, fin, 427, 1465, { size: FS_FIN, weight: 'bold', color: CLR_PRIMARY, mono: true });
 
   const qrB64 = (data.media?.qr?.png) || null;
   if (qrB64) {
-    const pad = 12;
-    const qw = 509, qh = 553;
+    const pad = 24;
+    const qw = 1293, qh = 1400;
+    const qx = 1198, qy = 92;
     const buf = await sharp(b64buf(qrB64))
       .trim({ background: '#ffffff', threshold: 80 })
       .resize(qw - pad * 2, qh - pad * 2, { fit: 'fill' })
       .png().toBuffer();
     ctx.fillStyle = '#ffffff';
-    ctx.fillRect(461, 13, qw, qh);
-    ctx.drawImage(await loadImage(buf), 461 + pad, 13 + pad, qw - pad * 2, qh - pad * 2);
+    ctx.fillRect(qx, qy, qw, qh);
+    ctx.drawImage(await loadImage(buf), qx + pad, qy + pad, qw - pad * 2, qh - pad * 2);
   } else {
     console.warn('[Back]  ⚠️  No QR image in pipeline result (media.qr.png is empty)');
   }
@@ -303,20 +306,20 @@ export async function renderBack(data, bgPath, outPath) {
 /** Buffer-returning variant (used by generateID — no file I/O) */
 export async function renderBackBuffer(data, bgPath) {
   const canvas = await _buildBackCanvas(data, bgPath);
-  return canvas.toBuffer('image/png');
+  return canvas.toBuffer('image/jpeg', { quality: 0.95 });
 }
 
 // ─── CLI (kept for direct invocation: node src/core/image/renderCards.js) ────
 if (import.meta.url === `file://${process.argv[1]}` || (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url))) {
   (async () => {
     const jsonPath = process.argv[2] || path.join(ROOT, 'verification_result.json');
-    const frontBg  = path.join(ROOT, 'front v3.0.png');
-    const backBg   = path.join(ROOT, 'back V3.0.png');
+    const frontBg  = path.join(ROOT, 'front v4.0.png');
+    const backBg   = path.join(ROOT, 'back v4.0.png');
     const outDir   = path.join(ROOT, 'output');
 
     if (!fs.existsSync(jsonPath)) { console.error('❌ JSON not found:', jsonPath); process.exit(1); }
-    if (!fs.existsSync(frontBg))  { console.error('❌ front v3.0.png not found');  process.exit(1); }
-    if (!fs.existsSync(backBg))   { console.error('❌ back V3.0.png not found');   process.exit(1); }
+    if (!fs.existsSync(frontBg))  { console.error('❌ front v4.0.png not found');  process.exit(1); }
+    if (!fs.existsSync(backBg))   { console.error('❌ back v4.0.png not found');   process.exit(1); }
 
     if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
 

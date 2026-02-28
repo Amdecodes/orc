@@ -19,12 +19,12 @@ import { IdentityExtractionError } from './errors.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // Both template images live in the id-engine package root — 2 levels up from src/core/
 const ENGINE_ROOT = path.resolve(__dirname, '../../');
-const FRONT_TEMPLATE = path.join(ENGINE_ROOT, 'front v3.0.png');
-const BACK_TEMPLATE  = path.join(ENGINE_ROOT, 'back V3.0.png');
+const FRONT_TEMPLATE = path.join(ENGINE_ROOT, 'front v4.0.png');
+const BACK_TEMPLATE  = path.join(ENGINE_ROOT, 'back v4.0.png');
 
 // Print-ready canvas size (front + back side by side)
-const PRINT_WIDTH  = 2102;
-const PRINT_HEIGHT = 638;
+const PRINT_WIDTH  = 5944;
+const PRINT_HEIGHT = 1778;
 
 /**
  * Generate a print-ready ID card image from three raw images.
@@ -32,7 +32,7 @@ const PRINT_HEIGHT = 638;
  * @param {Buffer} front - Front-side photo of the ID card
  * @param {Buffer} back  - Back-side photo of the ID card
  * @param {Buffer} third - Third image (selfie with QR code)
- * @returns {Promise<{ image: Buffer, frontBuffer: Buffer, backBuffer: Buffer, format: 'png', width: number, height: number, data: object }>}
+ * @returns {Promise<{ image: Buffer, frontBuffer: Buffer, backBuffer: Buffer, format: 'jpg', width: number, height: number, data: object }>}
  * @throws {IdentityExtractionError} on validation or processing failure
  */
 export async function generateID(front, back, third) {
@@ -52,7 +52,7 @@ export async function generateID(front, back, third) {
         throw new IdentityExtractionError('OCR_FAILED', `Pipeline failed: ${err.message}`);
     }
 
-    // 3. Render front and back onto their template images → PNG Buffers
+    // 3. Render front and back onto their template images → JPG Buffers
     let frontBuf, backBuf;
     try {
         [frontBuf, backBuf] = await Promise.all([
@@ -75,7 +75,7 @@ export async function generateID(front, back, third) {
         image:       printBuf,
         frontBuffer: frontBuf,
         backBuffer:  backBuf,
-        format:      'png',
+        format:      'jpeg',
         width:       PRINT_WIDTH,
         height:      PRINT_HEIGHT,
         // Expose pipeline result for callers that need structured data too

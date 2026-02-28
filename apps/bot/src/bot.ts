@@ -329,7 +329,7 @@ bot.on('message', async (msg: TelegramBot.Message) => {
               const imageBuffer = await api.downloadBotResult(jobId);
               
               // Send compressed Photo by default
-              await bot.sendPhoto(chatId, imageBuffer, {
+              await bot.sendDocument(chatId, imageBuffer, {
                 caption: `✅ *ID Formatted Successfully*\n\n🖨️ *Ready for Printing*\n📐 Correct size & margins applied.\n\n💳 *${creditsLeft} credits remaining.*`,
                 parse_mode: 'Markdown',
                 reply_markup: {
@@ -346,6 +346,9 @@ bot.on('message', async (msg: TelegramBot.Message) => {
                     ]
                   ]
                 }
+              }, {
+                filename: `Ethiopian_ID_${jobId.substring(0, 6)}.jpeg`,
+                contentType: 'image/jpeg'
               });
           } else {
               console.error('[Bot] Job did not reach SUCCESS. Final status:', statusResult);
