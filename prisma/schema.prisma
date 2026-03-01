@@ -20,6 +20,7 @@ model User {
   credits       Int       @default(0)
   role          Role      @default(USER)
   state         UserState @default(IDLE)
+  language      String?
   
   sessions      Session[]
   accounts      Account[]
@@ -172,6 +173,7 @@ enum Role {
 
 enum UserState {
   IDLE
+  WAIT_LANGUAGE
   WAIT_FRONT
   WAIT_BACK
   WAIT_THIRD

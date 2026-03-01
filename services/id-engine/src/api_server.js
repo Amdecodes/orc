@@ -156,9 +156,9 @@ app.post('/api/process-id-photo', upload.fields([
     const { image, frontBuffer, backBuffer, data: result } = await generateID(frontBuf, backBuf, thirdBuf);
 
     // 4. Define Output Paths
-    const frontOutPath = `public/output/${job.id}_front.png`;
-    const backOutPath = `public/output/${job.id}_back.png`;
-    const printReadyPath = `public/output/${job.id}_print_ready.png`;
+    const frontOutPath = `public/output/${job.id}_front.jpg`;
+    const backOutPath = `public/output/${job.id}_back.jpg`;
+    const printReadyPath = `public/output/${job.id}_print_ready.jpg`;
     
     console.log(`[API Server] Saving rendered images for job ${job.id}...`);
 
@@ -174,9 +174,9 @@ app.post('/api/process-id-photo', upload.fields([
     const baseUrl = process.env.BASE_URL || `http://localhost:${port}`;
     res.json({
       jobId: job.id,
-      frontImageUrl: `${baseUrl}/output/${job.id}_front.png`,
-      backImageUrl: `${baseUrl}/output/${job.id}_back.png`,
-      printReadyImageUrl: `${baseUrl}/output/${job.id}_print_ready.png`,
+      frontImageUrl: `${baseUrl}/output/${job.id}_front.jpg`,
+      backImageUrl: `${baseUrl}/output/${job.id}_back.jpg`,
+      printReadyImageUrl: `${baseUrl}/output/${job.id}_print_ready.jpg`,
       printReadyPath: printReadyPath, 
       data: result
     });

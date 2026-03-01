@@ -27,8 +27,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT      = path.resolve(__dirname, '../../../../..');
 
 // ─── Fonts ───────────────────────────────────────────────────────────────────
-registerFont(path.join(ROOT, 'fonts', 'NotoSerifEthiopic-Bold.ttf'),
-             { family: 'Noto Serif Ethiopic', weight: 'bold' });
+registerFont(path.join(ROOT, 'fonts', 'PGUNICODE1.TTF'),
+             { family: 'PGUNICODE', weight: 'bold' });
 registerFont(path.join(ROOT, 'fonts', 'Roboto-Medium.ttf'),
              { family: 'Roboto', weight: '500' });
 registerFont(path.join(ROOT, 'fonts', 'Roboto-Medium.ttf'),
@@ -129,7 +129,7 @@ async function autocropPortrait(b64, w, h, facePercent = 60) {
 function txt(ctx, text, x, y, { size = 14, weight = 'normal', color = CLR,
   align = 'left', ethiopic = false, mono = false } = {}) {
   if (!text || String(text).trim() === '') return;
-  const fam = ethiopic ? 'Noto Serif Ethiopic' : mono ? 'Roboto Mono' : 'Roboto';
+  const fam = ethiopic ? 'PGUNICODE' : mono ? 'Roboto Mono' : 'Roboto';
   const w   = weight === 'bold' ? 'bold' : ethiopic ? 'bold' : weight; 
   ctx.font      = `${w} ${size}px "${fam}"`;
   ctx.fillStyle = color;
@@ -143,7 +143,7 @@ function mixedLine(ctx, text, x, y, opts = {}) {
   let cur = x;
   parts.forEach((part, i) => {
     const t   = part.trim();
-    const fam = isEth(t) ? 'Noto Serif Ethiopic' : 'Roboto';
+    const fam = isEth(t) ? 'PGUNICODE' : 'Roboto';
     const w   = opts.weight || (isEth(t) ? 'bold' : 'normal');
     ctx.font      = `${w} ${opts.size || 14}px "${fam}"`;
     ctx.fillStyle = opts.color || CLR;
@@ -291,6 +291,10 @@ async function _buildBackCanvas(data, bgPath) {
   } else {
     console.warn('[Back]  ⚠️  No QR image in pipeline result (media.qr.png is empty)');
   }
+
+  // 8-digit Serial Number — X:2185 Y:1548
+  const serialNo = String(Math.floor(Math.random() * 100000000)).padStart(8, '0');
+  txt(ctx, serialNo, 2185, 1548, { size: FS_MAIN, weight: 'bold', mono: true });
 
   return canvas;
 }

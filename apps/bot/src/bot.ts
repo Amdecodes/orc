@@ -3,24 +3,49 @@ import { config } from './config.js';
 import prisma from './lib/prisma.js';
 import * as api from './api.js';
 import express from 'express';
+import path from 'path';
+import fs from 'fs';
+import { t } from './i18n.js';
 
 const bot = new TelegramBot(config.BOT_TOKEN, { polling: true });
 
+// --- Asset Paths ---
+const ASSETS_DIR = path.resolve(process.cwd(), 'assets');
+const GUIDE_FRONT = path.join(ASSETS_DIR, 'guide_front.jpg');
+const GUIDE_BACK = path.join(ASSETS_DIR, 'guide_back.jpg');
+const GUIDE_PROFILE = path.join(ASSETS_DIR, 'guide_profile.jpg');
+
 // --- Keyboards ---
 
-const mainMenuMarkup: TelegramBot.InlineKeyboardMarkup = {
+const getMainMenuMarkup = (lang: string): TelegramBot.InlineKeyboardMarkup => ({
   inline_keyboard: [
-    [{ text: '🪪 Generate ID', callback_data: 'GEN_ID' }],
-    [{ text: '💳 Buy Credits', callback_data: 'TOP_UP' }, { text: '📂 History', callback_data: 'HISTORY' }],
-    [{ text: '📞 Support', callback_data: 'HELP' }]
+    [{ text: t('btn_gen_id', lang), callback_data: 'GEN_ID' }],
+    [{ text: t('btn_buy_credits', lang), callback_data: 'TOP_UP' }, { text: t('btn_history', lang), callback_data: 'HISTORY' }],
+    [{ text: t('btn_language', lang), callback_data: 'CHANGE_LANG' }, { text: t('btn_support', lang), callback_data: 'HELP' }]
   ]
-};
+});
 
-const cancelMenuMarkup: TelegramBot.InlineKeyboardMarkup = {
-  inline_keyboard: [[{ text: '❌ Cancel & Reset', callback_data: 'START' }]]
-};
+const getCancelMenuMarkup = (lang: string): TelegramBot.InlineKeyboardMarkup => ({
+  inline_keyboard: [[{ text: t('btn_cancel', lang), callback_data: 'START' }]]
+});
 
 // --- Helpers ---
+
+function safeEditMessageText(chatId: number, messageId: number, text: string, options?: TelegramBot.EditMessageTextOptions) {
+  bot.editMessageText(text, { chat_id: chatId, message_id: messageId, ...options }).catch(async (err: any) => {
+    if (err.message && (err.message.includes('there is no text in the message to edit') || err.message.includes('message to edit not found'))) {
+      await bot.deleteMessage(chatId, messageId).catch(() => {});
+      const sendOptions: any = { ...options };
+      delete sendOptions.chat_id;
+      delete sendOptions.message_id;
+      bot.sendMessage(chatId, text, sendOptions).catch(console.error);
+    } else if (err.message && err.message.includes('message is not modified')) {
+      // Ignore
+    } else {
+      console.error('[Bot] Edit message error:', err.message);
+    }
+  });
+}
 
 async function syncUser(msg: TelegramBot.Message | TelegramBot.CallbackQuery) {
     const from = msg.from;
@@ -33,18 +58,48 @@ async function syncUser(msg: TelegramBot.Message | TelegramBot.CallbackQuery) {
 bot.onText(/\/start/, async (msg: TelegramBot.Message) => {
   try {
     const user = await syncUser(msg);
-    const text = `🔹 *National ID Formatter*\n\n` +
-                 `Professional, print-ready Ethiopian IDs in seconds.\n\n` +
-                 `🚀 *How it works:*\n` +
-                 `1. Upload 3 screenshots (Front, Back, Profile)\n` +
-                 `2. We auto-format everything\n` +
-                 `3. Download high-quality print file\n\n` +
-                 `💳 *Balance:* \`${user.credits} credits\``;
     
-    bot.sendMessage(msg.chat.id, text, { parse_mode: 'Markdown', reply_markup: mainMenuMarkup });
+    if (!user.language) {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { state: 'WAIT_LANGUAGE' }
+      });
+      bot.sendMessage(msg.chat.id, t('choose_language', 'en'), {
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: '🇺🇸 English', callback_data: 'LANG_EN' }],
+            [{ text: '🇪🇹 አማርኛ', callback_data: 'LANG_AM' }]
+          ]
+        }
+      });
+      return;
+    }
+
+    const text = t('start_msg', user.language, { credits: user.credits.toString() });
+    
+    bot.sendMessage(msg.chat.id, text, { parse_mode: 'Markdown', reply_markup: getMainMenuMarkup(user.language) });
   } catch (err) {
     console.error('[Bot] Start error:', err);
-    bot.sendMessage(msg.chat.id, '❌ Failed to connect to server.');
+  }
+});
+
+bot.onText(/\/language/, async (msg: TelegramBot.Message) => {
+  try {
+    const user = await syncUser(msg);
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { state: 'WAIT_LANGUAGE' }
+    });
+    bot.sendMessage(msg.chat.id, t('choose_language', user.language || 'en'), {
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: '🇺🇸 English', callback_data: 'LANG_EN' }],
+          [{ text: '🇪🇹 አማርኛ', callback_data: 'LANG_AM' }]
+        ]
+      }
+    });
+  } catch (err) {
+    console.error('[Bot] Lang error:', err);
   }
 });
 
@@ -55,9 +110,10 @@ bot.onText(/\/cancel/, async (msg: TelegramBot.Message) => {
       where: { id: user.id },
       data: { state: 'IDLE' }
     });
-    bot.sendMessage(msg.chat.id, '🔄 *Action cancelled.*', { parse_mode: 'Markdown', reply_markup: mainMenuMarkup });
+    const lang = user.language || 'en';
+    bot.sendMessage(msg.chat.id, t('action_cancelled', lang), { parse_mode: 'Markdown', reply_markup: getMainMenuMarkup(lang) });
   } catch (e) {
-    bot.sendMessage(msg.chat.id, '❌ Failed to reset state.');
+    // silently fail
   }
 });
 
@@ -79,20 +135,52 @@ bot.on('callback_query', async (callbackQuery: TelegramBot.CallbackQuery) => {
   try {
     const user = await syncUser(callbackQuery);
 
-    if (data === 'START') {
-      const text = `🔹 *National ID Formatter*\n\n` +
-                   `💳 *Balance:* \`${user.credits} credits\``;
-      bot.editMessageText(text, { 
-        chat_id: chatId, 
-        message_id: message.message_id, 
-        parse_mode: 'Markdown', 
-        reply_markup: mainMenuMarkup 
+    const lang = user.language || 'en';
+
+    if (data === 'LANG_EN' || data === 'LANG_AM') {
+      const selectedLang = data === 'LANG_EN' ? 'en' : 'am';
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { language: selectedLang, state: 'IDLE' }
       });
+      safeEditMessageText(chatId, message.message_id, t('lang_changed', selectedLang));
+      
+      const startText = t('start_msg', selectedLang, { credits: user.credits.toString() });
+      bot.sendMessage(chatId, startText, { parse_mode: 'Markdown', reply_markup: getMainMenuMarkup(selectedLang) });
+      return bot.answerCallbackQuery(callbackQuery.id).catch(console.error);
+    }
+
+    if (data === 'START') {
+      const text = t('start_msg', lang, { credits: user.credits.toString() });
+      safeEditMessageText(chatId, message.message_id, text, { 
+        parse_mode: 'Markdown', 
+        reply_markup: getMainMenuMarkup(lang) 
+      });
+      return bot.answerCallbackQuery(callbackQuery.id).catch(console.error);
+    }
+
+    if (data === 'CHANGE_LANG') {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { state: 'WAIT_LANGUAGE' }
+      });
+      const text = t('choose_language', lang);
+      const keyboard = {
+        inline_keyboard: [
+          [{ text: '🇺🇸 English', callback_data: 'LANG_EN' }],
+          [{ text: '🇪🇹 አማርኛ', callback_data: 'LANG_AM' }],
+          [{ text: t('btn_back', lang), callback_data: 'START' }]
+        ]
+      };
+      safeEditMessageText(chatId, message.message_id, text, {
+        reply_markup: keyboard
+      });
+      return bot.answerCallbackQuery(callbackQuery.id).catch(console.error);
     }
 
     if (data === 'GEN_ID') {
       if (user.credits < 1) {
-        return bot.answerCallbackQuery(callbackQuery.id, { text: '❌ Not enough credits. Please top up.', show_alert: true });
+        return bot.answerCallbackQuery(callbackQuery.id, { text: t('not_enough_credits', lang), show_alert: true }).catch(console.error);
       }
       
       await prisma.user.update({
@@ -100,37 +188,39 @@ bot.on('callback_query', async (callbackQuery: TelegramBot.CallbackQuery) => {
         data: { state: 'WAIT_FRONT' }
       });
 
-      bot.sendMessage(chatId, '📷 *Step 1/3*\nPlease send the **FRONT** screenshot of the ID', { 
-        parse_mode: 'Markdown',
-        reply_markup: cancelMenuMarkup
-      });
-      bot.answerCallbackQuery(callbackQuery.id);
+      const caption = t('step1_caption', lang);
+      if (fs.existsSync(GUIDE_FRONT)) {
+          bot.sendPhoto(chatId, GUIDE_FRONT, {
+              caption,
+              parse_mode: 'Markdown',
+              reply_markup: getCancelMenuMarkup(lang)
+          });
+      } else {
+          bot.sendMessage(chatId, caption, { 
+              parse_mode: 'Markdown',
+              reply_markup: getCancelMenuMarkup(lang)
+          });
+      }
+      return bot.answerCallbackQuery(callbackQuery.id).catch(console.error);
     }
 
     if (data === 'TOP_UP') {
-      const text = `💳 *Buy Credits*\n\n` +
-                   `Select a package to continue:\n\n` +
-                   `🔹 1 ID — 50 ETB\n` +
-                   `🔹 10 IDs — 450 ETB\n` +
-                   `🔹 40 IDs — 1400 ETB\n\n` +
-                   `Click below to select:`;
+      const text = t('menu_topup', lang);
       
       const topupMarkup: TelegramBot.InlineKeyboardMarkup = {
         inline_keyboard: [
-            [{ text: '🔹 1 ID (50 ETB)', callback_data: 'PKG_1' }],
-            [{ text: '🔹 10 IDs (450 ETB)', callback_data: 'PKG_10' }],
-            [{ text: '🔹 40 IDs (1400 ETB)', callback_data: 'PKG_40' }],
-            [{ text: '⬅️ Back', callback_data: 'START' }]
+            [{ text: t('btn_pkg_1', lang), callback_data: 'PKG_1' }],
+            [{ text: t('btn_pkg_10', lang), callback_data: 'PKG_10' }],
+            [{ text: t('btn_pkg_40', lang), callback_data: 'PKG_40' }],
+            [{ text: t('btn_back', lang), callback_data: 'START' }]
         ]
       };
 
-      bot.editMessageText(text, {
-        chat_id: chatId,
-        message_id: message.message_id,
+      safeEditMessageText(chatId, message.message_id, text, {
         parse_mode: 'Markdown',
         reply_markup: topupMarkup
       });
-      bot.answerCallbackQuery(callbackQuery.id);
+      bot.answerCallbackQuery(callbackQuery.id).catch(console.error);
     }
 
     if (data === 'PROOF_SCREENSHOT') {
@@ -138,28 +228,13 @@ bot.on('callback_query', async (callbackQuery: TelegramBot.CallbackQuery) => {
         where: { id: user.id },
         data: { state: 'WAIT_PAYMENT_PROOF' }
       });
-      bot.sendMessage(chatId, '📷 Please send a screenshot of your payment transfer.', {
-        reply_markup: cancelMenuMarkup
+      bot.sendMessage(chatId, t('wait_proof_screenshot', lang), {
+        reply_markup: getCancelMenuMarkup(lang)
       });
-      bot.answerCallbackQuery(callbackQuery.id);
+      return bot.answerCallbackQuery(callbackQuery.id).catch(console.error);
     }
     
-    if (data.startsWith('DL_PNG_')) {
-      const jobId = data.replace('DL_PNG_', '');
-      try {
-          bot.answerCallbackQuery(callbackQuery.id, { text: '⏳ Downloading HD PNG...' });
-          const imageBuffer = await api.downloadBotResult(jobId);
-          await bot.sendDocument(chatId, imageBuffer, {
-              caption: `✅ *Raw Uncompressed PNG*`,
-              parse_mode: 'Markdown'
-          }, {
-              filename: `Ethiopian_ID_${jobId.substring(0, 6)}.png`,
-              contentType: 'image/png'
-          });
-      } catch (err) {
-          bot.answerCallbackQuery(callbackQuery.id, { text: '❌ File expired or unavailable.', show_alert: true });
-      }
-    }
+    // Removed DL_PNG_ handler
 
 
     if (data === 'PROOF_TEXT') {
@@ -167,30 +242,22 @@ bot.on('callback_query', async (callbackQuery: TelegramBot.CallbackQuery) => {
         where: { id: user.id },
         data: { state: 'WAIT_PROOF_MODE' }
       });
-      bot.sendMessage(chatId, '✍️ Please send the **Transaction ID** or **Reference Text** of your payment.', { 
+      bot.sendMessage(chatId, t('wait_proof_text', lang), { 
         parse_mode: 'Markdown', 
-        reply_markup: cancelMenuMarkup 
+        reply_markup: getCancelMenuMarkup(lang) 
       });
-      bot.answerCallbackQuery(callbackQuery.id);
+      return bot.answerCallbackQuery(callbackQuery.id).catch(console.error);
     }
 
     if (data.startsWith('PKG_')) {
       const pkgId = data.split('_')[1];
-      const text = `🧾 *Order Details*\n\n` +
-                   `Package ID: *${pkgId}*\n\n` +
-                   `📍 *Payment Instructions*\n` +
-                   `Send payment to:\n` +
-                   `🏦 *Bank:* Telebirr /\n` +
-                   `🔢 *Account:* 1000xxxxxx\n` +
-                   `👤 *Name:* National ID Services\n\n` +
-                   `📸 *Final Step:*\n` +
-                   `How would you like to provide proof?`;
+      const text = t('pkg_details', lang, { pkgId: pkgId || '' });
       
       const proofChoiceMarkup: TelegramBot.InlineKeyboardMarkup = {
         inline_keyboard: [
-          [{ text: '📸 Upload Screenshot', callback_data: 'PROOF_SCREENSHOT' }],
-          [{ text: '✍️ Transaction Reference / ID', callback_data: 'PROOF_TEXT' }],
-          [{ text: '⬅️ Back', callback_data: 'TOP_UP' }]
+          [{ text: t('btn_proof_screenshot', lang), callback_data: 'PROOF_SCREENSHOT' }],
+          [{ text: t('btn_proof_text', lang), callback_data: 'PROOF_TEXT' }],
+          [{ text: t('btn_back', lang), callback_data: 'TOP_UP' }]
         ]
       };
 
@@ -201,13 +268,11 @@ bot.on('callback_query', async (callbackQuery: TelegramBot.CallbackQuery) => {
         }
       });
 
-      bot.editMessageText(text, {
-        chat_id: chatId,
-        message_id: message.message_id,
+      safeEditMessageText(chatId, message.message_id, text, {
         parse_mode: 'Markdown',
         reply_markup: proofChoiceMarkup
       });
-      bot.answerCallbackQuery(callbackQuery.id);
+      bot.answerCallbackQuery(callbackQuery.id).catch(console.error);
     }
 
     if (data === 'HISTORY') {
@@ -217,44 +282,33 @@ bot.on('callback_query', async (callbackQuery: TelegramBot.CallbackQuery) => {
         take: 10
       });
       
-      let text = `📂 *Your Recent Jobs*\n\n`;
-      if (jobs.length === 0) text += 'No history found.';
+      let text = t('menu_history', lang);
+      if (jobs.length === 0) text += '-';
       else {
         jobs.forEach((job: any, i: number) => {
           text += `${i+1}. ${job.status === 'SUCCESS' ? '✅' : '❌'} Job #${job.id.slice(-4)} — ${new Date(job.createdAt).toLocaleDateString()}\n`;
         });
       }
 
-      bot.editMessageText(text, {
-        chat_id: chatId,
-        message_id: message.message_id,
+      safeEditMessageText(chatId, message.message_id, text, {
         parse_mode: 'Markdown',
-        reply_markup: { inline_keyboard: [[{ text: '⬅️ Back', callback_data: 'START' }]] }
+        reply_markup: { inline_keyboard: [[{ text: t('btn_back', lang), callback_data: 'START' }]] }
       });
-      bot.answerCallbackQuery(callbackQuery.id);
+      return bot.answerCallbackQuery(callbackQuery.id).catch(console.error);
     }
 
     if (data === 'HELP') {
-       const text = `🛠️ *National ID Formatter Support*\n\n` +
-                    `• Each generation costs **1 credit**.\n` +
-                    `• Ensure photos are clear and legible.\n` +
-                    `• For manual bank top-ups, wait up to 10 mins for approval.\n\n` +
-                    `📞 *Need help?* Contact @AdminUsername\n\n` +
-                    `📍 *Commands:*\n` +
-                    `/start - Main Menu\n` +
-                    `/cancel - Reset Flow`;
-      bot.editMessageText(text, {
-        chat_id: chatId,
-        message_id: message.message_id,
+      const text = t('menu_help', lang);
+      safeEditMessageText(chatId, message.message_id, text, {
         parse_mode: 'Markdown',
-        reply_markup: { inline_keyboard: [[{ text: '⬅️ Back', callback_data: 'START' }]] }
+        reply_markup: { inline_keyboard: [[{ text: t('btn_back', lang), callback_data: 'START' }]] }
       });
-      bot.answerCallbackQuery(callbackQuery.id);
+      return bot.answerCallbackQuery(callbackQuery.id).catch(console.error);
     }
 
   } catch (err) {
     console.error('[Bot] Callback error:', err);
-    bot.answerCallbackQuery(callbackQuery.id, { text: '❌ Error processing request.' });
+    bot.answerCallbackQuery(callbackQuery.id, { text: '❌ Error processing request.' }).catch(console.error);
   }
 });
 
@@ -264,10 +318,15 @@ bot.on('message', async (msg: TelegramBot.Message) => {
   try {
     const user = await syncUser(msg);
     const chatId = msg.chat.id;
+    const lang = user.language || 'en';
+
+    if (user.state === 'WAIT_LANGUAGE') {
+       return; // Handle exclusively via callback queries
+    }
 
     if (user.state === 'WAIT_FRONT' || user.state === 'WAIT_BACK' || user.state === 'WAIT_THIRD') {
       if (!msg.photo || msg.photo.length === 0) {
-        return bot.sendMessage(chatId, '⚠️ Please send an image file.');
+        return bot.sendMessage(chatId, t('error_image_expected', lang));
       }
 
       const photo = msg.photo[msg.photo.length - 1];
@@ -287,31 +346,49 @@ bot.on('message', async (msg: TelegramBot.Message) => {
 
       if (user.state === 'WAIT_FRONT') {
         await prisma.user.update({ where: { id: user.id }, data: { state: 'WAIT_BACK' } });
-        bot.sendMessage(chatId, '📷 *Step 2/3*\nPlease send the **BACK** screenshot of the ID', { 
-          parse_mode: 'Markdown',
-          reply_markup: cancelMenuMarkup
-        });
+        const caption = t('step2_caption', lang);
+        if (fs.existsSync(GUIDE_BACK)) {
+            bot.sendPhoto(chatId, GUIDE_BACK, {
+                caption,
+                parse_mode: 'Markdown',
+                reply_markup: getCancelMenuMarkup(lang)
+            });
+        } else {
+            bot.sendMessage(chatId, caption, { 
+                parse_mode: 'Markdown',
+                reply_markup: getCancelMenuMarkup(lang)
+            });
+        }
       } else if (user.state === 'WAIT_BACK') {
         await prisma.user.update({ where: { id: user.id }, data: { state: 'WAIT_THIRD' } });
-        bot.sendMessage(chatId, '📷 *Step 3/3*\nPlease send the **PROFILE** screenshot', { 
-          parse_mode: 'Markdown',
-          reply_markup: cancelMenuMarkup
-        });
+        const caption = t('step3_caption', lang);
+        if (fs.existsSync(GUIDE_PROFILE)) {
+            bot.sendPhoto(chatId, GUIDE_PROFILE, {
+                caption,
+                parse_mode: 'Markdown',
+                reply_markup: getCancelMenuMarkup(lang)
+            });
+        } else {
+            bot.sendMessage(chatId, caption, { 
+                parse_mode: 'Markdown',
+                reply_markup: getCancelMenuMarkup(lang)
+            });
+        }
       } else if (user.state === 'WAIT_THIRD') {
         await prisma.user.update({ where: { id: user.id }, data: { state: 'PROCESSING' } });
-        const processingMsg = await bot.sendMessage(chatId, '⏳ *Processing formatting...*\nUsually takes ~10 seconds.', { parse_mode: 'Markdown' });
+        const processingMsg = await bot.sendMessage(chatId, t('processing', lang), { parse_mode: 'Markdown' });
 
         try {
           const temp = await prisma.tempUpload.findUnique({ where: { userId: user.id } });
           if (!temp || !temp.frontPath || !temp.backPath || !temp.thirdPath) throw new Error('Missing photos');
 
-          const [f, b, t] = await Promise.all([
+          const [f, b, p] = await Promise.all([
             fetch(temp.frontPath).then(res => res.arrayBuffer()).then(ab => Buffer.from(ab)),
             fetch(temp.backPath).then(res => res.arrayBuffer()).then(ab => Buffer.from(ab)),
             fetch(temp.thirdPath).then(res => res.arrayBuffer()).then(ab => Buffer.from(ab))
           ]);
 
-          const { jobId } = await api.createBotJob(user.id, f, b, t);
+          const { jobId } = await api.createBotJob(user.id, f, b, p);
 
           let statusResult = await api.getBotJobStatus(jobId);
 
@@ -330,22 +407,9 @@ bot.on('message', async (msg: TelegramBot.Message) => {
               
               // Send compressed Photo by default
               await bot.sendDocument(chatId, imageBuffer, {
-                caption: `✅ *ID Formatted Successfully*\n\n🖨️ *Ready for Printing*\n📐 Correct size & margins applied.\n\n💳 *${creditsLeft} credits remaining.*`,
+                caption: t('success_caption', lang, { creditsLeft: creditsLeft.toString() }),
                 parse_mode: 'Markdown',
-                reply_markup: {
-                  inline_keyboard: [
-                    [
-                      { text: '⬇️ Download HD PNG', callback_data: `DL_PNG_${jobId}` }
-                    ],
-                    [
-                      { text: '🔄 Format Another', callback_data: 'GEN_ID' },
-                      { text: '💳 Top Up', callback_data: 'TOP_UP' }
-                    ],
-                    [
-                      { text: '🏠 Home', callback_data: 'START' }
-                    ]
-                  ]
-                }
+                reply_markup: getMainMenuMarkup(lang)
               }, {
                 filename: `Ethiopian_ID_${jobId.substring(0, 6)}.jpeg`,
                 contentType: 'image/jpeg'
@@ -357,7 +421,7 @@ bot.on('message', async (msg: TelegramBot.Message) => {
 
         } catch (err: any) {
           console.error('[Bot] Generation Error:', err);
-          bot.sendMessage(chatId, `❌ *Formatting failure*\n${err.message || 'Please try again.'}`, { parse_mode: 'Markdown' });
+          bot.sendMessage(chatId, t('error_failed_format', lang, { errorMsg: err.message || 'Please try again.' }), { parse_mode: 'Markdown' });
         } finally {
           await prisma.user.update({ where: { id: user.id }, data: { state: 'IDLE' } });
           await prisma.tempUpload.delete({ where: { userId: user.id } }).catch(() => {});
@@ -367,9 +431,10 @@ bot.on('message', async (msg: TelegramBot.Message) => {
     }
 
     if (user.state === 'WAIT_PAYMENT_PROOF') {
+      if (msg.text === '/cancel') return bot.sendMessage(chatId, t('action_cancelled', lang));
       const photo = msg.photo ? msg.photo[msg.photo.length - 1] : null;
       if (!photo) {
-        return bot.sendMessage(chatId, '⚠️ Please send a screenshot of the payment proof.');
+        return bot.sendMessage(chatId, t('wait_proof_screenshot', lang));
       }
 
       const file = await bot.getFile(photo.file_id);
@@ -377,33 +442,32 @@ bot.on('message', async (msg: TelegramBot.Message) => {
       const response = await fetch(fileUrl);
       const buffer = Buffer.from(await response.arrayBuffer());
 
-      bot.sendMessage(chatId, '⏳ *Submitting proof...*', { parse_mode: 'Markdown' });
+      bot.sendMessage(chatId, t('submitting_proof', lang), { parse_mode: 'Markdown' });
 
       try {
         await api.submitTopUpRequest(user.id, user.pendingPackageId || '1', buffer);
         await prisma.user.update({ where: { id: user.id }, data: { state: 'IDLE' } });
-        bot.sendMessage(chatId, '✅ *Success!*\nYour payment has been submitted for review. An admin will approve it shortly.', { parse_mode: 'Markdown', reply_markup: mainMenuMarkup });
+        bot.sendMessage(chatId, t('payment_submitted', lang), { parse_mode: 'Markdown', reply_markup: getMainMenuMarkup(lang) });
       } catch (err) {
         console.error('Failed to submit topup proof:', err);
-        bot.sendMessage(chatId, '❌ Failed to submit payment proof. Please try again or contact support.');
       }
       return;
     }
 
     if (user.state === 'WAIT_PROOF_MODE') {
+      if (msg.text === '/cancel') return bot.sendMessage(chatId, t('action_cancelled', lang));
       if (!msg.text) {
-        return bot.sendMessage(chatId, '⚠️ Please send a text reference or ID.');
+        return bot.sendMessage(chatId, t('wait_proof_text', lang));
       }
 
-      bot.sendMessage(chatId, '⏳ *Submitting reference...*', { parse_mode: 'Markdown' });
+      bot.sendMessage(chatId, t('submitting_ref', lang), { parse_mode: 'Markdown' });
 
       try {
         await api.submitTopUpRequest(user.id, user.pendingPackageId || '1', null, msg.text);
         await prisma.user.update({ where: { id: user.id }, data: { state: 'IDLE' } });
-        bot.sendMessage(chatId, '✅ *Success!*\nYour transaction ID has been submitted for review. An admin will approve it shortly.', { parse_mode: 'Markdown', reply_markup: mainMenuMarkup });
+        bot.sendMessage(chatId, t('payment_submitted', lang), { parse_mode: 'Markdown', reply_markup: getMainMenuMarkup(lang) });
       } catch (err) {
         console.error('Failed to submit topup reference:', err);
-        bot.sendMessage(chatId, '❌ Failed to submit. Please try again or contact support.');
       }
       return;
     }

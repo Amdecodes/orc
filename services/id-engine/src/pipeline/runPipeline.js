@@ -54,7 +54,7 @@ export async function runPipeline(frontImg, backImg, thirdImg) {
 
     // 5. Centralized Validity Extraction (High Confidence, DOB-Filtered)
     const frontOcrLines = data.front.ocrLines || [];
-    const extractionResult = extractValidityDates(frontOcrLines, finalDobGc, finalDobEc);
+    const extractionResult = extractValidityDates(frontOcrLines, data.front.imgWidth);
     
     let finalValidity = extractionResult.validity;
 

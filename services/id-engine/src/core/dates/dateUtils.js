@@ -15,9 +15,14 @@ export function formatGcWithMonth(dateStr) {
         
         const y = parts[0];
         const m = parseInt(parts[1], 10);
+        if (isNaN(m)) return dateStr; // Already contains string month
         const d = parts[2].padStart(2, "0");
         
-        const monthShort = MONTHS[m - 1] || "???";
+        // Ensure month matches our capitalized format e.g. 'Feb'
+        const monthNames = ["Feb", "Jan", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]; // wait, index 1 is Feb?
+        // Let's just use the uppercase exact list
+        const MONTHS_CAP = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const monthShort = MONTHS_CAP[m - 1] || "???";
         return `${y}/${monthShort}/${d}`;
     } catch (e) {
         return dateStr;

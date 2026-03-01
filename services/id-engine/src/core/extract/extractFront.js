@@ -105,6 +105,7 @@ export async function extractFront(input) {
             en: "",
             confidence: bestOverall ? 0.95 : 0
         },
+        imgWidth: meta.width,
         ocrLines, // Expose for centralized date extraction
         _raw: { candidates, dobText: dobGc }
     };

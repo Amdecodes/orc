@@ -13,8 +13,8 @@ const CLIP = { x: 0, y: 0, width: 5944, height: 1778 };
 async function _renderLayout(frontBase64, backBase64) {
   const template = fs.readFileSync(TEMPLATE_PATH, 'utf8');
   const html = template
-    .replace('{{FRONT_IMAGE}}', `data:image/png;base64,${frontBase64}`)
-    .replace('{{BACK_IMAGE}}',  `data:image/png;base64,${backBase64}`);
+    .replace('{{FRONT_IMAGE}}', `data:image/jpeg;base64,${frontBase64}`)
+    .replace('{{BACK_IMAGE}}',  `data:image/jpeg;base64,${backBase64}`);
 
   const browser = await chromium.launch({
     headless: true,
@@ -35,32 +35,12 @@ async function _renderLayout(frontBase64, backBase64) {
   }
 }
 
-/**
- * File-writing variant (used by api_server.js).
- * Writes both PNG and JPG to disk.
- *
- * @param {string} frontPath Path to the front ID image.
- * @param {string} backPath Path to the back ID image.
- * @param {string} outputPath Target path for the composite PNG.
- */
 export async function renderPrintReady(frontPath, backPath, outputPath) {
   const frontBase64 = fs.readFileSync(frontPath).toString('base64');
   const backBase64  = fs.readFileSync(backPath).toString('base64');
   const buf = await _renderLayout(frontBase64, backBase64);
 
   fs.writeFileSync(outputPath, buf);
-  // JPG version
-  const jpgPath = outputPath.replace('.png', '.jpg');
-  const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
-  const page = await browser.newPage({ viewport: { width: CLIP.width, height: CLIP.height }, deviceScaleFactor: 2 });
-  const template = fs.readFileSync(TEMPLATE_PATH, 'utf8');
-  const html = template
-    .replace('{{FRONT_IMAGE}}', `data:image/png;base64,${frontBase64}`)
-    .replace('{{BACK_IMAGE}}',  `data:image/png;base64,${backBase64}`);
-  await page.setContent(html);
-  await page.waitForTimeout(500);
-  await page.screenshot({ path: jpgPath, type: 'jpeg', quality: 95, clip: CLIP });
-  await browser.close();
 
   console.log(`[renderPrintReady] ✅ Print-ready layout saved to ${outputPath}`);
 }
