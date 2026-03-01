@@ -11,7 +11,9 @@
   "scripts": {
     "dev:web": "npm run dev --workspace=web",
     "dev:admin": "npm run dev --workspace=admin",
-    "dev": "concurrently \"npm run dev:web\" \"npm run dev:admin\"",
+    "dev:bot": "npm run dev --workspace=tg-bot",
+    "dev:worker": "npm run worker --workspace=web",
+    "dev": "concurrently \"npm run dev:web\" \"npm run dev:admin\" \"npm run dev:bot\" \"npm run dev:worker\"",
     "build": "npm run build --workspaces --if-present",
     "start": "npm run start --workspaces --if-present",
     "prisma:generate": "npx prisma generate",

@@ -32,20 +32,17 @@ export async function POST(req: Request) {
     const backPath = await saveUploadedFile(back, userId, "back");
     const photoPath = await saveUploadedFile(third, userId, "photo");
 
-    // 3. Create Job (status: PROCESSING)
+    // 3. Create Job (status: PENDING)
     const job = await prisma.job.create({
       data: {
         userId,
-        status: "PROCESSING",
+        status: "PENDING",
         cost: 1,
         frontImagePath: frontPath,
         backImagePath: backPath,
         photoPath: photoPath,
       },
     });
-
-    // 4. Kick off processing async
-    processJob(job.id, userId, frontPath, backPath, photoPath).catch(console.error);
 
     return NextResponse.json({ success: true, jobId: job.id });
   } catch (error: any) {

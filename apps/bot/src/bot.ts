@@ -376,7 +376,7 @@ bot.on('message', async (msg: TelegramBot.Message) => {
         }
       } else if (user.state === 'WAIT_THIRD') {
         await prisma.user.update({ where: { id: user.id }, data: { state: 'PROCESSING' } });
-        const processingMsg = await bot.sendMessage(chatId, t('processing', lang), { parse_mode: 'Markdown' });
+        await bot.sendMessage(chatId, t('processing', lang), { parse_mode: 'Markdown' });
 
         try {
           const temp = await prisma.tempUpload.findUnique({ where: { userId: user.id } });
@@ -388,42 +388,15 @@ bot.on('message', async (msg: TelegramBot.Message) => {
             fetch(temp.thirdPath).then(res => res.arrayBuffer()).then(ab => Buffer.from(ab))
           ]);
 
-          const { jobId } = await api.createBotJob(user.id, f, b, p);
-
-          let statusResult = await api.getBotJobStatus(jobId);
-
-          let attempts = 0;
-          while ((statusResult?.status === 'PENDING' || statusResult?.status === 'PROCESSING') && attempts < 20) {
-              await new Promise(r => setTimeout(r, 2000));
-              statusResult = await api.getBotJobStatus(jobId);
-              attempts++;
-          }
-
-          if (statusResult?.status === 'SUCCESS') {
-              const updatedUser = await prisma.user.findUnique({ where: { id: user.id } });
-              const creditsLeft = updatedUser?.credits || 0;
-
-              const imageBuffer = await api.downloadBotResult(jobId);
-              
-              // Send compressed Photo by default
-              await bot.sendDocument(chatId, imageBuffer, {
-                caption: t('success_caption', lang, { creditsLeft: creditsLeft.toString() }),
-                parse_mode: 'Markdown',
-                reply_markup: getMainMenuMarkup(lang)
-              }, {
-                filename: `Ethiopian_ID_${jobId.substring(0, 6)}.jpeg`,
-                contentType: 'image/jpeg'
-              });
-          } else {
-              console.error('[Bot] Job did not reach SUCCESS. Final status:', statusResult);
-              throw new Error(`Processing failed (Status: ${statusResult?.status || 'UNKNOWN'}).`);
-          }
-
+          // Just trigger the job. The worker and webhook will handle the rest.
+          await api.createBotJob(user.id, f, b, p);
+          
+          // No more polling loop!
         } catch (err: any) {
-          console.error('[Bot] Generation Error:', err);
+          console.error('[Bot] Generation Error Triggering:', err);
           bot.sendMessage(chatId, t('error_failed_format', lang, { errorMsg: err.message || 'Please try again.' }), { parse_mode: 'Markdown' });
-        } finally {
           await prisma.user.update({ where: { id: user.id }, data: { state: 'IDLE' } });
+        } finally {
           await prisma.tempUpload.delete({ where: { userId: user.id } }).catch(() => {});
         }
       }
@@ -502,6 +475,53 @@ app.post('/notify', async (req, res) => {
   } catch (err) {
     console.error('[Bot Notify Error]:', err);
     res.status(500).json({ error: 'Failed to send message' });
+  }
+});
+
+app.post('/notify-job', async (req, res) => {
+  console.log('[Bot Webhook] Received /notify-job request:', req.body);
+  const { telegramId, jobId, status } = req.body;
+  const secret = req.headers['x-bot-secret'];
+
+  if (secret !== config.BOT_SECRET) {
+    console.warn('[Bot Webhook] Unauthorized secret provided');
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  if (!telegramId || !jobId) {
+    console.warn('[Bot Webhook] Missing telegramId or jobId');
+    return res.status(400).json({ error: 'Missing params' });
+  }
+
+  try {
+    const user = await prisma.user.findUnique({ where: { telegramId: String(telegramId) } });
+    const lang = user?.language || 'en';
+
+    if (status === 'SUCCESS') {
+      const creditsLeft = user?.credits || 0;
+      const imageBuffer = await api.downloadBotResult(jobId);
+
+      await bot.sendDocument(telegramId, imageBuffer, {
+        caption: t('success_caption', lang, { creditsLeft: creditsLeft.toString() }),
+        parse_mode: 'Markdown',
+        reply_markup: getMainMenuMarkup(lang)
+      }, {
+        filename: `Ethiopian_ID_${jobId.substring(0, 6)}.jpeg`,
+        contentType: 'image/jpeg'
+      });
+    } else {
+      bot.sendMessage(telegramId, t('error_failed_format', lang, { errorMsg: 'Processing failed.' }), { parse_mode: 'Markdown' });
+    }
+
+    // Set state back to IDLE
+    if (user) {
+        await prisma.user.update({ where: { id: user.id }, data: { state: 'IDLE' } });
+    }
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error('[Bot Job Notify Error]:', err);
+    res.status(500).json({ error: 'Failed to notify user' });
   }
 });
 

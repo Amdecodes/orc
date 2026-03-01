@@ -53,8 +53,15 @@ export async function GET(
             return;
           }
 
-          // Still processing
-          send({ status: "PROCESSING", attempt: attempts });
+          if (job.status === "PENDING") {
+            send({ status: "PENDING", attempt: attempts });
+            return;
+          }
+
+          if (job.status === "PROCESSING") {
+            send({ status: "PROCESSING", attempt: attempts });
+            return;
+          }
 
           if (attempts >= MAX_ATTEMPTS) {
             send({ status: "TIMEOUT" });

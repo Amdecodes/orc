@@ -9,7 +9,7 @@ const translations: Record<string, Record<SupportedLanguages, string>> = {
   },
   choose_language: {
     en: '🌐 Please select your preferred language:',
-    am: '🌐 እባክዎ የሚፈልጉትን ቋቋ ይምረጡ:'
+    am: '🌐 እባክዎ የሚፈልጉትን ቋንቋ ይምረጡ:'
   },
   lang_changed: {
     en: '✅ Language changed to English.',

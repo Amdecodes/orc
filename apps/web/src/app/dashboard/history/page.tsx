@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/components/LanguageContext";
 
 type Job = {
   id: string;
@@ -9,6 +10,7 @@ type Job = {
 };
 
 export default function HistoryPage() {
+  const { t } = useLanguage();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -31,7 +33,7 @@ export default function HistoryPage() {
 
   if (loading) return (
     <div className="p-8 text-center">
-      <p className="text-gray-500 animate-pulse">Loading your history...</p>
+      <p className="text-gray-500 animate-pulse">{t('loading')}</p>
     </div>
   );
 
@@ -39,18 +41,18 @@ export default function HistoryPage() {
     <div className="p-8 md:p-12 max-w-7xl mx-auto space-y-12">
       <header className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
         <div>
-          <h1 className="text-4xl font-extrabold tracking-tight">Your History</h1>
+          <h1 className="text-4xl font-extrabold tracking-tight">{t('your_history')}</h1>
           <p className="text-gray-500 mt-2 font-light">
-            View your past generated IDs. Files are available for 48 hours.
+            {t('history_desc')}
           </p>
         </div>
-        <Button variant="outline" onClick={loadHistory}>Refresh</Button>
+        <Button variant="outline" onClick={loadHistory}>{t('refresh')}</Button>
       </header>
 
       {jobs.length === 0 ? (
         <div className="bg-white rounded-[3rem] p-20 text-center shadow-xl shadow-gray-200/40 border border-gray-100">
           <p className="text-gray-400 font-light italic text-lg">
-            No jobs found. Start by formatting an ID!
+            {t('no_jobs_found')}
           </p>
         </div>
       ) : (
@@ -59,10 +61,10 @@ export default function HistoryPage() {
             <table className="w-full text-left">
               <thead className="bg-gray-50 border-b border-gray-100">
                 <tr>
-                  <th className="px-8 py-6 text-sm font-bold text-gray-400 uppercase tracking-widest">Job ID</th>
-                  <th className="px-8 py-6 text-sm font-bold text-gray-400 uppercase tracking-widest">Status</th>
-                  <th className="px-8 py-6 text-sm font-bold text-gray-400 uppercase tracking-widest">Date</th>
-                  <th className="px-8 py-6 text-sm font-bold text-gray-400 uppercase tracking-widest text-right">Action</th>
+                  <th className="px-8 py-6 text-sm font-bold text-gray-400 uppercase tracking-widest">{t('job_id')}</th>
+                  <th className="px-8 py-6 text-sm font-bold text-gray-400 uppercase tracking-widest">{t('status')}</th>
+                  <th className="px-8 py-6 text-sm font-bold text-gray-400 uppercase tracking-widest">{t('date')}</th>
+                  <th className="px-8 py-6 text-sm font-bold text-gray-400 uppercase tracking-widest text-right">{t('action')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -90,7 +92,7 @@ export default function HistoryPage() {
                           download 
                           className="inline-flex items-center justify-center rounded-2xl bg-gray-900 px-6 py-3 text-xs font-bold text-white shadow-lg shadow-gray-200 transition-all hover:scale-110 active:scale-95"
                         >
-                          Download
+                          {t('download')}
                         </a>
                       )}
                     </td>

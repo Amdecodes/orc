@@ -14,6 +14,8 @@ export default function middleware(req: NextRequest) {
   const isAuthRoute = pathname === "/login" || pathname === "/register";
   const isPublicRoute =
     pathname === "/" ||
+    pathname === "/terms" ||
+    pathname === "/privacy" ||
     isAuthRoute ||
     pathname.startsWith("/api/auth") ||
     pathname.startsWith("/api/bot") ||

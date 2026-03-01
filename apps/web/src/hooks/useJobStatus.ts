@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export type JobStatus = "PROCESSING" | "SUCCESS" | "FAILED" | "TIMEOUT" | "IDLE" | "ERROR" | "NOT_FOUND";
+export type JobStatus = "PENDING" | "PROCESSING" | "SUCCESS" | "FAILED" | "TIMEOUT" | "IDLE" | "ERROR" | "NOT_FOUND";
 
 export function useJobStatus(jobId: string | null) {
   const [status, setStatus] = useState<JobStatus>("IDLE");

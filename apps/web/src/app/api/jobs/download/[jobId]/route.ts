@@ -35,11 +35,16 @@ export async function GET(
       return new Response("File not generated yet", { status: 400 });
     }
 
+    const { searchParams } = new URL(req.url);
+    const isInline = searchParams.get("inline") === "true";
+
     const file = await readFile(job.outputPath);
     return new Response(file, {
       headers: { 
         "Content-Type": "image/png",
-        "Content-Disposition": `attachment; filename="formatted-id-${jobId}.png"`,
+        "Content-Disposition": isInline 
+          ? "inline" 
+          : `attachment; filename="formatted-id-${jobId}.png"`,
       },
     });
   } catch (error) {

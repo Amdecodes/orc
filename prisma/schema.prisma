@@ -205,3 +205,20 @@ enum PaymentMethod {
   MANUAL
   AUTO
 }
+
+model OTP {
+  id        String     @id @default(uuid())
+  email     String
+  code      String
+  purpose   OTPPurpose
+  expiresAt DateTime
+  used      Boolean    @default(false)
+  createdAt DateTime   @default(now())
+
+  @@map("otp")
+}
+
+enum OTPPurpose {
+  REGISTER
+  RESET_PASSWORD
+}

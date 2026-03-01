@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "worker": "tsx watch src/scripts/worker.ts",
+    "stress": "tsx src/scripts/stress-test.ts"
   },
   "dependencies": {
     "@et-id-ocr/credit-engine": "*",

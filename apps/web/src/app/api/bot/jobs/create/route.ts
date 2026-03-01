@@ -49,7 +49,7 @@ export async function POST(req: Request) {
     const job = await prisma.job.create({
       data: {
         userId,
-        status: "PROCESSING",
+        status: "PENDING",
         cost: 1,
         frontImagePath: frontPath,
         backImagePath: backPath,
@@ -57,9 +57,8 @@ export async function POST(req: Request) {
       },
     });
 
-    // 3. Trigger processing (async)
-    processJob(job.id, userId, frontPath, backPath, photoPath).catch(console.error);
-
+    // 3. Trigger processing (Handled by background worker)
+    
     return NextResponse.json({ jobId: job.id });
   } catch (error) {
     console.error("Bot Job Create Error:", error);
