@@ -13,7 +13,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const ROOT      = path.resolve(__dirname, '../../');
+const ROOT      = path.resolve(__dirname, '../../../');
 
 // ─── Register fonts (real TrueType system fonts) ──────────────────────────────
 const FONT_ETH_REG  = '/usr/share/fonts/google-droid-sans-fonts/DroidSansEthiopic-Regular.ttf';
@@ -54,14 +54,14 @@ function drawText(ctx, text, x, y, { size = 14, weight = 'normal', color = CLR_V
   if (isEthiopic) family = 'DroidEthiopic';
   else if (isMono) family = 'LiberationMono';
   else             family = 'Liberation';
-  ctx.font      = \`\${weight} \${size}px '\${family}'\`;
+  ctx.font      = `${weight} ${size}px '${family}'`;
   ctx.fillStyle = color;
   ctx.textAlign = align;
   ctx.fillText(String(text), x, y);
 }
 
 function hasEthiopic(s) {
-  return /[\\u1200-\\u137F\\u2D80-\\u2DDF\\uAB00-\\uAB2F]/u.test(String(s));
+  return /[\u1200-\u137F\u2D80-\u2DDF\uAB00-\uAB2F]/u.test(String(s));
 }
 
 function drawMixedLine(ctx, text, x, y, opts = {}) {
@@ -71,14 +71,14 @@ function drawMixedLine(ctx, text, x, y, opts = {}) {
   parts.forEach((part, i) => {
     const t      = part.trim();
     const family = hasEthiopic(t) ? 'DroidEthiopic' : 'Liberation';
-    ctx.font      = \`\${opts.weight || 'normal'} \${opts.size || 14}px '\${family}'\`;
+    ctx.font      = `${opts.weight || 'normal'} ${opts.size || 14}px '${family}'`;
     ctx.fillStyle = opts.color || CLR_VALUE;
     ctx.textAlign = 'left';
     ctx.fillText(t, cursor, y);
     const w = ctx.measureText(t).width;
     cursor += w;
     if (i < parts.length - 1) {
-      ctx.font = \`\${opts.weight || 'normal'} \${opts.size || 14}px 'Liberation'\`;
+      ctx.font = `${opts.weight || 'normal'} ${opts.size || 14}px 'Liberation'`;
       ctx.fillText(' | ', cursor, y);
       cursor += ctx.measureText(' | ').width;
     }
@@ -108,7 +108,7 @@ async function renderFront(data, frontImgPath, outputPath) {
 
   const baseImg = await loadImage(frontImgPath);
 
-  // Fixed canvas: 1011 × 638
+  // Fixed canvas: 1011 x 638
   const canvas  = createCanvas(CANVAS_W, CANVAS_H);
   const ctx     = canvas.getContext('2d');
 
@@ -135,16 +135,16 @@ async function renderFront(data, frontImgPath, outputPath) {
   drawText(ctx, namEn, 411, 214, { size: FS_MAIN, weight: 'bold', color: CLR_VALUE });
 
   // ── Date of Birth (14/7/1995 | 2003/Mar/23) — X:411 Y:314 ──
-  drawMixedLine(ctx, \`\${dobEc} |\${dobGc}\`, 411, 314, { size: FS_MAIN, color: CLR_VALUE });
+  drawMixedLine(ctx, `${dobEc} |${dobGc}`, 411, 314, { size: FS_MAIN, color: CLR_VALUE });
 
-  // ── Sex / Gender (ወንድ | MALE) — X:411 Y:381 ──
-  drawMixedLine(ctx, \`\${sexAm} |\${sexEn}\`, 411, 381, { size: FS_MAIN, weight: 'bold', color: CLR_VALUE });
+  // ── Sex / Gender — X:411 Y:381 ──
+  drawMixedLine(ctx, `${sexAm} |${sexEn}`, 411, 381, { size: FS_MAIN, weight: 'bold', color: CLR_VALUE });
 
-  // ── Expiry date (2018/03/04 | 25/NOV/2025) — X:411 Y:447 ──
-  drawMixedLine(ctx, \`\${expEc} |\${expGc}\`, 411, 447, { size: FS_MAIN, color: CLR_VALUE });
+  // ── Expiry date — X:411 Y:447 ──
+  drawMixedLine(ctx, `${expEc} |${expGc}`, 411, 447, { size: FS_MAIN, color: CLR_VALUE });
 
   // ── FAN number — X:482 Y:505 ──
-  const fanFmt = fan.replace(/(\\d{4})(?=\\d)/g, '$1 ');
+  const fanFmt = fan.replace(/(\d{4})(?=\d)/g, '$1 ');
   drawText(ctx, fanFmt, 482, 505, { size: FS_MAIN, weight: 'bold', color: CLR_PRIMARY, isMono: true });
 
   // ── FAN barcode — X:478 Y:529 ──
@@ -186,7 +186,7 @@ async function renderFront(data, frontImgPath, outputPath) {
 
   const buf = canvas.toBuffer('image/png');
   fs.writeFileSync(outputPath, buf);
-  console.log(\`[Export] ✅ Front saved: \${outputPath}\`);
+  console.log(`[Export] Front saved: ${outputPath}`);
 }
 
 // ─── BACK ─────────────────────────────────────────────────────────────────────
@@ -199,7 +199,7 @@ async function renderBack(data, backImgPath, outputPath) {
   const id = data.identifiers || {};
 
   const phone  = (c.phone    || {}).value || '';
-  const natAm  = (p.nationality || {}).am || 'ኢትዮጵያዊ';
+  const natAm  = (p.nationality || {}).am || '\u12A2\u1275\u12EE\u1335\u12EB\u12CA';
   const natEn  = (p.nationality || {}).en || 'Ethiopian';
   const addrAm = (c.address  || {}).am   || '';
   const addrEn = (c.address  || {}).en   || '';
@@ -216,7 +216,7 @@ async function renderBack(data, backImgPath, outputPath) {
 
   const baseImg = await loadImage(backImgPath);
 
-  // Fixed canvas: 1011 × 638
+  // Fixed canvas: 1011 x 638
   const canvas  = createCanvas(CANVAS_W, CANVAS_H);
   const ctx     = canvas.getContext('2d');
 
@@ -226,8 +226,8 @@ async function renderBack(data, backImgPath, outputPath) {
   // ── Phone — X:23 Y:54, font 6.5pt ──
   drawText(ctx, phone, 23, 54, { size: FS_MAIN, weight: 'bold', color: CLR_VALUE, isMono: true });
 
-  // ── Nationality (ኢትዮጵያዊ | Ethiopian) — X:23 Y:155, font 7.3pt ──
-  drawMixedLine(ctx, \`\${natAm} |\${natEn}\`, 23, 155, { size: FS_NAT, weight: 'bold', color: CLR_VALUE });
+  // ── Nationality — X:23 Y:155, font 7.3pt ──
+  drawMixedLine(ctx, `${natAm} |${natEn}`, 23, 155, { size: FS_NAT, weight: 'bold', color: CLR_VALUE });
 
   // ── Region Amharic — X:23 Y:231, font 6.4pt ──
   drawText(ctx, regAm, 23, 231, { size: FS_ADDR_AM, color: CLR_VALUE, isEthiopic: true });
@@ -264,7 +264,7 @@ async function renderBack(data, backImgPath, outputPath) {
 
   const buf = canvas.toBuffer('image/png');
   fs.writeFileSync(outputPath, buf);
-  console.log(\`[Export] ✅ Back saved: \${outputPath}\`);
+  console.log(`[Export] Back saved: ${outputPath}`);
 }
 
 // ─── Public API ───
@@ -284,19 +284,19 @@ export async function exportIDCards(pipelineResult, frontImgPath, backImgPath, o
 // ─── CLI ───
 if (process.argv[1] && process.argv[1].endsWith('id-card-exporter.js')) {
   const jsonPath  = process.argv[2] || path.join(ROOT, 'verification_result.json');
-  const frontImg  = path.join(ROOT, 'front v2.0.png');
-  const backImg   = path.join(ROOT, 'back V2.0.png');
+  const frontImg  = path.join(ROOT, 'front_V5.0.png');
+  const backImg   = path.join(ROOT, 'back_v5.0.png');
 
-  if (!fs.existsSync(jsonPath)) { console.error('❌ JSON not found:', jsonPath); process.exit(1); }
-  if (!fs.existsSync(frontImg)) { console.error('❌ Front image not found:', frontImg); process.exit(1); }
-  if (!fs.existsSync(backImg))  { console.error('❌ Back image not found:', backImg);  process.exit(1); }
+  if (!fs.existsSync(jsonPath)) { console.error('JSON not found:', jsonPath); process.exit(1); }
+  if (!fs.existsSync(frontImg)) { console.error('Front image not found:', frontImg); process.exit(1); }
+  if (!fs.existsSync(backImg))  { console.error('Back image not found:', backImg);  process.exit(1); }
 
   const data = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
   exportIDCards(data, frontImg, backImg)
     .then(out => {
-      console.log('\n✅ Export complete!');
+      console.log('\nExport complete!');
       console.log('  Front:', out.front);
       console.log('  Back: ', out.back);
     })
-    .catch(err => { console.error('❌ Export failed:', err); process.exit(1); });
+    .catch(err => { console.error('Export failed:', err); process.exit(1); });
 }

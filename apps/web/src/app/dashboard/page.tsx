@@ -62,7 +62,7 @@ function UploadCard({ id, label, step, desc, isDone, onFileChange, onClear, prev
         />
       </div>
 
-      <div className="mt-4 px-1">
+      <div className="mt-4 px-1 hidden sm:block">
         <p className="text-[8px] sm:text-[9px] font-bold text-text-muted uppercase leading-relaxed tracking-wider">
           {desc}
         </p>
@@ -184,7 +184,7 @@ export default function ActionPage() {
   }, [result]);
 
   return (
-    <div className="max-w-screen-2xl mx-auto py-10 sm:py-16 px-6 sm:px-12 xl:px-20 space-y-16 sm:space-y-24 pb-32">
+    <div className="max-w-screen-2xl mx-auto py-6 sm:py-16 px-4 sm:px-12 xl:px-20 space-y-8 sm:space-y-24 pb-16 sm:pb-32">
       {/* Top Navigation / Header */}
       <div className="flex items-center justify-between gap-6 border-b border-border/50 pb-8 animate-in fade-in slide-in-from-top-4 duration-700">
         <div className="flex flex-col">
@@ -196,18 +196,18 @@ export default function ActionPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-4 sm:gap-6">
+        <div className="flex items-center gap-2 sm:gap-6">
           {/* Credit Display (Clickable to open wall) */}
           <button 
             onClick={() => setShowCreditWall(true)}
-            className="flex items-center gap-3 px-4 sm:px-6 h-12 bg-bg-surface border-2 border-border hover:border-accent rounded-xl sm:rounded-2xl transition-all group shadow-sm"
+            className="flex items-center gap-2 sm:gap-3 px-3 sm:px-6 h-10 sm:h-12 bg-bg-surface border-2 border-border hover:border-accent rounded-xl sm:rounded-2xl transition-all group shadow-sm"
           >
-            <div className="w-6 h-6 rounded-lg bg-accent/10 flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-accent-text transition-all">
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-md sm:rounded-lg bg-accent/10 flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-accent-text transition-all">
+              <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             </div>
             <div className="text-left">
-              <p className="text-[8px] font-black text-text-muted uppercase tracking-widest leading-none mb-1">{t('credits')}</p>
-              <p className="text-sm font-black text-text-primary tabular-nums leading-none">
+              <p className="hidden sm:block text-[8px] font-black text-text-muted uppercase tracking-widest leading-none mb-1">{t('credits')}</p>
+              <p className="text-xs sm:text-sm font-black text-text-primary tabular-nums leading-none">
                 {displayCredits}
               </p>
             </div>
@@ -336,7 +336,7 @@ export default function ActionPage() {
 
           <div className="space-y-6">
             <button 
-              className="w-full h-16 sm:h-20 bg-accent hover:bg-accent-hover text-accent-text rounded-xl sm:rounded-2xl font-black text-lg sm:text-xl uppercase tracking-[0.2em] transition-all shadow-xl active:scale-[0.98] disabled:opacity-40 disabled:grayscale disabled:cursor-not-allowed disabled:hover:bg-accent"
+              className="w-full h-14 sm:h-20 bg-accent hover:bg-accent-hover text-accent-text rounded-xl sm:rounded-2xl font-black text-base sm:text-xl uppercase tracking-[0.2em] transition-all shadow-xl active:scale-[0.98] disabled:opacity-40 disabled:grayscale disabled:cursor-not-allowed disabled:hover:bg-accent"
               disabled={!front || !back || !profile || isLoading}
               onClick={handleGenerate}
             >

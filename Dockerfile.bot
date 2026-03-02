@@ -1,0 +1,41 @@
+FROM node:20-alpine AS base
+
+# Install dependencies only when needed
+FROM base AS deps
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+
+# Copy root package.json and workspace package.json files
+COPY package.json package-lock.json ./
+COPY apps/bot/package.json ./apps/bot/
+COPY services/id-engine/package.json ./services/id-engine/
+COPY services/credit-engine/package.json ./services/credit-engine/
+COPY services/payment-engine/package.json ./services/payment-engine/
+COPY prisma ./prisma
+
+# Install dependencies
+RUN npm ci
+
+# Build the application
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+# Generate Prisma Client
+RUN npx prisma generate --schema=./prisma/schema.prisma
+
+# Build the bot (if needed, or just use tsx)
+# Given the bot uses tsx watch in dev, we should build it for prod
+RUN npm run start --workspace=tg-bot --dry-run || true
+
+# Production image
+FROM base AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+
+# Copy built node_modules and source
+COPY --from=builder /app ./
+
+CMD ["npm", "run", "start", "--workspace=tg-bot"]

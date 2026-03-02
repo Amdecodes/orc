@@ -20,8 +20,8 @@
   --border-default: #E2E8F0;
 
   /* Actions */
-  --accent-primary: #F59E0B;
-  --accent-hover: #D97706;
+  --accent-primary: #1DB954;
+  --accent-hover: #1db9548d;
   --accent-text: #FFFFFF;
 
   /* Status */
@@ -51,8 +51,8 @@
   --border-default: #334155;
 
   /* Actions */
-  --accent-primary: #F59E0B;
-  --accent-hover: #D97706;
+  --accent-primary: #1DB954;
+  --accent-hover: #1db9548d;
   --accent-text: #FFFFFF;
 
   /* Status */
@@ -83,10 +83,9 @@
     --border-default: #334155;
 
     /* Actions */
-    --accent-primary: #F59E0B;
-    --accent-hover: #D97706;
+    --accent-primary: #1DB954;
+    --accent-hover: #1db9548d;
     --accent-text: #FFFFFF;
-
     /* Status */
     --success: #22C55E;
     --warning: #FBBF24;
@@ -103,6 +102,16 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', sans-serif;
+    /* Mobile: remove tap highlight flash */
+    -webkit-tap-highlight-color: transparent;
+    /* Prevent text size inflation on orientation change */
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Smooth scroll everywhere */
+  html {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
   }
 
   ::selection {
@@ -112,6 +121,11 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Space Grotesk', sans-serif;
+  }
+
+  /* Ensure all interactive elements meet 44px touch target minimum */
+  button, [role="button"], a {
+    touch-action: manipulation;
   }
 }
 

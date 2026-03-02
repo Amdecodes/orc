@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import prisma from "@/lib/prisma";
+import { sendEmail } from "./email";
 
 export const auth = betterAuth({
     database: prismaAdapter(prisma, {
@@ -10,6 +11,23 @@ export const auth = betterAuth({
     baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
     emailAndPassword: {
         enabled: true,
+        requireEmailVerification: true,
+    },
+    emailVerification: {
+        sendOnSignUp: true,
+        autoSignInAfterVerification: true,
+        sendVerificationEmail: async ({ user, url, token }) => {
+            const { error } = await sendEmail({
+                to: user.email,
+                subject: "Verify your email",
+                text: `Click the link to verify your email: ${url}`,
+                html: `<p>Click the link to verify your email: <a href="${url}">${url}</a></p><p>Or use this code: <b>${token}</b></p>`,
+                idempotencyKey: `verification-email/${user.id}-${token.substring(0, 8)}`,
+            });
+            if (error) {
+                throw new Error(`Failed to send verification email: ${error.message}`);
+            }
+        },
     },
     socialProviders: {
         google: {

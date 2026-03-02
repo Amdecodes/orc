@@ -76,7 +76,7 @@ async function recognizeVariant(imagePath, crop, psm, options = {}, externalWork
       if (data && data.text) {
          // console.log(`DEBUG: Tesseract returned text length: ${data.text.length}`);
       } else {
-          console.log("DEBUG: Tesseract returned NO text.");
+          // console.log("DEBUG: Tesseract returned NO text.");
       }
 
       let lines = [];
@@ -170,7 +170,7 @@ async function recognizeVariant(imagePath, crop, psm, options = {}, externalWork
       
       // FINAL FALLBACK: Raw Text Splitting
       if (lines.length === 0 && data.text) {
-          console.log("DEBUG: Generating lines from raw text (Layout data missing).");
+          // console.log("DEBUG: Generating lines from raw text (Layout data missing).");
           lines = data.text.split('\n').map(text => ({
               text: text.trim(),
               confidence: 0, // Unknown
@@ -182,7 +182,7 @@ async function recognizeVariant(imagePath, crop, psm, options = {}, externalWork
       }
 
       if (lines.length === 0) {
-          console.log("DEBUG: No lines found in Tesseract data. Keys:", data ? Object.keys(data) : "null");
+          // console.log("DEBUG: No lines found in Tesseract data. Keys:", data ? Object.keys(data) : "null");
           return [];
       }
 

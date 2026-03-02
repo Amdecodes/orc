@@ -1,6 +1,5 @@
 import sharp from "sharp";
 import { runTesseractCLI, parseTSV } from "./cli_ocr.js";
-import crypto from "crypto";
 import { CROPS } from "./crops.js";
 import fs from "fs";
 import { scanQR } from "./qr_engine.js";
@@ -274,26 +273,6 @@ async function getAdaptiveThreshold(buffer, defaultVal = 128) {
     }
 }
 
-// Cache lives in <project-root>/ocr_cache.json regardless of CWD
-const CACHE_FILE = path.join(__dirname, '../../ocr_cache.json');
-function getCache() {
-    try {
-        if (fs.existsSync(CACHE_FILE)) {
-            return JSON.parse(fs.readFileSync(CACHE_FILE, 'utf8'));
-        }
-    } catch (e) {}
-    return {};
-}
-
-function saveCache(cache) {
-    try {
-        fs.writeFileSync(CACHE_FILE, JSON.stringify(cache, null, 2));
-    } catch (e) {}
-}
-
-function getImageHash(buffer) {
-    return crypto.createHash('md5').update(buffer).digest('hex');
-}
 
 export async function extractBackID(input) {
   // Accept Buffer (from generateID) or file path string (from api_server / CLI)
@@ -302,8 +281,6 @@ export async function extractBackID(input) {
 
   console.log(`[extractBackID] 100% Safe Mode Start for ${imagePath ?? '<buffer>'}`);
 
-  const imgHash = getImageHash(imageBuffer);
-  const cache = getCache();
 
   // For QR scan and tesseract we need a file path — write temp file if given a Buffer
   let tempFilePath = null;
@@ -315,8 +292,6 @@ export async function extractBackID(input) {
 
   const qrData = await scanQR(resolvedPath);
   if (qrData && qrData.uin && qrData.uin.length === 12) {
-      if (qrData.uin) cache[imgHash] = { fin: qrData.uin, phone: qrData.phone };
-      saveCache(cache);
       if (tempFilePath && fs.existsSync(tempFilePath)) { try { fs.unlinkSync(tempFilePath); } catch (_) {} }
       return { ...qrData, _source: "QR", _status: "Extracted" };
   }
@@ -682,29 +657,6 @@ export async function extractBackID(input) {
     // --- 6. Final Evaluation ---
     const isSuccess = !!fin; // At minimum, we want FIN correctly
     
-    if (!fin || !phone) {
-        const cached = cache[imgHash];
-        if (cached) {
-            console.log(`[Stage 4D] Potential Cache Hit!`);
-            if (!fin && cached.fin) {
-                console.log(`[Stage 4D] Recovered FIN from cache: ${cached.fin}`);
-                fin = cached.fin;
-            }
-            if (!phone && cached.phone) {
-                // Validate prefix before accepting from cache
-                if (/^(09|07)/.test(cached.phone)) {
-                   console.log(`[Stage 4D] Recovered Phone from cache: ${cached.phone}`);
-                   phone = cached.phone;
-                }
-            }
-        }
-    }
-
-    // Update Cache if we have both now
-    if (fin && phone) {
-        cache[imgHash] = { fin, phone };
-        saveCache(cache);
-    }
 
     // --- 6. Final Evaluation & Confidence Scoring ---
 

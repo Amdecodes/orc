@@ -317,13 +317,13 @@ export async function renderBackBuffer(data, bgPath) {
 if (import.meta.url === `file://${process.argv[1]}` || (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url))) {
   (async () => {
     const jsonPath = process.argv[2] || path.join(ROOT, 'verification_result.json');
-    const frontBg  = path.join(ROOT, 'front v4.0.png');
-    const backBg   = path.join(ROOT, 'back v4.0.png');
+    const frontBg  = path.join(ROOT, 'front_V5.0.png');
+    const backBg   = path.join(ROOT, 'back_v5.0.png');
     const outDir   = path.join(ROOT, 'output');
 
     if (!fs.existsSync(jsonPath)) { console.error('❌ JSON not found:', jsonPath); process.exit(1); }
-    if (!fs.existsSync(frontBg))  { console.error('❌ front v4.0.png not found');  process.exit(1); }
-    if (!fs.existsSync(backBg))   { console.error('❌ back v4.0.png not found');   process.exit(1); }
+    if (!fs.existsSync(frontBg))  { console.error('❌ front_V5.0.png not found');  process.exit(1); }
+    if (!fs.existsSync(backBg))   { console.error('❌ back_v5.0.png not found');   process.exit(1); }
 
     if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
 

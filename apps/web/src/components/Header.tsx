@@ -3,6 +3,7 @@ import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { Menu, X, Globe } from "lucide-react";
 import { useLanguage } from "./LanguageContext";
 
@@ -71,13 +72,17 @@ export function Header() {
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 xl:px-12 h-16 flex items-center justify-between gap-3">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group cursor-pointer shrink-0">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-text-primary flex items-center justify-center text-bg-surface transition-transform group-hover:rotate-12">
-              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" /></svg>
-            </div>
+          <Link href="/" className="flex items-center gap-2 sm:gap-3 group cursor-pointer shrink-0">
+            <Image
+              src="/logo.png"
+              alt="ID Formatter Logo"
+              width={120}
+              height={120}
+              className="w-32 h-32 sm:w-40 sm:h-40 rounded-xl object-contain transition-transform group-hover:scale-105"
+            />
             <div className="flex flex-col">
-              <span className="text-sm sm:text-lg font-black tracking-tight text-text-primary uppercase font-['Space_Grotesk'] leading-none">ID Formatter</span>
-              <span className="text-[8px] sm:text-[10px] font-bold text-text-secondary uppercase tracking-widest mt-1">Ethiopian National ID Tool</span>
+              <span className="hidden sm:block text-sm sm:text-base font-black tracking-tight text-text-primary uppercase font-['Space_Grotesk'] leading-none">ID Formatter</span>
+              <span className="hidden sm:block text-[8px] sm:text-[10px] font-bold text-text-secondary uppercase tracking-widest mt-1">Ethiopian National ID Tool</span>
             </div>
           </Link>
 
@@ -141,7 +146,7 @@ export function Header() {
                 {/* Desktop Logout */}
                 <button
                   onClick={handleLogout}
-                  className="text-[10px] font-black text-text-secondary hover:text-text-primary transition-colors uppercase tracking-widest hidden lg:block"
+                  className="hidden lg:flex items-center justify-center px-4 h-9 rounded-lg bg-error/10 text-error border border-error/20 text-[10px] font-black uppercase tracking-widest hover:bg-error hover:text-white transition-all focus:outline-none"
                 >
                   {t('logout')}
                 </button>
@@ -235,20 +240,18 @@ export function Header() {
                   {t('nav_admin_portal')}
                 </Link>
               )}
+              {/* Mobile Logout - Integrated in list with red highlight */}
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-3 px-4 py-3.5 rounded-xl text-[11px] font-black text-error bg-error/10 hover:bg-error hover:text-white uppercase tracking-[0.2em] transition-all mt-4"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                {t('nav_sign_out')}
+              </button>
             </nav>
 
             {/* Spacer */}
             <div className="flex-1" />
-
-            {/* Logout */}
-            <div className="px-6 pb-8 pt-4 border-t border-border">
-              <button
-                onClick={handleLogout}
-                className="w-full h-12 rounded-2xl border-2 border-border text-[11px] font-black text-text-secondary hover:text-destructive hover:border-destructive/50 uppercase tracking-widest transition-all"
-              >
-                {t('nav_sign_out')}
-              </button>
-            </div>
           </div>
         </>
       )}

@@ -657,3 +657,18 @@ Candidate: y=2438 score=55 text="9129"
 Candidate: y=2438 score=55 text="5724"
 Candidate: y=2472 score=85 text="0903908121"
 Best for fin: y=2472 score=85
+
+--- Searching for phone near label at y=2429 ---
+Candidate: y=2506 score=205 text="0943023404"
+Best for phone: y=2506 score=205
+
+--- Searching for phone near label at y=2400 ---
+Candidate: y=2472 score=205 text="0903908121"
+Best for phone: y=2472 score=205
+
+--- Searching for fin near label at y=2435 ---
+Candidate: y=2438 score=55 text="4304"
+Candidate: y=2438 score=55 text="9129"
+Candidate: y=2438 score=55 text="5724"
+Candidate: y=2472 score=85 text="0903908121"
+Best for fin: y=2472 score=85

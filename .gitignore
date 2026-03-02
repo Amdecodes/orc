@@ -23,7 +23,6 @@ yarn-error.log*
 # Uploads & Temporary Files
 tmp/
 public/uploads/
-ocr_cache.json
 verification_result.json
 
 # IDEs

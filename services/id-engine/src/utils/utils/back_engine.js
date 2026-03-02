@@ -1,6 +1,5 @@
 import sharp from "sharp";
 import { runTesseractCLI, parseTSV } from "./cli_ocr.js";
-import crypto from "crypto";
 import { CROPS } from "./crops.js";
 import fs from "fs";
 import { scanQR } from "./qr_engine.js";
@@ -28,7 +27,7 @@ function getBoxCenter(bbox) {
 function extractFromLayout(lines, imgWidth) {
     // Check for layout data availability
     if (!lines || lines.length === 0 || !lines[0].bbox) {
-        console.log("DEBUG: No layout data (boxes) found. Using Strict Global Regex Fallback.");
+        // console.log("DEBUG: No layout data (boxes) found. Using Strict Global Regex Fallback.");
         return extractGlobalStrict(lines);
     }
 
@@ -220,7 +219,7 @@ function extractWoredaDeterministic(words) {
             if (num >= 1 && num <= 30) {
                 // Return numeric string only, resolveAddress will format based on region
                 const result = String(num).padStart(2, '0');
-                console.log(`[WoredaRecovery] Found deterministic numeric woreda: ${result} (kw: ${kw.text}, line: ${kw.line_num})`);
+                // console.log(`[WoredaRecovery] Found deterministic numeric woreda: ${result} (kw: ${kw.text}, line: ${kw.line_num})`);
                 return result;
             }
         }
@@ -274,36 +273,14 @@ async function getAdaptiveThreshold(buffer, defaultVal = 128) {
     }
 }
 
-// Cache lives in <project-root>/ocr_cache.json regardless of CWD
-const CACHE_FILE = path.join(__dirname, '../../ocr_cache.json');
-function getCache() {
-    try {
-        if (fs.existsSync(CACHE_FILE)) {
-            return JSON.parse(fs.readFileSync(CACHE_FILE, 'utf8'));
-        }
-    } catch (e) {}
-    return {};
-}
-
-function saveCache(cache) {
-    try {
-        fs.writeFileSync(CACHE_FILE, JSON.stringify(cache, null, 2));
-    } catch (e) {}
-}
-
-function getImageHash(buffer) {
-    return crypto.createHash('md5').update(buffer).digest('hex');
-}
 
 export async function extractBackID(input) {
   // Accept Buffer (from generateID) or file path string (from api_server / CLI)
   const imageBuffer = Buffer.isBuffer(input) ? input : fs.readFileSync(input);
   const imagePath   = Buffer.isBuffer(input) ? null : input;
 
-  console.log(`[extractBackID] 100% Safe Mode Start for ${imagePath ?? '<buffer>'}`);
+  // console.log(`[extractBackID] 100% Safe Mode Start for ${imagePath ?? '<buffer>'}`);
 
-  const imgHash = getImageHash(imageBuffer);
-  const cache = getCache();
 
   // For QR scan and tesseract we need a file path — write temp file if given a Buffer
   let tempFilePath = null;
@@ -315,8 +292,6 @@ export async function extractBackID(input) {
 
   const qrData = await scanQR(resolvedPath);
   if (qrData && qrData.uin && qrData.uin.length === 12) {
-      if (qrData.uin) cache[imgHash] = { fin: qrData.uin, phone: qrData.phone };
-      saveCache(cache);
       if (tempFilePath && fs.existsSync(tempFilePath)) { try { fs.unlinkSync(tempFilePath); } catch (_) {} }
       return { ...qrData, _source: "QR", _status: "Extracted" };
   }
@@ -415,7 +390,7 @@ export async function extractBackID(input) {
     const finLabel = labels.get('fin');
     
     if (!phoneLabel || !finLabel) {
-        console.log(`[SafeMode] Missing required labels: Phone=${!!phoneLabel}, FIN=${!!finLabel}. Returning null.`);
+        // console.log(`[SafeMode] Missing required labels: Phone=${!!phoneLabel}, FIN=${!!finLabel}. Returning null.`);
         // Note: Address/Nationality might still be extracted as best-effort if needed, 
         // but for numeric fields, we stop.
     }
@@ -466,7 +441,7 @@ export async function extractBackID(input) {
         // Relaxed rule: If they are on different lines but < 15px apart, they might overlap.
         // If they are on the SAME line (yDist < 5), we allow it but handle during OCR.
         if (yDist > 5 && yDist < 15) {
-            console.log(`[SafeMode] FIN and Phone lines overlapping (${yDist}px). Rejecting both.`);
+            // console.log(`[SafeMode] FIN and Phone lines overlapping (${yDist}px). Rejecting both.`);
             crops.phone = null;
             crops.fin = null;
         }
@@ -535,7 +510,7 @@ export async function extractBackID(input) {
             return { value: winner, candidates };
         }
 
-        console.log(`[SafeMode] No consensus for ${type}: ${candidates.join(' | ')}`);
+        // console.log(`[SafeMode] No consensus for ${type}: ${candidates.join(' | ')}`);
         return { value: null, candidates };
     };
 
@@ -544,7 +519,7 @@ export async function extractBackID(input) {
      */
     const attemptRecovery = async (cropRect, type, seenCandidates) => {
         if (!cropRect) return null;
-        console.log(`[Stage 4] Attempting Recovery for ${type}...`);
+        // console.log(`[Stage 4] Attempting Recovery for ${type}...`);
 
         const recoveryPasses = [];
         // Layer A: Extreme Upscale (Separates touching digits)
@@ -575,17 +550,17 @@ export async function extractBackID(input) {
             }
 
             if (candidate) {
-                console.log(`[Stage 4A] Found recovery candidate: ${candidate}`);
+                // console.log(`[Stage 4A] Found recovery candidate: ${candidate}`);
                 // Acceptance Rule: Match ANY previously seen candidate
                 if (seenCandidates.includes(candidate)) {
-                    console.log(`[Stage 4A] MATCH FOUND in previous candidates! Accepting ${candidate}.`);
+                    // console.log(`[Stage 4A] MATCH FOUND in previous candidates! Accepting ${candidate}.`);
                     return candidate;
                 }
 
                 // Layer C: Structural Proof (Phone specific)
                 // Accept if valid prefix, length 10, and high-quality match
                 if (type === 'phone' && /^(09|07)\d{8}$/.test(candidate)) {
-                    console.log(`[Stage 4C] Structural Proof: Valid Phone format detected. Accepting ${candidate}.`);
+                    // console.log(`[Stage 4C] Structural Proof: Valid Phone format detected. Accepting ${candidate}.`);
                     return candidate;
                 }
             }
@@ -627,7 +602,7 @@ export async function extractBackID(input) {
         // Use the words from the anchor pass (TSV)
         for (const w of words) {
             if (w.level === 5 && /^(09|07)\d{8}$/.test(w.text)) {
-                console.log(`[PhoneRecovery] Found phone in global TSV: ${w.text}`);
+                // console.log(`[PhoneRecovery] Found phone in global TSV: ${w.text}`);
                 phone = w.text;
                 break;
             }
@@ -638,7 +613,7 @@ export async function extractBackID(input) {
         fullTextRaw = runTesseractCLI(resolvedPath, 'txt', { psm: 3 });
         const phoneMatch = fullTextRaw.match(/(?:^|[^0-9])((?:09|07)\d{8})(?:[^0-9]|$)/);
         if (phoneMatch) {
-            console.log(`[PhoneRecovery] Found phone in global text: ${phoneMatch[1]}`);
+            // console.log(`[PhoneRecovery] Found phone in global text: ${phoneMatch[1]}`);
             phone = phoneMatch[1];
         }
     }
@@ -661,14 +636,14 @@ export async function extractBackID(input) {
         // We only apply it if address.woreda is null/empty.
         if (isNumericRegion && !address.woreda) {
              const targetWoreda = "Woreda " + deterministicWoreda;
-             console.log(`[WoredaRecovery] No textual Woreda found. Applying deterministic fallback: ${targetWoreda}`);
+             // console.log(`[WoredaRecovery] No textual Woreda found. Applying deterministic fallback: ${targetWoreda}`);
              address.woreda = targetWoreda;
              address.woreda_am = "ወረዳ " + deterministicWoreda;
              address.confidence = Math.max(address.confidence, 0.85); // Lower confidence for recovery
              address.normalized = [address.region, address.zone, address.woreda].filter(Boolean).join(", ");
              address.normalized_am = [address.region_am, address.zone_am, address.woreda_am].filter(Boolean).join(", ");
         } else if (deterministicWoreda && address.woreda) {
-             console.log(`[WoredaRecovery] Ignoring numeric recovery (${deterministicWoreda}) because textual Woreda (${address.woreda}) is already locked.`);
+             // console.log(`[WoredaRecovery] Ignoring numeric recovery (${deterministicWoreda}) because textual Woreda (${address.woreda}) is already locked.`);
         }
     }
 
@@ -682,29 +657,6 @@ export async function extractBackID(input) {
     // --- 6. Final Evaluation ---
     const isSuccess = !!fin; // At minimum, we want FIN correctly
     
-    if (!fin || !phone) {
-        const cached = cache[imgHash];
-        if (cached) {
-            console.log(`[Stage 4D] Potential Cache Hit!`);
-            if (!fin && cached.fin) {
-                console.log(`[Stage 4D] Recovered FIN from cache: ${cached.fin}`);
-                fin = cached.fin;
-            }
-            if (!phone && cached.phone) {
-                // Validate prefix before accepting from cache
-                if (/^(09|07)/.test(cached.phone)) {
-                   console.log(`[Stage 4D] Recovered Phone from cache: ${cached.phone}`);
-                   phone = cached.phone;
-                }
-            }
-        }
-    }
-
-    // Update Cache if we have both now
-    if (fin && phone) {
-        cache[imgHash] = { fin, phone };
-        saveCache(cache);
-    }
 
     // --- 6. Final Evaluation & Confidence Scoring ---
 
