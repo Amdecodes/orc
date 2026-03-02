@@ -4,12 +4,14 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { Loader2, Eye, EyeOff } from "lucide-react";
 import { useLanguage } from "@/components/LanguageContext";
 
 export default function LoginPage() {
   const { t } = useLanguage();
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +34,7 @@ export default function LoginPage() {
         setIsLoading(false);
       },
       onSuccess: () => {
-        // Redirect is handled by callbackURL or middleware
+        router.push("/dashboard");
       }
     });
   };

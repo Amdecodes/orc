@@ -48,6 +48,12 @@ export default function AdminDashboardLayout({
             <Link href="/topups" className="hover:text-white transition-colors">
               Top-ups
             </Link>
+            <Link href="/jobs" className="hover:text-white transition-colors">
+              Jobs
+            </Link>
+            <Link href="/users" className="hover:text-white transition-colors">
+              Users
+            </Link>
             <Link
               href="/settings"
               className="hover:text-white transition-colors"

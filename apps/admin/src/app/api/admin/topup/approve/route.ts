@@ -10,14 +10,22 @@ export async function POST(req: Request) {
   }
 
   try {
-    const { requestId, action } = await req.json();
+    const { requestId, action, type = "TOPUP" } = await req.json();
 
-    const topup = await prisma.topUpRequest.findUnique({
-      where: { id: requestId },
-      include: { user: true },
-    });
+    let targetItem;
+    if (type === "TOPUP") {
+      targetItem = await prisma.topUpRequest.findUnique({
+        where: { id: requestId },
+        include: { user: true },
+      });
+    } else {
+      targetItem = await prisma.payment.findUnique({
+        where: { id: requestId },
+        include: { user: true },
+      });
+    }
 
-    if (!topup || topup.status !== "PENDING") {
+    if (!targetItem || targetItem.status !== "PENDING") {
       return NextResponse.json(
         { error: "Request not found or already handled" },
         { status: 400 }
@@ -26,39 +34,79 @@ export async function POST(req: Request) {
 
     if (action === "APPROVE") {
       await prisma.$transaction([
-        prisma.topUpRequest.update({
-          where: { id: requestId },
-          data: { status: "APPROVED" },
-        }),
+        type === "TOPUP" 
+          ? prisma.topUpRequest.update({
+              where: { id: requestId },
+              data: { status: "APPROVED" },
+            })
+          : prisma.payment.update({
+              where: { id: requestId },
+              data: { status: "APPROVED", adminId, approvedAt: new Date() },
+            }),
         prisma.user.update({
-          where: { id: topup.userId },
-          data: { credits: { increment: topup.credits } },
+          where: { id: targetItem.userId },
+          data: { credits: { increment: targetItem.credits } },
         }),
         prisma.creditTransaction.create({
           data: {
-            userId: topup.userId,
-            amount: topup.credits,
-            reason: "TOPUP",
+            userId: targetItem.userId,
+            amount: targetItem.credits,
+            reason: type === "TOPUP" ? "TOPUP" : "PAYMENT",
             reference: requestId,
+          },
+        }),
+        prisma.notification.create({
+          data: {
+            userId: targetItem.userId,
+            title: "Top-up Approved ✅",
+            message: `Your top-up of ${targetItem.credits} credits has been approved and added to your account.`,
+            type: "SUCCESS",
           },
         }),
       ]);
     } else {
-      await prisma.topUpRequest.update({
-        where: { id: requestId },
-        data: { status: "REJECTED" },
-      });
+      if (type === "TOPUP") {
+        await prisma.$transaction([
+          prisma.topUpRequest.update({
+            where: { id: requestId },
+            data: { status: "REJECTED" },
+          }),
+          prisma.notification.create({
+            data: {
+              userId: targetItem.userId,
+              title: "Top-up Request Declined ❌",
+              message: `Your top-up request for ${targetItem.credits} credits was declined. Please contact support if you need help.`,
+              type: "ERROR",
+            }
+          }),
+        ]);
+      } else {
+        await prisma.$transaction([
+          prisma.payment.update({
+            where: { id: requestId },
+            data: { status: "REJECTED", adminId, approvedAt: new Date() },
+          }),
+          prisma.notification.create({
+            data: {
+              userId: targetItem.userId,
+              title: "Payment Declined ❌",
+              message: `Your payment for ${targetItem.credits} credits was declined. Please contact support if you need help.`,
+              type: "ERROR",
+            }
+          }),
+        ]);
+      }
     }
 
     // --- Notify the Bot ---
-    if (topup.user.telegramId) {
+    if (targetItem.user.telegramId) {
       try {
         const message = action === "APPROVE" 
-          ? `Your top-up of ${topup.credits} credits was approved!` 
-          : `Your top-up request for ${topup.credits} credits was rejected. Please contact support.`;
+          ? `Your top-up of ${targetItem.credits} credits was approved!` 
+          : `Your top-up request for ${targetItem.credits} credits was rejected. Please contact support.`;
 
         await axios.post("http://localhost:5005/notify", {
-          telegramId: topup.user.telegramId,
+          telegramId: targetItem.user.telegramId,
           message,
           status: action,
         }, {
@@ -74,7 +122,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Admin Handle TopUp Action Error:", error);
+    console.error("Admin Handle Action Error:", error);
     return NextResponse.json({ error: "Failed to handle request" }, { status: 500 });
   }
 }

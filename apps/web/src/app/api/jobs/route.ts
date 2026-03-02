@@ -41,6 +41,7 @@ export async function POST(req: Request) {
         frontImagePath: frontPath,
         backImagePath: backPath,
         photoPath: photoPath,
+        source: "WEB",
       },
     });
 

@@ -46,6 +46,7 @@ export async function POST(req: Request) {
         screenshotPath,
         referenceText,
         status: "PENDING",
+        source: "WEB",
       },
     });
 

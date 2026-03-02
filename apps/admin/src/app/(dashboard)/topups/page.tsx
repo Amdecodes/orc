@@ -7,15 +7,18 @@ import {
   XCircle, 
   ExternalLink, 
   Image as ImageIcon, 
-  MessageSquare, 
   User, 
   Clock, 
   CreditCard, 
   Maximize2,
   X,
-  Calendar,
-  Zap
+  Zap,
+  Bot,
+  Globe,
+  Activity,
+  AlertTriangle
 } from "lucide-react";
+
 
 interface TopUpRequest {
   id: string;
@@ -25,6 +28,8 @@ interface TopUpRequest {
   screenshotPath: string | null;
   referenceText: string | null;
   status: string;
+  source: string;
+  type: "TOPUP" | "PAYMENT";
   createdAt: string;
   user: {
     email: string;
@@ -40,13 +45,25 @@ export default function TopUpsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [actioningId, setActioningId] = useState<string | null>(null);
   const [selectedScreenshot, setSelectedScreenshot] = useState<string | null>(null);
+  const [sourceFilter, setSourceFilter] = useState("all");
+  const [pendingAction, setPendingAction] = useState<{
+    requestId: string;
+    action: "APPROVE" | "REJECT";
+    type: string;
+    userEmail: string;
+    credits: number;
+  } | null>(null);
 
   const fetchRequests = async () => {
     setIsLoading(true);
     try {
       const res = await fetch("/api/admin/topup/pending");
       const data = await res.json();
-      setRequests(data);
+      if (Array.isArray(data)) {
+        setRequests(data);
+      } else {
+        setRequests([]);
+      }
     } catch (error) {
       console.error("Failed to fetch top-up requests:", error);
     } finally {
@@ -58,13 +75,19 @@ export default function TopUpsPage() {
     fetchRequests();
   }, []);
 
-  const handleAction = async (requestId: string, action: "APPROVE" | "REJECT") => {
+  const filteredRequests = requests.filter((r) => {
+    if (sourceFilter === "all") return true;
+    return r.source === sourceFilter;
+  });
+
+  const handleAction = async (requestId: string, action: "APPROVE" | "REJECT", type: string) => {
     setActioningId(requestId);
+    setPendingAction(null);
     try {
       const res = await fetch("/api/admin/topup/approve", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ requestId, action }),
+        body: JSON.stringify({ requestId, action, type }),
       });
       if (res.ok) {
         setRequests((prev) => prev.filter((r) => r.id !== requestId));
@@ -80,268 +103,256 @@ export default function TopUpsPage() {
     }
   };
 
-  const formatTime = (dateStr: string) => {
-    const date = new Date(dateStr);
-    return {
-      full: date.toLocaleString(),
-      time: date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      date: date.toLocaleDateString([], { month: 'short', day: 'numeric' }),
-      relative: getRelativeTime(date)
-    };
-  };
-
-  const getRelativeTime = (date: Date) => {
-    const now = new Date();
-    const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / 60000);
-    
-    if (diffInMinutes < 1) return 'Just now';
-    if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
-    
-    const diffInHours = Math.floor(diffInMinutes / 60);
-    if (diffInHours < 24) return `${diffInHours}h ago`;
-    
-    return `${Math.floor(diffInHours / 24)}d ago`;
-  };
-
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
-        <div className="relative">
-           <div className="absolute inset-0 rounded-full bg-zinc-800 animate-ping opacity-20"></div>
-           <Loader2 className="w-12 h-12 text-zinc-100 animate-spin relative z-10" />
-        </div>
-        <p className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.5em]">Synchronizing Data</p>
+        <Loader2 className="w-12 h-12 text-zinc-100 animate-spin" />
+        <p className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.5em]">Synchronizing Vault</p>
       </div>
     );
   }
 
   return (
-    <div className="p-10 max-w-7xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      {/* Header Section */}
+    <div className="p-10 space-y-12 animate-in fade-in duration-700">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div className="space-y-3">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-zinc-100 to-zinc-400 flex items-center justify-center shadow-2xl shadow-zinc-100/10">
-              <Zap className="w-6 h-6 text-black fill-black" />
-            </div>
-            <h1 className="text-5xl font-black tracking-tighter uppercase italic leading-none">
-              Top-up <span className="text-zinc-700">Vault</span>
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <h1 className="text-5xl font-black tracking-tighter uppercase">
+              Top-up <span className="text-zinc-700">Queue</span>
             </h1>
+            <p className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.4em]">
+              Vault Operations • Pending Approval Requests
+            </p>
           </div>
-          <div className="flex items-center gap-4">
-             <div className="px-3 py-1 bg-zinc-900 border border-zinc-800 rounded-full flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
-                <p className="text-[9px] font-black text-zinc-400 uppercase tracking-widest">Live Operations</p>
-             </div>
-             <p className="text-[9px] font-bold text-zinc-600 uppercase tracking-[0.2em]">Manual Liquidity Verification</p>
+
+          <div className="flex items-center gap-2 p-1 bg-zinc-950 rounded-2xl border border-zinc-800 w-fit">
+            {[
+              { id: "all", label: "All Items", icon: Activity },
+              { id: "BOT", label: "Bot Only", icon: Bot },
+              { id: "WEB", label: "Web Only", icon: Globe },
+            ].map((f) => (
+              <button
+                key={f.id}
+                onClick={() => setSourceFilter(f.id)}
+                className={`flex items-center gap-2 px-4 py-1.5 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all ${
+                  sourceFilter === f.id 
+                    ? "bg-white text-black shadow-lg" 
+                    : "text-zinc-500 hover:text-zinc-300"
+                }`}
+              >
+                <f.icon className="w-3 h-3" />
+                {f.label}
+              </button>
+            ))}
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-           <div className="px-6 py-4 bg-zinc-900/50 border border-zinc-800 rounded-3xl backdrop-blur-xl group hover:border-zinc-700 transition-all">
-              <div className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-1">Queue Status</div>
-              <div className="text-2xl font-black tabular-nums tracking-tighter">
-                {requests.length < 10 ? `0${requests.length}` : requests.length} <span className="text-xs text-zinc-600 uppercase">Pending</span>
-              </div>
-           </div>
+        <div className="px-6 py-4 bg-zinc-900/50 border border-zinc-800 rounded-3xl">
+          <div className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-1">Active Queue</div>
+          <div className="text-2xl font-black">{filteredRequests.length} Requests</div>
         </div>
       </div>
 
-      {requests.length === 0 ? (
-        <div className="h-[50vh] bg-zinc-950 border border-zinc-900 rounded-[3rem] flex flex-col items-center justify-center space-y-6 text-zinc-600 transition-all hover:border-zinc-800 group">
-          <div className="w-20 h-20 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center group-hover:scale-110 transition-transform">
-             <CheckCircle2 className="w-8 h-8 opacity-40 text-emerald-500" />
-          </div>
-          <div className="text-center space-y-1">
-            <p className="text-xs font-black uppercase tracking-[0.4em] text-zinc-400">Terminal Synchronized</p>
-            <p className="text-[10px] font-medium uppercase tracking-widest opacity-50">No pending actions requiring intervention</p>
-          </div>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 gap-8">
-          {requests.map((req) => {
-            const timeInfo = formatTime(req.createdAt);
-            return (
-              <div
-                key={req.id}
-                className="group relative bg-[#0a0a0a] border border-zinc-900 rounded-[2.5rem] overflow-hidden hover:border-zinc-700 transition-all duration-500 shadow-2xl hover:shadow-zinc-100/5"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-zinc-100/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
-                
-                <div className="p-8 flex flex-col md:flex-row items-stretch gap-10">
-                  {/* Proof Side */}
-                  <div className="relative w-full md:w-56 h-72 md:h-auto overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-950 shrink-0 group-hover:border-zinc-600 transition-all duration-500">
+      <div className="bg-zinc-900 border border-zinc-800 rounded-[2.5rem] overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left">
+            <thead>
+              <tr className="bg-black/20 text-[9px] font-black text-zinc-500 uppercase tracking-widest">
+                <th className="px-8 py-5">Source</th>
+                <th className="px-8 py-5">User</th>
+                <th className="px-8 py-5">Request</th>
+                <th className="px-8 py-5">Proof</th>
+                <th className="px-8 py-5">Reference</th>
+                <th className="px-8 py-5">Time</th>
+                <th className="px-8 py-5 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-zinc-800/50">
+              {filteredRequests.map((req) => (
+                <tr key={req.id} className="group hover:bg-white/5 transition-all">
+                  <td className="px-8 py-6">
+                    <div className="flex flex-col items-center justify-center gap-1">
+                      {req.source === "BOT" ? (
+                        <Bot className="w-5 h-5 text-blue-500" />
+                      ) : (
+                        <Globe className="w-5 h-5 text-zinc-500" />
+                      )}
+                      <span className="text-[8px] font-black text-zinc-500">{req.source}</span>
+                    </div>
+                  </td>
+                  <td className="px-8 py-6">
+                    <div className="space-y-1">
+                      <div className="text-xs font-black text-zinc-200">{req.user.email}</div>
+                      <div className="flex items-center gap-2">
+                        <span className={`text-[8px] font-black px-1.5 py-0.5 rounded border ${
+                          req.type === "TOPUP" 
+                            ? "bg-zinc-800 border-zinc-700 text-zinc-400" 
+                            : "bg-blue-500/10 border-blue-500/20 text-blue-500"
+                        }`}>
+                          {req.type}
+                        </span>
+                        <div className="text-[9px] text-zinc-500 font-medium tracking-tight">
+                          {req.user.telegramId ? `@${req.user.username || req.user.telegramId}` : 'Web Customer'}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-8 py-6">
+                    <div className="space-y-1">
+                      <div className="text-sm font-black text-emerald-500">+{req.credits} CR</div>
+                      <div className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">{req.price || (req as any).amount} ETB</div>
+                    </div>
+                  </td>
+                  <td className="px-8 py-6">
                     {req.screenshotPath ? (
-                      <>
-                        <img
-                          src={`/api/admin/screenshot/${req.id}`}
-                          alt="Payment Proof"
-                          className="w-full h-full object-cover opacity-40 group-hover:opacity-70 group-hover:scale-105 transition-all duration-700 blur-[2px] group-hover:blur-0"
+                      <button 
+                        onClick={() => setSelectedScreenshot(`/api/admin/screenshot/${req.id}`)}
+                        className="w-10 h-10 rounded-lg bg-zinc-800 border border-zinc-700 overflow-hidden group/thumb relative"
+                      >
+                         <img 
+                          src={`/api/admin/screenshot/${req.id}`} 
+                          className="w-full h-full object-cover opacity-50 group-hover/thumb:opacity-100 transition-opacity" 
+                          alt="thumb" 
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-                        <button
-                          onClick={() => setSelectedScreenshot(`/api/admin/screenshot/${req.id}`)}
-                          className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/40 md:bg-black/0 md:opacity-0 group-hover:opacity-100 transition-all duration-500"
-                        >
-                          <div className="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center shadow-2xl scale-75 group-hover:scale-100 transition-transform duration-500">
-                            <Maximize2 className="w-5 h-5" />
-                          </div>
-                          <span className="text-[9px] font-black uppercase tracking-widest text-white drop-shadow-lg">Inspect Document</span>
-                        </button>
-                      </>
+                         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/thumb:opacity-100 bg-black/40 transition-opacity">
+                            <Maximize2 className="w-3 h-3 text-white" />
+                         </div>
+                      </button>
                     ) : (
-                      <div className="w-full h-full flex flex-col items-center justify-center space-y-4 opacity-30">
-                        <MessageSquare className="w-12 h-12" />
-                        <span className="text-[9px] font-black uppercase tracking-widest">Text Based Proof</span>
-                      </div>
+                      <div className="text-[9px] font-black text-zinc-700 uppercase italic">No File</div>
                     )}
-                  </div>
-
-                  {/* Information Side */}
-                  <div className="flex-1 flex flex-col justify-between py-2 space-y-10">
-                    <div className="space-y-8">
-                      {/* User Section */}
-                      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-                        <div className="flex items-center gap-5">
-                          <div className="w-14 h-14 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center group-hover:bg-zinc-800 group-hover:border-zinc-700 transition-colors">
-                             <User className="w-6 h-6 text-zinc-500" />
-                          </div>
-                          <div className="space-y-1">
-                             <h3 className="text-xl font-black tracking-tight text-white group-hover:text-zinc-100 flex items-center gap-3">
-                                {req.user.name || 'Anonymous User'}
-                                <span className="text-[9px] px-2 py-0.5 bg-zinc-900 border border-zinc-800 rounded text-zinc-500 font-black uppercase tracking-tight">VIP</span>
-                             </h3>
-                             <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                                <span className="text-xs font-medium text-zinc-400">{req.user.email}</span>
-                                <div className="w-1 h-1 rounded-full bg-zinc-800"></div>
-                                {req.user.username && (
-                                  <span className="text-xs font-black text-blue-500 tracking-tight italic">@{req.user.username}</span>
-                                )}
-                                <div className="w-1 h-1 rounded-full bg-zinc-800"></div>
-                                <span className="text-[10px] font-mono text-zinc-600 select-all tracking-tighter uppercase">{req.user.telegramId || 'No TG ID'}</span>
-                             </div>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-6 lg:text-right">
-                           <div className="space-y-1">
-                              <div className="text-[9px] font-black text-zinc-500 uppercase tracking-widest">Current Credits</div>
-                              <div className="text-lg font-black tracking-tighter text-zinc-300">{req.user.credits} <span className="text-[10px] text-zinc-600">CR</span></div>
-                           </div>
-                           <div className="w-px h-10 bg-zinc-900 hidden lg:block"></div>
-                           <div className="space-y-1">
-                              <div className="text-[9px] font-black text-zinc-500 uppercase tracking-widest flex items-center gap-2 lg:justify-end">
-                                <Clock className="w-2.5 h-2.5" /> Received
-                              </div>
-                              <div className="text-xs font-black tracking-tight text-zinc-100 uppercase italic">
-                                {timeInfo.relative}
-                                <span className="mx-2 text-zinc-800">/</span>
-                                <span className="text-[9px] font-medium text-zinc-500 italic lowercase">{timeInfo.date} • {timeInfo.time}</span>
-                              </div>
-                           </div>
-                        </div>
-                      </div>
-
-                      {/* Payment Section */}
-                      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-                         <div className="p-6 bg-[#040404] rounded-3xl border border-zinc-900 flex items-start gap-4">
-                            <div className="w-10 h-10 rounded-xl bg-zinc-950 border border-zinc-900 flex items-center justify-center shrink-0">
-                               <CreditCard className="w-5 h-5 text-emerald-500" />
-                            </div>
-                            <div className="space-y-4 flex-1">
-                               <div className="flex items-center justify-between">
-                                  <div className="text-[9px] font-black text-zinc-500 uppercase tracking-widest">Transaction Intent</div>
-                                  <div className="text-[10px] font-mono text-zinc-700 uppercase">SYS-MGR-#{req.id.slice(0, 4)}</div>
-                               </div>
-                               <div className="flex items-end justify-between">
-                                  <div className="space-y-1">
-                                     <div className="text-3xl font-black tracking-tighter text-emerald-500 group-hover:scale-105 transition-transform origin-left">
-                                        +{req.credits} <span className="text-xs uppercase text-emerald-600/50">Units</span>
-                                     </div>
-                                     <div className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">Pricing Model: {req.price} ETB</div>
-                                  </div>
-                                  <div className="px-3 py-1 bg-zinc-900 border border-zinc-800 rounded-lg text-[10px] font-black text-zinc-400 uppercase tracking-tighter">
-                                     Manual Wire
-                                  </div>
-                               </div>
-                            </div>
-                         </div>
-
-                         <div className="p-6 bg-[#040404] rounded-3xl border border-zinc-900 space-y-4">
-                            <div className="flex items-center justify-between">
-                               <div className="text-[9px] font-black text-zinc-500 uppercase tracking-widest">Evidence Data</div>
-                               <div className="px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 rounded text-[8px] font-black text-emerald-500 uppercase tracking-widest">Verified Schema</div>
-                            </div>
-                            <div 
-                              className={`p-3 rounded-2xl font-mono text-xs break-all border transition-all ${
-                                req.referenceText 
-                                  ? 'bg-zinc-950 border-zinc-800 text-zinc-300' 
-                                  : 'bg-zinc-950/50 border-zinc-900 text-zinc-700 italic'
-                              }`}
-                            >
-                               {req.referenceText ? (
-                                 <div className="flex flex-col gap-1">
-                                    <span className="text-[8px] uppercase text-zinc-600 font-sans tracking-widest mb-1">Payment Account / Reference:</span>
-                                    {req.referenceText}
-                                 </div>
-                               ) : "No textual reference provided"}
-                            </div>
-                         </div>
-                      </div>
+                  </td>
+                  <td className="px-8 py-6">
+                    <div className="max-w-[150px] truncate font-mono text-[10px] text-zinc-500" title={req.referenceText || ""}>
+                      {req.referenceText || "–"}
                     </div>
-
-                    {/* Action Bar */}
-                    <div className="flex items-center justify-between gap-6 pt-6 pt-10 border-t border-zinc-900">
-                      <div className="text-[9px] font-bold text-zinc-700 uppercase tracking-[0.2em] hidden sm:block">
-                        Digital Asset Distribution Terminal • ETHIOPIA OPS
-                      </div>
-                      <div className="flex items-center gap-4 flex-1 sm:flex-none">
-                        <button
-                          onClick={() => handleAction(req.id, "REJECT")}
-                          disabled={actioningId === req.id}
-                          className="px-6 h-12 rounded-2xl bg-zinc-950 text-zinc-500 hover:bg-zinc-900 hover:text-red-500 border border-zinc-900 hover:border-red-500/30 font-black uppercase tracking-[0.2em] text-[10px] transition-all disabled:opacity-50 flex items-center justify-center gap-3 flex-1 sm:flex-none"
-                        >
-                          {actioningId === req.id ? (
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                          ) : (
-                            <>
-                              <XCircle className="w-4 h-4" />
-                              Revoke
-                            </>
-                          )}
-                        </button>
-                        <button
-                          onClick={() => handleAction(req.id, "APPROVE")}
-                          disabled={actioningId === req.id}
-                          className="px-10 h-12 rounded-2xl bg-white text-black hover:bg-emerald-500 hover:text-white font-black uppercase tracking-[0.2em] text-[10px] transition-all disabled:opacity-50 flex items-center justify-center gap-3 shadow-xl hover:shadow-emerald-500/20 flex-1 sm:flex-none group/btn"
-                        >
-                          {actioningId === req.id ? (
-                            <Loader2 className="w-4 h-4 animate-spin text-black" />
-                          ) : (
-                            <>
-                              <CheckCircle2 className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
-                              Authorize Receipt
-                            </>
-                          )}
-                        </button>
-                      </div>
+                  </td>
+                  <td className="px-8 py-6">
+                    <div className="text-[10px] text-zinc-500 font-medium">
+                      {new Date(req.createdAt).toLocaleDateString()}<br/>
+                      {new Date(req.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </div>
-                  </div>
+                  </td>
+                  <td className="px-8 py-6">
+                    <div className="flex items-center justify-end gap-3">
+                      <button
+                        onClick={() => setPendingAction({ requestId: req.id, action: "REJECT", type: req.type, userEmail: req.user.email, credits: req.credits })}
+                        disabled={actioningId === req.id}
+                        className="p-2 rounded-lg bg-zinc-800 text-zinc-500 hover:text-red-500 hover:bg-red-500/10 transition-all border border-zinc-700"
+                        title="Reject"
+                      >
+                         <XCircle className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => setPendingAction({ requestId: req.id, action: "APPROVE", type: req.type, userEmail: req.user.email, credits: req.credits })}
+                        disabled={actioningId === req.id}
+                        className="px-4 py-2 rounded-lg bg-white text-black text-[10px] font-black uppercase tracking-widest hover:bg-emerald-500 hover:text-white transition-all shadow-xl"
+                      >
+                        {actioningId === req.id ? (
+                          <Loader2 className="w-4 h-4 animate-spin mx-auto text-black" />
+                        ) : (
+                          "Approve"
+                        )}
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {filteredRequests.length === 0 && (
+          <div className="p-20 text-center space-y-4 opacity-20">
+            <CheckCircle2 className="w-16 h-16 mx-auto text-emerald-500" />
+            <p className="text-[10px] font-black uppercase tracking-[0.5em]">Vault Clear</p>
+          </div>
+        )}
+      </div>
+
+      {/* ─── Confirmation Modal ─── */}
+      {pendingAction && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-6 backdrop-blur-xl bg-black/80 animate-in fade-in duration-200"
+          onClick={() => setPendingAction(null)}
+        >
+          <div 
+            className="relative w-full max-w-sm bg-zinc-950 border border-zinc-800 rounded-[2.5rem] p-8 space-y-6 animate-in zoom-in-95 duration-200 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center gap-4">
+              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${
+                pendingAction.action === "APPROVE" 
+                  ? "bg-emerald-500/20 text-emerald-500" 
+                  : "bg-red-500/20 text-red-500"
+              }`}>
+                {pendingAction.action === "APPROVE" 
+                  ? <CheckCircle2 className="w-6 h-6" /> 
+                  : <AlertTriangle className="w-6 h-6" />}
+              </div>
+              <div>
+                <div className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">
+                  Confirm Action
+                </div>
+                <div className="text-xl font-black">
+                  {pendingAction.action === "APPROVE" ? "Approve Payment" : "Reject Payment"}
                 </div>
               </div>
-            );
-          })}
+            </div>
+
+            <div className="bg-zinc-900 rounded-2xl p-5 space-y-2">
+              <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
+                <span className="text-zinc-500">User</span>
+                <span className="text-zinc-300 truncate max-w-[180px]">{pendingAction.userEmail}</span>
+              </div>
+              <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
+                <span className="text-zinc-500">Credits</span>
+                <span className={pendingAction.action === "APPROVE" ? "text-emerald-500" : "text-zinc-300"}>
+                  +{pendingAction.credits} CR
+                </span>
+              </div>
+              <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
+                <span className="text-zinc-500">Action</span>
+                <span className={pendingAction.action === "APPROVE" ? "text-emerald-500" : "text-red-500"}>
+                  {pendingAction.action}
+                </span>
+              </div>
+            </div>
+
+            <p className="text-[10px] text-zinc-600 font-medium tracking-wide">
+              {pendingAction.action === "APPROVE" 
+                ? "This will credit the user's account immediately. This action cannot be easily undone."
+                : "This will reject the payment request. The user will be notified."}
+            </p>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setPendingAction(null)}
+                className="flex-1 h-12 rounded-xl border border-zinc-800 text-zinc-500 text-[10px] font-black uppercase tracking-widest hover:border-zinc-700 hover:text-zinc-300 transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleAction(pendingAction.requestId, pendingAction.action, pendingAction.type)}
+                className={`flex-1 h-12 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
+                  pendingAction.action === "APPROVE"
+                    ? "bg-emerald-500 text-white hover:bg-emerald-400"
+                    : "bg-red-500 text-white hover:bg-red-400"
+                }`}
+              >
+                {pendingAction.action === "APPROVE" ? "Yes, Approve" : "Yes, Reject"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
-      {/* Screenshot Modal/Lightbox */}
+      {/* ─── Screenshot Modal ─── */}
       {selectedScreenshot && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-8 lg:p-12 animate-in fade-in duration-300 backdrop-blur-3xl bg-black/90"
+          className="fixed inset-0 z-50 flex items-center justify-center p-12 backdrop-blur-3xl bg-black/90 animate-in fade-in duration-300"
           onClick={() => setSelectedScreenshot(null)}
         >
           <div className="absolute top-10 right-10 flex items-center gap-4">
-             <div className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Inspecting Digital Receipt • Safe View Mode</div>
              <button 
                 onClick={() => setSelectedScreenshot(null)}
                 className="w-12 h-12 rounded-full bg-zinc-900 flex items-center justify-center text-white hover:bg-zinc-800 transition-colors border border-zinc-800"
@@ -353,24 +364,7 @@ export default function TopUpsPage() {
             className="relative max-w-full max-h-full rounded-[2.5rem] overflow-hidden border border-zinc-800 shadow-2xl animate-in zoom-in-95 duration-500"
             onClick={(e) => e.stopPropagation()}
           >
-             <img 
-               src={selectedScreenshot} 
-               alt="Document Inspector" 
-               className="max-h-[85vh] object-contain select-none"
-             />
-             <div className="absolute bottom-6 left-6 right-6 p-4 bg-zinc-950/80 backdrop-blur border border-zinc-800 rounded-2xl flex items-center justify-between">
-                 <div className="flex items-center gap-3">
-                    <ImageIcon className="w-4 h-4 text-zinc-500" />
-                    <span className="text-[10px] font-black text-zinc-100 uppercase tracking-widest">Captured Digital Reference</span>
-                 </div>
-                 <a 
-                   href={selectedScreenshot} 
-                   target="_blank" 
-                   className="text-[10px] font-black text-emerald-500 uppercase tracking-widest flex items-center gap-2 hover:text-emerald-400 transition-colors"
-                 >
-                   Open Original <ExternalLink className="w-3 h-3" />
-                 </a>
-             </div>
+             <img src={selectedScreenshot} className="max-h-[85vh] object-contain" alt="doc" />
           </div>
         </div>
       )}

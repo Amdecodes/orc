@@ -10,18 +10,44 @@ export async function GET() {
   }
 
   try {
-    const payments = await prisma.payment.findMany({
-      include: {
-        user: { select: { email: true } },
-        package: true,
-      },
-      orderBy: { createdAt: "desc" },
-    });
+    const [payments, topups] = await Promise.all([
+      prisma.payment.findMany({
+        include: {
+          user: { select: { email: true } },
+          package: true,
+        },
+        orderBy: { createdAt: "desc" },
+      }),
+      prisma.topUpRequest.findMany({
+        include: {
+          user: { select: { email: true } },
+        },
+        orderBy: { createdAt: "desc" },
+      })
+    ]);
 
-    return NextResponse.json(payments);
+    // Format topups to match payment structure where possible
+    const formattedTopups = topups.map(t => ({
+      ...t,
+      amount: t.price,
+      method: "MANUAL",
+      type: "TOPUP",
+      package: { name: "Manual Top-up" }
+    }));
+
+    const formattedPayments = payments.map(p => ({
+      ...p,
+      type: "PAYMENT"
+    }));
+
+    const unifiedLedger = [...formattedPayments, ...formattedTopups].sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+
+    return NextResponse.json(unifiedLedger);
   } catch (error) {
     console.error("Admin Fetch Payments Error:", error);
-    return NextResponse.json({ error: "Failed to fetch payments" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to fetch ledger" }, { status: 500 });
   }
 }
 

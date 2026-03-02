@@ -17,16 +17,23 @@ export default async function AdminDashboardPage() {
   const [
     totalUsers,
     totalJobs,
-    pendingApprovals,
-    totalRevenueData,
+    pendingPayments,
+    pendingTopups,
+    paymentRevenueData,
+    topupRevenueData,
     recentActivity
   ] = await Promise.all([
     prisma.user.count(),
     prisma.job.count({ where: { status: "SUCCESS" } }),
+    prisma.payment.count({ where: { status: "PENDING" } }),
     prisma.topUpRequest.count({ where: { status: "PENDING" } }),
     prisma.payment.aggregate({
       where: { status: "APPROVED" },
       _sum: { amount: true }
+    }),
+    prisma.topUpRequest.aggregate({
+      where: { status: "APPROVED" },
+      _sum: { price: true }
     }),
     prisma.creditTransaction.findMany({
       take: 5,
@@ -35,7 +42,8 @@ export default async function AdminDashboardPage() {
     })
   ]);
 
-  const totalRevenue = totalRevenueData._sum.amount || 0;
+  const totalRevenue = (paymentRevenueData._sum.amount || 0) + (topupRevenueData._sum.price || 0);
+  const pendingApprovals = pendingPayments + pendingTopups;
 
   const stats = [
     { 
