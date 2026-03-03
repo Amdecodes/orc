@@ -5,3 +5,24 @@ dist
 .env.local
 .git
 prisma/generated-client
+
+# Large binary assets at root level (not needed inside Docker images)
+*.jpg
+*.jpeg
+
+# Exclude root-level big png files but NOT tessdata/* or services assets
+front_V5.0.png
+back_v5.0.png
+logo.png
+idServiceshand.png
+
+# Large model files (if any are added to root)
+*.onnx
+models/
+
+# Runtime/output directories
+certbot/
+output/
+results/
+tmp/
+data/
