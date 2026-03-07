@@ -111,7 +111,7 @@ export async function POST(req: Request) {
           status: action,
         }, {
           headers: {
-            "x-bot-secret": process.env.BOT_SECRET || "SUPER_SECRET_BOT_TOKEN_2026",
+            "x-bot-secret": process.env.BOT_SECRET || "",
           }
         });
       } catch (notifyError) {

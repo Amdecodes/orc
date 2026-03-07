@@ -53,6 +53,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: true, requestId: request.id });
   } catch (error: any) {
     console.error("Payment Submission Error:", error);
-    return NextResponse.json({ error: "Failed to submit payment", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to submit payment" }, { status: 500 });
   }
 }

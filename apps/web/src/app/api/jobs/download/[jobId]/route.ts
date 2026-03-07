@@ -2,6 +2,9 @@ import { auth, validateBotSecret } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { readFile } from "fs/promises";
 import { NextResponse } from "next/server";
+import { decryptBuffer } from "@/lib/crypto";
+import { UPLOAD_DIR } from "@/lib/upload";
+import path from "path";
 
 export async function GET(
   req: Request,
@@ -35,16 +38,26 @@ export async function GET(
       return new Response("File not generated yet", { status: 400 });
     }
 
+    // Security: Validate path is within expected upload directory
+    const resolvedPath = path.resolve(job.outputPath);
+    const resolvedUploadDir = path.resolve(UPLOAD_DIR);
+    if (!resolvedPath.startsWith(resolvedUploadDir)) {
+      console.error(`[Security] Path traversal attempt blocked: ${resolvedPath}`);
+      return new Response("Forbidden", { status: 403 });
+    }
+
     const { searchParams } = new URL(req.url);
     const isInline = searchParams.get("inline") === "true";
 
-    const file = await readFile(job.outputPath);
-    return new Response(file, {
+    const encryptedFile = await readFile(job.outputPath);
+    const file = decryptBuffer(encryptedFile);
+    return new Response(new Uint8Array(file), {
       headers: { 
         "Content-Type": "image/png",
         "Content-Disposition": isInline 
           ? "inline" 
           : `attachment; filename="formatted-id-${jobId}.png"`,
+        "Cache-Control": "private, no-store",
       },
     });
   } catch (error) {

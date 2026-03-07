@@ -4,6 +4,7 @@ import { readFile, writeFile, mkdir, unlink } from "fs/promises";
 import fs from "fs";
 import path from "path";
 import { UPLOAD_DIR } from "./upload";
+import { encryptBuffer } from "./crypto";
 
 export async function processJob(jobId: string, userId: string, frontPath: string, backPath: string, photoPath: string) {
   let status: "SUCCESS" | "FAILED" = "FAILED";
@@ -29,9 +30,10 @@ export async function processJob(jobId: string, userId: string, frontPath: strin
     const userDir = path.join(UPLOAD_DIR, userId, "output");
     await mkdir(userDir, { recursive: true });
     
-    const outputFileName = `id-${jobId}.${format}`;
+    const outputFileName = `id-${jobId}.${format}.enc`;
     const outputPath = path.join(userDir, outputFileName);
-    await writeFile(outputPath, image);
+    const encryptedImage = encryptBuffer(image);
+    await writeFile(outputPath, encryptedImage);
 
     // 3. Deduct Credits & Update Job (Transaction)
     await prisma.$transaction([
@@ -56,16 +58,6 @@ export async function processJob(jobId: string, userId: string, frontPath: strin
         }
       })
     ]);
-    status = "SUCCESS";
-
-    // 4. Instantly clean up input sources to save disk space
-    const exists = (p: string) => fs.existsSync(p);
-    await Promise.allSettled([
-      frontPath && exists(frontPath) ? unlink(frontPath) : Promise.resolve(),
-      backPath && exists(backPath) ? unlink(backPath) : Promise.resolve(),
-      photoPath && exists(photoPath) ? unlink(photoPath) : Promise.resolve()
-    ]);
-
   } catch (error: any) {
     console.error(`Processing failed for job ${jobId}:`, error);
     await prisma.job.update({
@@ -74,6 +66,13 @@ export async function processJob(jobId: string, userId: string, frontPath: strin
     });
     status = "FAILED";
   } finally {
+    // ALWAYS clean up input files (even on failure) to protect user privacy
+    const exists = (p: string) => fs.existsSync(p);
+    await Promise.allSettled([
+      frontPath && exists(frontPath) ? unlink(frontPath) : Promise.resolve(),
+      backPath && exists(backPath) ? unlink(backPath) : Promise.resolve(),
+      photoPath && exists(photoPath) ? unlink(photoPath) : Promise.resolve()
+    ]);
     // Notify Bot via Webhook
     if (user?.telegramId) {
         try {

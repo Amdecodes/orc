@@ -89,8 +89,7 @@ export async function POST(req: Request) {
   } catch (error: any) {
     console.error("CRITICAL TOP-UP ERROR:", error);
     return NextResponse.json({ 
-      error: "Internal Server Error",
-      details: error?.message 
+      error: "Internal Server Error"
     }, { status: 500 });
   }
 }

@@ -1,4 +1,4 @@
-import { execSync } from "child_process";
+import { execFileSync } from "child_process";
 import fs from "fs";
 import path from "path";
 
@@ -12,24 +12,27 @@ export function runTesseractCLI(imagePath, outputFormat = 'txt', config = {}) {
     const tempPrefix = `/tmp/tess_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
     const outputBase = tempPrefix;
     
-    let command = `tesseract "${imagePath}" "${outputBase}"`;
+    // Build args as array to prevent command injection
+    const args = [imagePath, outputBase];
     
-    // Add format
-    if (outputFormat === 'tsv') command += ' tsv';
-    else if (outputFormat === 'hocr') command += ' hocr';
+    // Add format (must come before other options for tesseract)
+    if (outputFormat === 'tsv') args.push('tsv');
+    else if (outputFormat === 'hocr') args.push('hocr');
     
     // Add PSM
-    if (config.psm) command += ` --psm ${config.psm}`;
+    if (config.psm) args.push('--psm', String(config.psm));
     
     // Add parameters (whitelist, etc)
     if (config.params) {
         for (const [k, v] of Object.entries(config.params)) {
-            command += ` -c ${k}=${v}`;
+            args.push('-c', `${k}=${v}`);
         }
     }
 
+    console.log(`[TesseractCLI] Executing: tesseract ${args.join(' ')}`);
+
     try {
-        execSync(command, { stdio: 'pipe' });
+        execFileSync('tesseract', args, { stdio: 'pipe' });
         
         let resultPath = outputBase;
         if (outputFormat === 'tsv') resultPath += '.tsv';

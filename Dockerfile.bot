@@ -35,7 +35,15 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 appuser
+
 # Copy built node_modules and source
 COPY --from=builder /app ./
+
+# Change ownership of tmp directory for file operations
+RUN mkdir -p tmp && chown -R appuser:nodejs tmp
+
+USER appuser
 
 CMD ["npm", "run", "start", "--workspace=tg-bot"]
