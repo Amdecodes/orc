@@ -48,6 +48,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: true, jobId: job.id });
   } catch (error: any) {
     console.error("Job Creation Error:", error);
+    
+    // Bubble up user-facing validation errors from upload.ts
+    if (error.message?.includes("File too large") || error.message?.includes("Invalid file type")) {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+    
     return NextResponse.json({ error: "Failed to start job" }, { status: 500 });
   }
 }

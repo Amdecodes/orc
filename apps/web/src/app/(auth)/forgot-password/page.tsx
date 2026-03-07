@@ -234,7 +234,7 @@ export default function ForgotPasswordPage() {
                   <Button 
                     type="submit" 
                     className="w-full h-16 text-lg font-black rounded-2xl bg-text-primary text-bg-surface hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xl transition-all transform hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-3 uppercase tracking-widest"
-                    disabled={isLoading || !code || !newPassword || !confirmPassword || success.length > 0}
+                    disabled={isLoading || !code || !newPassword || !confirmPassword}
                   >
                     {isLoading ? (
                       <Loader2 className="h-6 w-6 animate-spin" />

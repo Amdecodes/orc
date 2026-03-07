@@ -15,9 +15,17 @@ export const auth = betterAuth({
         return secret || "build-time-only-not-for-production";
     })(),
     baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+    trustedOrigins: [
+        "http://localhost:3000", 
+        "http://localhost:3001",
+        "https://nationalidformatter.app",
+        "https://admin.nationalidformatter.app"
+    ],
     emailAndPassword: {
         enabled: true,
         requireEmailVerification: true,
+        minPasswordLength: 4,
+        maxPasswordLength: 128,
     },
     emailVerification: {
         sendOnSignUp: true,
@@ -49,7 +57,7 @@ export const auth = betterAuth({
             },
             credits: {
                 type: "number",
-                defaultValue: 0,
+                defaultValue: 1,
             },
             telegramId: {
                 type: "string",

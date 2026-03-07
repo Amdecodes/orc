@@ -29,7 +29,7 @@ export async function createBotJob(userId: string, front: Buffer, back: Buffer, 
   const response = await api.post('/api/bot/jobs/create', form, {
     headers: form.getHeaders()
   });
-  return response.data; // { jobId: string }
+  return response.data; // { jobId: string, queue?: { position: number, estimatedSeconds: number, activeWorkers: number } }
 }
 
 export async function getBotJobStatus(jobId: string) {

@@ -212,11 +212,11 @@ async function _buildFrontCanvas(data, bgPath) {
   }
 
   // Issue date EC (rotated vertical)
-  ctx.save(); ctx.translate(80, 1250); ctx.rotate(-Math.PI / 2);
+  ctx.save(); ctx.translate(90, 1250); ctx.rotate(-Math.PI / 2);
   txt(ctx, issEc, 0, 0, { size: FS_ISSUE, weight: 'bold'});
   ctx.restore();
   // Issue date GC (rotated vertical)
-  ctx.save(); ctx.translate(80, 650); ctx.rotate(-Math.PI / 2);
+  ctx.save(); ctx.translate(90, 650); ctx.rotate(-Math.PI / 2);
   txt(ctx, issGc, 0, 0, { size: FS_ISSUE, weight: 'bold'});
   ctx.restore();
 
@@ -294,7 +294,7 @@ async function _buildBackCanvas(data, bgPath) {
 
   // 8-digit Serial Number — X:2185 Y:1548
   const serialNo = String(Math.floor(Math.random() * 100000000)).padStart(8, '0');
-  txt(ctx, serialNo, 2185, 1548, { size: FS_MAIN, weight: 'bold', mono: true });
+  txt(ctx, serialNo, 2190, 1595, { size: FS_MAIN, weight: 'bold', mono: true });
 
   return canvas;
 }

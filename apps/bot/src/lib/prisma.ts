@@ -1,11 +1,7 @@
 import { PrismaClient } from "../../../../prisma/generated-client/index.js";
 import { PrismaPg } from "@prisma/adapter-pg";
 import pg from "pg";
-import path from "node:path";
-import dotenv from "dotenv";
-
-// Load environment variables from the root .env file
-dotenv.config({ path: path.resolve(process.cwd(), "../../.env") });
+// Symlinks natively bring root .env here
 
 const prismaClientSingleton = () => {
   const connectionString = process.env.DATABASE_URL || "postgresql://postgres:postgres@localhost:5432/dummy?schema=public";

@@ -1,32 +1,15 @@
 import { PrismaClient } from "../../../../prisma/generated-client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import pg from "pg";
+import dotenv from "dotenv";
+import path from "path";
 
-// Next.js handles environment variables automatically in some cases,
-// but in monorepos, especially with Edge/Turbopack, we need to be more explicit.
-if (typeof process !== "undefined" && process.env && !process.env.DATABASE_URL) {
-  try {
-    // We use a try/catch and dynamic requires to avoid breaking Edge Runtime
-    const fs = require("fs");
-    const path = require("path");
-    const dotenv = require("dotenv");
-    
-    // Search for .env in current dir, parent, and root
-    const pathsToTry = [
-      path.resolve(process.cwd(), ".env"),
-      path.resolve(process.cwd(), "../../.env"),
-    ];
-
-    for (const p of pathsToTry) {
-      if (fs.existsSync(p)) {
-        dotenv.config({ path: p });
-        if (process.env.DATABASE_URL) break;
-      }
-    }
-  } catch (e) {
-    // Fail silently in non-Node environments
-  }
+// In monorepos with background workers, guarantee variables are loaded BEFORE Prisma initializes.
+if (!process.env.DATABASE_URL) {
+  dotenv.config({ path: path.resolve(process.cwd(), "../../.env") });
+  dotenv.config({ path: path.resolve(process.cwd(), ".env") });
 }
+
 
 const prismaClientSingleton = () => {
   const connectionString = process.env.DATABASE_URL;

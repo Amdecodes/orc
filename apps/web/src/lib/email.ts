@@ -33,7 +33,7 @@ export async function sendEmail({
     }
 
     const { data, error } = await (resend.emails.send({
-        from: "onboarding@resend.dev", // Resend Sandbox Sender
+        from: "noreply@nationalidformatter.app",
         to,
         subject,
         text,

@@ -1,3 +1,4 @@
+import "dotenv/config";
 console.log("--- WORKER FILE LOADED ---");
 import prisma from "../lib/prisma";
 import { processJob } from "../lib/jobs";
@@ -8,7 +9,8 @@ import fs from "fs";
  * A simple background worker that polls the prisma database for PENDING jobs.
  * Supports parallel processing.
  */
-const MAX_CONCURRENT_JOBS = 5; // Handle up to 5 IDs at the exact same time
+const MAX_CONCURRENT_JOBS = parseInt(process.env.MAX_CONCURRENT_JOBS || "2", 10); // Default to 2 for safety, configurable on VPS
+const CLEAN_STORAGE_ON_START = process.env.CLEAN_STORAGE_ON_START === "true";
 const CLEANUP_INTERVAL_MS = 60 * 60 * 1000; // Check for old files every 1 hour
 let activeJobs = 0;
 

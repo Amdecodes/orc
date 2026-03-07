@@ -17,9 +17,13 @@ export function runTesseractCLI(imagePath, outputFormat = 'txt', config = {}) {
     const __dirname = path.dirname(__filename);
     const PROJECT_ROOT = path.resolve(__dirname, '../../../../tessdata');
     
-    // Build args as array to prevent command injection
-    const args = ['--tessdata-dir', PROJECT_ROOT, imagePath, outputBase];
+    // Tesseract CLI syntax: tesseract imagefile outputbase [options...] [configfile...]
+    // Options (--tessdata-dir, -l, --psm, -c) come before configfiles (tsv, hocr)
+    const args = [imagePath, outputBase];
     
+    // Add tessdata directory
+    args.push('--tessdata-dir', PROJECT_ROOT);
+
     // Add language
     if (config.lang) {
         args.push('-l', config.lang);
@@ -30,6 +34,9 @@ export function runTesseractCLI(imagePath, outputFormat = 'txt', config = {}) {
     // Add PSM
     if (config.psm) args.push('--psm', String(config.psm));
     
+    // Add OEM (0=Legacy, 1=LSTM, 2=Legacy+LSTM, 3=Default)
+    if (config.oem !== undefined) args.push('--oem', String(config.oem));
+    
     // Add parameters (whitelist, etc)
     if (config.params) {
         for (const [k, v] of Object.entries(config.params)) {
@@ -37,7 +44,7 @@ export function runTesseractCLI(imagePath, outputFormat = 'txt', config = {}) {
         }
     }
 
-    // Add format (must be last as they are config files)
+    // Add format LAST (configfiles must be the last arguments)
     if (outputFormat === 'tsv') args.push('tsv');
     else if (outputFormat === 'hocr') args.push('hocr');
 

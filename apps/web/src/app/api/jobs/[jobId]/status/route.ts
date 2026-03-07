@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { getQueueMetrics } from "@/lib/jobs";
 
 export async function GET(
   req: Request,
@@ -47,14 +48,15 @@ export async function GET(
           }
 
           if (job.status === "FAILED") {
-            send({ status: "FAILED", error: "Processing failed. No credits deducted." });
+            send({ status: "FAILED", errorCode: job.errorCode, errorMessage: job.errorMessage || "Processing failed.", error: job.errorMessage || "Processing failed. No credits deducted." });
             clearInterval(interval);
             controller.close();
             return;
           }
 
           if (job.status === "PENDING") {
-            send({ status: "PENDING", attempt: attempts });
+            const metrics = await getQueueMetrics(jobId);
+            send({ status: "PENDING", attempt: attempts, queue: metrics });
             return;
           }
 

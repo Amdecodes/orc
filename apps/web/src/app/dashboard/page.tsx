@@ -86,7 +86,7 @@ export default function ActionPage() {
   const [showCreditWall, setShowCreditWall] = useState(false);
   const [liveCredits, setLiveCredits] = useState<number | null>(null);
   
-  const { status, output, error: jobError } = useJobStatus(jobId);
+  const { status, output, error: jobError, queueMetrics } = useJobStatus(jobId);
 
   const fetchCredits = async () => {
     try {
@@ -335,17 +335,40 @@ export default function ActionPage() {
           </div>
 
           <div className="space-y-6">
+            {error && (
+              <div className="p-4 sm:p-5 rounded-2xl bg-destructive/10 border border-destructive/20 flex flex-col items-center text-center animate-in slide-in-from-top-4 duration-300">
+                <div className="w-10 h-10 rounded-full bg-destructive/20 flex items-center justify-center text-destructive mb-3">
+                  <X className="w-5 h-5" />
+                </div>
+                <h4 className="text-sm font-black text-destructive uppercase tracking-widest">{t('error') || 'Error'}</h4>
+                <p className="text-xs font-bold text-text-secondary mt-1">{error}</p>
+              </div>
+            )}
+            
             <button 
-              className="w-full h-14 sm:h-20 bg-accent hover:bg-accent-hover text-accent-text rounded-xl sm:rounded-2xl font-black text-base sm:text-xl uppercase tracking-[0.2em] transition-all shadow-xl active:scale-[0.98] disabled:opacity-40 disabled:grayscale disabled:cursor-not-allowed disabled:hover:bg-accent"
+              className="w-full relative h-14 sm:h-20 bg-accent hover:bg-accent-hover text-accent-text rounded-xl sm:rounded-2xl font-black text-base sm:text-xl uppercase tracking-[0.2em] transition-all shadow-xl active:scale-[0.98] disabled:opacity-40 disabled:grayscale disabled:cursor-not-allowed overflow-hidden"
               disabled={!front || !back || !profile || isLoading}
               onClick={handleGenerate}
             >
               {isLoading ? (
-                <div className="flex items-center justify-center gap-3">
-                  <div className="w-5 h-5 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
-                  <span className="text-base">
-                    {status === "PENDING" ? t('in_queue') : t('generating')}
-                  </span>
+                <div className="flex flex-col items-center justify-center h-full gap-1">
+                  <div className="flex items-center gap-3">
+                    <div className="w-4 h-4 sm:w-5 sm:h-5 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    <span className="text-sm sm:text-base">
+                      {status === "PENDING" ? (queueMetrics ? `In Queue: #${queueMetrics.position}` : t('in_queue')) : t('generating')}
+                    </span>
+                  </div>
+                  {queueMetrics && status === "PENDING" && (
+                    <span className="text-[10px] sm:text-xs font-bold text-white/80 lowercase tracking-wider">
+                      ~ {queueMetrics.estimatedSeconds}s wait time
+                    </span>
+                  )}
+                  {/* Progress bar background animation */}
+                  {status === "PENDING" && (
+                    <div className="absolute bottom-0 left-0 h-1 bg-white/30 w-full overflow-hidden">
+                       <div className="h-full bg-white animate-[indeterminate_2s_infinite_linear] w-[30%]"></div>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <span className="flex items-center justify-center gap-2">

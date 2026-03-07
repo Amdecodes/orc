@@ -376,7 +376,6 @@ bot.on('message', async (msg: TelegramBot.Message) => {
         }
       } else if (user.state === 'WAIT_THIRD') {
         await prisma.user.update({ where: { id: user.id }, data: { state: 'PROCESSING' } });
-        await bot.sendMessage(chatId, t('processing', lang), { parse_mode: 'Markdown' });
 
         try {
           const temp = await prisma.tempUpload.findUnique({ where: { userId: user.id } });
@@ -388,8 +387,17 @@ bot.on('message', async (msg: TelegramBot.Message) => {
             fetch(temp.thirdPath).then(res => res.arrayBuffer()).then(ab => Buffer.from(ab))
           ]);
 
-          // Just trigger the job. The worker and webhook will handle the rest.
-          await api.createBotJob(user.id, f, b, p);
+          bot.sendMessage(chatId, "⏳ Submitting to queue...", { parse_mode: 'Markdown' });
+
+          // Trigger the job and get queue metrics
+          const jobData = await api.createBotJob(user.id, f, b, p);
+          
+          let processingText = t('processing', lang);
+          if (jobData.queue) {
+            const { position, estimatedSeconds } = jobData.queue;
+            processingText = `⏳ *In Queue: #${position}*\n\nEstimated wait time: ~${estimatedSeconds} seconds.\n\nWe will notify you automatically when it's ready.`;
+          }
+          await bot.sendMessage(chatId, processingText, { parse_mode: 'Markdown' });
           
           // No more polling loop!
         } catch (err: any) {
@@ -480,7 +488,7 @@ app.post('/notify', async (req, res) => {
 
 app.post('/notify-job', async (req, res) => {
   console.log('[Bot Webhook] Received /notify-job request:', req.body);
-  const { telegramId, jobId, status } = req.body;
+  const { telegramId, jobId, status, errorCode, errorMessage } = req.body;
   const secret = req.headers['x-bot-secret'];
 
   if (secret !== config.BOT_SECRET) {
@@ -510,7 +518,8 @@ app.post('/notify-job', async (req, res) => {
         contentType: 'image/jpeg'
       });
     } else {
-      bot.sendMessage(telegramId, t('error_failed_format', lang, { errorMsg: 'Processing failed.' }), { parse_mode: 'Markdown' });
+      const msg = errorMessage || 'Processing failed.';
+      bot.sendMessage(telegramId, t('error_failed_format', lang, { errorMsg: msg }), { parse_mode: 'Markdown' });
     }
 
     // Set state back to IDLE

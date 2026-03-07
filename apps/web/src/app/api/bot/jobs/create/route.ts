@@ -59,8 +59,10 @@ export async function POST(req: Request) {
     });
 
     // 3. Trigger processing (Handled by background worker)
+    const { getQueueMetrics } = await import("@/lib/jobs");
+    const queueMetrics = await getQueueMetrics(job.id);
     
-    return NextResponse.json({ jobId: job.id });
+    return NextResponse.json({ jobId: job.id, queue: queueMetrics });
   } catch (error) {
     console.error("Bot Job Create Error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

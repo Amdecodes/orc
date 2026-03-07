@@ -1,6 +1,4 @@
-// apps/web/src/scripts/stress-test.ts
-import prisma from "../lib/prisma";
-import { processJob } from "../lib/jobs";
+import fs from "fs";
 import path from "path";
 
 /**
@@ -17,31 +15,44 @@ async function runStressTest(concurrency: number = 5) {
     return;
   }
 
-  // 2. Prepare dummy paths (we expect these to fail gracefully or we point to real files if available)
-  // For a real stress test, we should ideally have a set of valid test images.
-  const dummyFront = "/tmp/stress_front.jpg";
-  const dummyBack = "/tmp/stress_back.jpg";
-  const dummyPhoto = "/tmp/stress_photo.jpg";
+  // 2. Prepare real paths
+  const srcFront = "/home/amde/Documents/et-id-ocr-test/test img/photo_3_2026-02-27_00-06-59.jpg";
+  const srcBack = "/home/amde/Documents/et-id-ocr-test/test img/photo_2_2026-02-27_00-06-59.jpg";
+  const srcPhoto = "/home/amde/Documents/et-id-ocr-test/test img/photo_1_2026-02-27_00-06-59.jpg";
 
-  console.log("📝 Creating test jobs...");
+  if (!fs.existsSync(srcFront) || !fs.existsSync(srcBack) || !fs.existsSync(srcPhoto)) {
+    console.error("❌ Source images not found!");
+    return;
+  }
+
+  console.log("📝 Creating test jobs with REAL images...");
   const jobIds: string[] = [];
   
   for (let i = 0; i < concurrency; i++) {
+    // Copy images so the worker can safely process/delete them without affecting the originals
+    const frontPath = `/tmp/stress_front_${Date.now()}_${i}.jpg`;
+    const backPath = `/tmp/stress_back_${Date.now()}_${i}.jpg`;
+    const photoPath = `/tmp/stress_photo_${Date.now()}_${i}.jpg`;
+    
+    fs.copyFileSync(srcFront, frontPath);
+    fs.copyFileSync(srcBack, backPath);
+    fs.copyFileSync(srcPhoto, photoPath);
+
     const job = await prisma.job.create({
       data: {
         userId: user.id,
         status: "PENDING",
         cost: 0, // No cost for stress test
-        frontImagePath: dummyFront,
-        backImagePath: dummyBack,
-        photoPath: dummyPhoto,
+        frontImagePath: frontPath,
+        backImagePath: backPath,
+        photoPath: photoPath,
       }
     });
     jobIds.push(job.id);
   }
 
   console.log(`✅ Created ${concurrency} PENDING jobs.`);
-  console.log("⏱️  Monitoring worker through database...");
+  console.log("⏱️  Monitoring worker through database (this may take a while)...");
 
   const startTime = Date.now();
   let completedCount = 0;

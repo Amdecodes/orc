@@ -2,16 +2,24 @@ import { useEffect, useState } from "react";
 
 export type JobStatus = "PENDING" | "PROCESSING" | "SUCCESS" | "FAILED" | "TIMEOUT" | "IDLE" | "ERROR" | "NOT_FOUND";
 
+export interface QueueMetrics {
+  position: number;
+  estimatedSeconds: number;
+  activeWorkers: number;
+}
+
 export function useJobStatus(jobId: string | null) {
   const [status, setStatus] = useState<JobStatus>("IDLE");
   const [output, setOutput] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [queueMetrics, setQueueMetrics] = useState<QueueMetrics | null>(null);
 
   useEffect(() => {
     if (!jobId) {
       setStatus("IDLE");
       setOutput(null);
       setError(null);
+      setQueueMetrics(null);
       return;
     }
 
@@ -21,6 +29,10 @@ export function useJobStatus(jobId: string | null) {
       try {
         const data = JSON.parse(e.data);
         setStatus(data.status);
+
+        if (data.queue) {
+          setQueueMetrics(data.queue);
+        }
 
         if (data.status === "SUCCESS") {
           setOutput(data.output);
@@ -48,5 +60,5 @@ export function useJobStatus(jobId: string | null) {
     return () => eventSource.close();
   }, [jobId]);
 
-  return { status, output, error };
+  return { status, output, error, queueMetrics };
 }

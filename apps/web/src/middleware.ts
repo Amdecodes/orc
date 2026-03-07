@@ -11,11 +11,12 @@ export default function middleware(req: NextRequest) {
     req.cookies.get("better-auth.session_token") ||
     req.cookies.get("__Secure-better-auth.session_token");
 
-  const isAuthRoute = pathname === "/login" || pathname === "/register";
+  const isAuthRoute = pathname === "/login" || pathname === "/register" || pathname === "/verify-email";
   const isPublicRoute =
     pathname === "/" ||
     pathname === "/terms" ||
     pathname === "/privacy" ||
+    pathname === "/forgot-password" ||
     isAuthRoute ||
     pathname.startsWith("/api/auth") ||
     pathname.startsWith("/api/bot") ||

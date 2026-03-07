@@ -48,6 +48,14 @@ export async function generateID(front, back, third) {
     let pipelineResult;
     try {
         pipelineResult = await runPipeline(front, back, third);
+        
+        // Validate that we actually extracted some core data
+        const hasName = pipelineResult.personal.name.am || pipelineResult.personal.name.en;
+        const hasFIN = pipelineResult.identifiers.fin;
+        
+        if (!hasName && !hasFIN) {
+            throw new Error("No valid ID detected or image is too blurry. Core fields (Name, FIN) are completely unreadable.");
+        }
     } catch (err) {
         throw new IdentityExtractionError('OCR_FAILED', `Pipeline failed: ${err.message}`);
     }

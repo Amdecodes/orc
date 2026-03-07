@@ -1,55 +1,69 @@
-import crypto from "crypto";
+import {
+  createCipheriv,
+  createDecipheriv,
+  randomBytes,
+  createHash,
+  createSecretKey,
+  KeyObject,
+} from "crypto";
 
 const ALGORITHM = "aes-256-gcm";
-const IV_LENGTH = 16;
-const AUTH_TAG_LENGTH = 16;
+const IV_LENGTH = 12; // 96-bit IV — standard for GCM
+const TAG_LENGTH = 16; // 128-bit authentication tag
 
-/**
- * Get the encryption key from environment. 
- * Must be a 64-char hex string (32 bytes).
- */
-function getKey(): Buffer {
-  const keyHex = process.env.FILE_ENCRYPTION_KEY;
-  if (!keyHex || keyHex.length !== 64) {
+/** Derives a stable 32-byte key from the FILE_ENCRYPTION_KEY env var. */
+function getKey(): KeyObject {
+  const secret = process.env.FILE_ENCRYPTION_KEY;
+  if (!secret) {
     throw new Error(
-      "FILE_ENCRYPTION_KEY must be set as a 64-character hex string (32 bytes)"
+      "FILE_ENCRYPTION_KEY environment variable is not set. " +
+        "Generate one with: openssl rand -hex 32",
     );
   }
-  return Buffer.from(keyHex, "hex");
+  // SHA-256 produces exactly 32 bytes — correct size for AES-256
+  const keyBytes = createHash("sha256").update(secret).digest();
+  return createSecretKey(new Uint8Array(keyBytes));
+}
+
+/** Convert any Buffer or Uint8Array to a plain Uint8Array. */
+function toU8(input: ArrayLike<number>): Uint8Array {
+  return Uint8Array.from(input);
 }
 
 /**
- * Encrypts a buffer using AES-256-GCM.
- * Returns: [IV (16 bytes)] + [Auth Tag (16 bytes)] + [Ciphertext]
+ * Encrypts binary data using AES-256-GCM.
+ * Returns a Buffer containing: [IV: 12 bytes][AuthTag: 16 bytes][Ciphertext]
  */
-export function encryptBuffer(plainBuffer: Buffer): Buffer {
+export function encryptBuffer(plaintext: Buffer | Uint8Array): Buffer {
   const key = getKey();
-  const iv = crypto.randomBytes(IV_LENGTH);
-  const cipher = crypto.createCipheriv(ALGORITHM, key, iv);
+  const iv = new Uint8Array(randomBytes(IV_LENGTH));
+  const cipher = createCipheriv(ALGORITHM, key, iv);
 
   const encrypted = Buffer.concat([
-    cipher.update(plainBuffer),
-    cipher.final(),
+    toU8(cipher.update(toU8(plaintext))),
+    toU8(cipher.final()),
   ]);
-  const authTag = cipher.getAuthTag();
+  const tag = cipher.getAuthTag();
 
-  // Format: IV + AuthTag + Ciphertext
-  return Buffer.concat([iv, authTag, encrypted]);
+  return Buffer.concat([toU8(iv), toU8(tag), toU8(encrypted)]);
 }
 
 /**
- * Decrypts a buffer previously encrypted with encryptBuffer.
- * Expects: [IV (16 bytes)] + [Auth Tag (16 bytes)] + [Ciphertext]
+ * Decrypts data that was produced by encryptBuffer().
+ * Throws if the data is corrupted or the key is wrong (GCM auth tag mismatch).
  */
-export function decryptBuffer(encryptedBuffer: Buffer): Buffer {
+export function decryptBuffer(ciphertext: Buffer | Uint8Array): Buffer {
   const key = getKey();
+  const data = toU8(ciphertext);
+  const iv = data.subarray(0, IV_LENGTH);
+  const tag = data.subarray(IV_LENGTH, IV_LENGTH + TAG_LENGTH);
+  const encrypted = data.subarray(IV_LENGTH + TAG_LENGTH);
 
-  const iv = encryptedBuffer.subarray(0, IV_LENGTH);
-  const authTag = encryptedBuffer.subarray(IV_LENGTH, IV_LENGTH + AUTH_TAG_LENGTH);
-  const ciphertext = encryptedBuffer.subarray(IV_LENGTH + AUTH_TAG_LENGTH);
+  const decipher = createDecipheriv(ALGORITHM, key, iv);
+  decipher.setAuthTag(tag);
 
-  const decipher = crypto.createDecipheriv(ALGORITHM, key, iv);
-  decipher.setAuthTag(authTag);
-
-  return Buffer.concat([decipher.update(ciphertext), decipher.final()]);
+  return Buffer.concat([
+    toU8(decipher.update(toU8(encrypted))),
+    toU8(decipher.final()),
+  ]);
 }

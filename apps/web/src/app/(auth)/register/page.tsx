@@ -48,14 +48,13 @@ export default function RegisterPage() {
         email,
         password,
         name,
-        callbackURL: "/dashboard"
       });
 
       if (res.error) {
         throw new Error(res.error.message || "Registration failed");
       }
 
-      router.push("/dashboard");
+      router.push("/verify-email?email=" + encodeURIComponent(email));
     } catch (err: any) {
       setError(err.message);
     } finally {

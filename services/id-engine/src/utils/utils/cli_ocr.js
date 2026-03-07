@@ -12,15 +12,14 @@ export function runTesseractCLI(imagePath, outputFormat = 'txt', config = {}) {
     const tempPrefix = `/tmp/tess_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
     const outputBase = tempPrefix;
     
-    // Build args as array to prevent command injection
+    // Tesseract CLI syntax: tesseract imagefile outputbase [options...] [configfile...]
     const args = [imagePath, outputBase];
-    
-    // Add format (must come before other options for tesseract)
-    if (outputFormat === 'tsv') args.push('tsv');
-    else if (outputFormat === 'hocr') args.push('hocr');
     
     // Add PSM
     if (config.psm) args.push('--psm', String(config.psm));
+    
+    // Add OEM (0=Legacy, 1=LSTM, 2=Legacy+LSTM, 3=Default)
+    if (config.oem !== undefined) args.push('--oem', String(config.oem));
     
     // Add parameters (whitelist, etc)
     if (config.params) {
@@ -28,6 +27,10 @@ export function runTesseractCLI(imagePath, outputFormat = 'txt', config = {}) {
             args.push('-c', `${k}=${v}`);
         }
     }
+
+    // Add format LAST (configfiles must be the last arguments)
+    if (outputFormat === 'tsv') args.push('tsv');
+    else if (outputFormat === 'hocr') args.push('hocr');
 
     console.log(`[TesseractCLI] Executing: tesseract ${args.join(' ')}`);
 

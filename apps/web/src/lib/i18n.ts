@@ -15,6 +15,7 @@ export const translations: Record<string, Record<SupportedLanguages, string>> = 
   cancel: { en: 'Cancel', am: 'ሰርዝ' },
   submit: { en: 'Submit', am: 'ላክ' },
   loading: { en: 'Loading...', am: 'በመጫን ላይ...' },
+  or: { en: 'or', am: 'ወይም' },
 
   // Header
   nav_admin: { en: 'Admin', am: 'አድሚን' },
@@ -144,6 +145,15 @@ export const translations: Record<string, Record<SupportedLanguages, string>> = 
   // Legal Pages
   back_to_home: { en: 'Back to Home', am: 'ወደ መነሻ ተመለስ' },
   last_updated: { en: 'Last Updated: {{date}}', am: 'መጨረሻ የተሻሻለው፦ {{date}}' },
+
+  // Verify Email Page
+  check_your_email: { en: 'Check Your Email', am: 'ኢሜይልዎን ያረጋግጡ' },
+  verification_email_sent: { en: "We've sent a verification link to", am: 'የማረጋገጫ ሊንክ ወደ' },
+  verification_email_sent_suffix: { en: '. Please check your inbox and click the link to verify your account.', am: ' ልከናል። እባክዎ ኢሜይልዎን ይመልከቱ እና አካውንትዎን ለማረጋገጥ ሊንኩን ይጫኑ።' },
+  resend_verification: { en: 'Resend Verification Email', am: 'የማረጋገጫ ኢሜይል እንደገና ላክ' },
+  wrong_email_go_back: { en: 'Wrong email? Go back to register', am: 'ኢሜይሉ ተሳስቷል? ወደ ምዝገባ ተመለስ' },
+  email_resent: { en: 'Verification email resent!', am: 'የማረጋገጫ ኢሜይል እንደገና ተልኳል!' },
+  check_spam_folder: { en: "Didn't receive it? Check your spam folder.", am: 'አልደረሰዎትም? የስፓም ፎልደርዎን ይመልከቱ።' },
 
   // Password Reset
   reset_access: { en: 'Reset Access', am: 'መግቢያዎን ያስተካክሉ' },

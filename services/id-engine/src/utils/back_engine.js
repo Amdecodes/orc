@@ -451,26 +451,34 @@ export async function extractBackID(input) {
         if (!cropRect) return { value: null, candidates: [] };
         
         const passes = [];
-        // Pass A: Standard
-        passes.push(await sharp(resolvedPath).extract(cropRect).threshold(128).png().toBuffer());
-        // Pass B: High Contrast
-        passes.push(await sharp(resolvedPath).extract(cropRect).modulate({ contrast: 2.0 }).threshold(180).png().toBuffer());
-        // Pass C: Sharpened
-        passes.push(await sharp(resolvedPath).extract(cropRect).sharpen().threshold(140).png().toBuffer());
+        
+        // Key improvement: 4x upscale gives Tesseract 16x more pixels to distinguish 6 vs 8
+        const upscaledWidth = cropRect.width * 4;
+        
+        // Pass A: Upscaled + Standard Threshold
+        passes.push(await sharp(resolvedPath).extract(cropRect).resize({ width: upscaledWidth }).threshold(128).png().toBuffer());
+        // Pass B: Upscaled + High Contrast
+        passes.push(await sharp(resolvedPath).extract(cropRect).resize({ width: upscaledWidth }).modulate({ contrast: 2.0 }).threshold(180).png().toBuffer());
+        // Pass C: Upscaled + Sharpened
+        passes.push(await sharp(resolvedPath).extract(cropRect).resize({ width: upscaledWidth }).sharpen().threshold(140).png().toBuffer());
+        // Pass D: Upscaled + Inverted (helps with low-contrast digits)
+        passes.push(await sharp(resolvedPath).extract(cropRect).resize({ width: upscaledWidth }).negate().threshold(128).png().toBuffer());
+        // Pass E: 8x Extreme Upscale (brute force resolution)
+        passes.push(await sharp(resolvedPath).extract(cropRect).resize({ width: cropRect.width * 8 }).threshold(128).png().toBuffer());
 
         const candidates = [];
         for (const buf of passes) {
             const tempPath = `/tmp/safe_crop_${Date.now()}_${Math.floor(Math.random()*1000)}.png`;
             fs.writeFileSync(tempPath, buf);
             
-            // Digit-Only OCR: Whitelist
-            // If the crop is a fallback (no baseline found), use PSM 6
+            // Digit-Only OCR: Whitelist + OEM 1 (LSTM only - better for similar digits)
             const currentPSM = cropRect.isFallback ? 6 : 7;
             
             const text = runTesseractCLI(tempPath, 'txt', {
                 psm: currentPSM,
+                oem: 1, // LSTM only
                 params: {
-                    tessedit_char_whitelist: "0123456789OSIlB", 
+                    tessedit_char_whitelist: "0123456789", 
                     load_system_dawg: "0",
                     load_freq_dawg: "0"
                 }
@@ -496,7 +504,28 @@ export async function extractBackID(input) {
 
         if (candidates.length === 0) return { value: null, candidates: [] };
 
-        // VOTE: Majority rule (e.g. 2/3 agreement)
+        // --- Per-digit voting for phone (simple majority per position) ---
+        if (type === 'phone' && candidates.length >= 2 && candidates.every(c => c.length === 10)) {
+            const voted = [];
+            for (let pos = 0; pos < 10; pos++) {
+                const digitCounts = {};
+                for (const c of candidates) {
+                    const d = c[pos];
+                    digitCounts[d] = (digitCounts[d] || 0) + 1;
+                }
+                // Pick the digit with the most votes at this position
+                const best = Object.entries(digitCounts).sort((a, b) => b[1] - a[1])[0];
+                voted.push(best[0]);
+            }
+            const result = voted.join('');
+            // Validate it's still a valid phone number
+            if (/^(09|07)\d{8}$/.test(result)) {
+                console.log(`[PhoneVote] Per-digit voted result: ${result} from [${candidates.join(', ')}]`);
+                return { value: result, candidates };
+            }
+        }
+
+        // VOTE: Whole-string majority rule (FIN or phone fallback)
         const counts = {};
         for (const c of candidates) {
             counts[c] = (counts[c] || 0) + 1;
@@ -618,6 +647,41 @@ export async function extractBackID(input) {
         }
     }
 
+    // --- 4F: Global FIN Fallback ---
+    // If FIN is still null, try a global search in the raw text
+    if (!fin) {
+        if (!fullTextRaw) {
+            fullTextRaw = runTesseractCLI(resolvedPath, 'txt', { psm: 3 });
+        }
+        
+        // 1. Look for spaced FIN (e.g. 1234 5678 9012)
+        const finSpaced = fullTextRaw.match(/(?:^|[^0-9])(\d{4}[ ]\d{4}[ ]\d{4})(?:[^0-9]|$)/);
+        if (finSpaced) {
+            console.log(`[FINRecovery] Found FIN in global text (spaced): ${finSpaced[1]}`);
+            fin = finSpaced[1].replace(/\s/g, '');
+        } else {
+            // 2. Look for continuous FIN (e.g. 123456789012)
+            const finContinuous = fullTextRaw.match(/(?:^|[^0-9])(\d{12})(?:[^0-9]|$)/);
+            if (finContinuous) {
+                 console.log(`[FINRecovery] Found FIN in global text: ${finContinuous[1]}`);
+                 fin = finContinuous[1];
+            } else {
+                 // 3. Look for ANY 12 digits ignoring spaces, protecting against phone number
+                 let textWithoutPhone = fullTextRaw;
+                 if (phone) {
+                     // Remove the phone number so we don't accidentally merge it with other random digits
+                     textWithoutPhone = textWithoutPhone.replace(new RegExp(phone, 'g'), '');
+                 }
+                 const cleanText = textWithoutPhone.replace(/[^\d]/g, '');
+                 const match12 = cleanText.match(/\d{12}/);
+                 if (match12) {
+                     console.log(`[FINRecovery] Found FIN by cleaning global text: ${match12[0]}`);
+                     fin = match12[0];
+                 }
+            }
+        }
+    }
+
     // --- 5. Semantic Fields (Best Effort) ---
     // We already have the normalized full text from the anchor pass (TSV)
     // but a full English+Amharic pass is better for address.
@@ -692,8 +756,7 @@ export async function extractBackID(input) {
 
     const finConfidence = calculateConfidence(fin, 'fin', { 
         source: qrData?.uin ? "QR" : "OCR",
-        consensus: finResult ? (finResult.candidates && finResult.candidates.filter(c => c === fin).length >= 2) : false,
-        cached: cache && !!cache[imgHash]?.fin
+        consensus: finResult ? (finResult.candidates && finResult.candidates.filter(c => c === fin).length >= 2) : false
     });
 
     const phoneConfidence = calculateConfidence(phone, 'phone', {

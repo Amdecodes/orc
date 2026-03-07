@@ -451,26 +451,34 @@ export async function extractBackID(input) {
         if (!cropRect) return { value: null, candidates: [] };
         
         const passes = [];
-        // Pass A: Standard
-        passes.push(await sharp(resolvedPath).extract(cropRect).threshold(128).png().toBuffer());
-        // Pass B: High Contrast
-        passes.push(await sharp(resolvedPath).extract(cropRect).modulate({ contrast: 2.0 }).threshold(180).png().toBuffer());
-        // Pass C: Sharpened
-        passes.push(await sharp(resolvedPath).extract(cropRect).sharpen().threshold(140).png().toBuffer());
+        
+        // Key improvement: 4x upscale gives Tesseract 16x more pixels to distinguish 6 vs 8
+        const upscaledWidth = cropRect.width * 4;
+        
+        // Pass A: Upscaled + Standard Threshold
+        passes.push(await sharp(resolvedPath).extract(cropRect).resize({ width: upscaledWidth }).threshold(128).png().toBuffer());
+        // Pass B: Upscaled + High Contrast
+        passes.push(await sharp(resolvedPath).extract(cropRect).resize({ width: upscaledWidth }).modulate({ contrast: 2.0 }).threshold(180).png().toBuffer());
+        // Pass C: Upscaled + Sharpened
+        passes.push(await sharp(resolvedPath).extract(cropRect).resize({ width: upscaledWidth }).sharpen().threshold(140).png().toBuffer());
+        // Pass D: Upscaled + Inverted (helps with low-contrast digits)
+        passes.push(await sharp(resolvedPath).extract(cropRect).resize({ width: upscaledWidth }).negate().threshold(128).png().toBuffer());
+        // Pass E: 8x Extreme Upscale (brute force resolution)
+        passes.push(await sharp(resolvedPath).extract(cropRect).resize({ width: cropRect.width * 8 }).threshold(128).png().toBuffer());
 
         const candidates = [];
         for (const buf of passes) {
             const tempPath = `/tmp/safe_crop_${Date.now()}_${Math.floor(Math.random()*1000)}.png`;
             fs.writeFileSync(tempPath, buf);
             
-            // Digit-Only OCR: Whitelist
-            // If the crop is a fallback (no baseline found), use PSM 6
+            // Digit-Only OCR: Whitelist + OEM 1 (LSTM only - better for similar digits)
             const currentPSM = cropRect.isFallback ? 6 : 7;
             
             const text = runTesseractCLI(tempPath, 'txt', {
                 psm: currentPSM,
+                oem: 1, // LSTM only
                 params: {
-                    tessedit_char_whitelist: "0123456789OSIlB", 
+                    tessedit_char_whitelist: "0123456789", 
                     load_system_dawg: "0",
                     load_freq_dawg: "0"
                 }
@@ -496,7 +504,26 @@ export async function extractBackID(input) {
 
         if (candidates.length === 0) return { value: null, candidates: [] };
 
-        // VOTE: Majority rule (e.g. 2/3 agreement)
+        // --- Per-digit voting for phone (simple majority per position) ---
+        if (type === 'phone' && candidates.length >= 2 && candidates.every(c => c.length === 10)) {
+            const voted = [];
+            for (let pos = 0; pos < 10; pos++) {
+                const digitCounts = {};
+                for (const c of candidates) {
+                    const d = c[pos];
+                    digitCounts[d] = (digitCounts[d] || 0) + 1;
+                }
+                const best = Object.entries(digitCounts).sort((a, b) => b[1] - a[1])[0];
+                voted.push(best[0]);
+            }
+            const result = voted.join('');
+            if (/^(09|07)\d{8}$/.test(result)) {
+                console.log(`[PhoneVote] Per-digit voted result: ${result} from [${candidates.join(', ')}]`);
+                return { value: result, candidates };
+            }
+        }
+
+        // VOTE: Whole-string majority rule (FIN or phone fallback)
         const counts = {};
         for (const c of candidates) {
             counts[c] = (counts[c] || 0) + 1;
@@ -505,7 +532,6 @@ export async function extractBackID(input) {
         const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
         const [winner, count] = sorted[0];
 
-        // Safe Rule: 2 out of 3 passes must agree
         if (count >= 2) {
             return { value: winner, candidates };
         }
@@ -692,8 +718,7 @@ export async function extractBackID(input) {
 
     const finConfidence = calculateConfidence(fin, 'fin', { 
         source: qrData?.uin ? "QR" : "OCR",
-        consensus: finResult ? (finResult.candidates && finResult.candidates.filter(c => c === fin).length >= 2) : false,
-        cached: cache && !!cache[imgHash]?.fin
+        consensus: finResult ? (finResult.candidates && finResult.candidates.filter(c => c === fin).length >= 2) : false
     });
 
     const phoneConfidence = calculateConfidence(phone, 'phone', {
