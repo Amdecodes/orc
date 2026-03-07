@@ -1,8 +1,8 @@
-version: '3.8'
+# version attribute is obsolete and removed
 
 services:
   postgres:
-    image: postgres:16-alpine
+    image: postgres:15-alpine
     container_name: postgres
     restart: always
     environment:
@@ -29,6 +29,7 @@ services:
       retries: 5
 
   web:
+    image: orc-app
     build:
       context: .
       dockerfile: apps/web/Dockerfile
@@ -46,6 +47,10 @@ services:
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
       - BOT_SECRET=${BOT_SECRET}
       - BOT_INTERNAL_URL=http://bot:5005
+      - HOSTNAME=0.0.0.0
+      - PORT=3000
+    volumes:
+      - uploads_data:/app/tmp/uploads
     depends_on:
       postgres:
         condition: service_healthy
@@ -53,14 +58,17 @@ services:
         condition: service_healthy
 
   worker:
+    image: orc-app
     build:
       context: .
       dockerfile: apps/web/Dockerfile
     container_name: worker
     restart: always
-    command: ["tsx", "apps/web/src/scripts/worker.ts"]
     environment:
+      - IS_WORKER=true
       - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/et_id_ocr?schema=public
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+      - BETTER_AUTH_URL=https://nationalidformatter.app
       - REDIS_HOST=redis
       - FILE_ENCRYPTION_KEY=${FILE_ENCRYPTION_KEY}
       - BOT_SECRET=${BOT_SECRET}
@@ -68,10 +76,12 @@ services:
       - WORKER_HEAP_MB=${WORKER_HEAP_MB:-2048}
       - NODE_OPTIONS=--max-old-space-size=${WORKER_HEAP_MB:-2048}
       - MAX_CONCURRENT_JOBS=${MAX_CONCURRENT_JOBS:-2}
+    volumes:
+      - uploads_data:/app/tmp/uploads
     deploy:
       resources:
         limits:
-          memory: 4G # Hard limit to prevent host system crash
+          memory: 4G
     depends_on:
       postgres:
         condition: service_healthy
@@ -133,3 +143,4 @@ services:
 volumes:
   postgres_data:
   redis_data:
+  uploads_data:
