@@ -92,6 +92,9 @@ services:
     build:
       context: .
       dockerfile: apps/admin/Dockerfile
+      args:
+        - NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+        - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/et_id_ocr?schema=public
     container_name: admin
     restart: always
     environment:

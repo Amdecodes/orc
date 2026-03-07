@@ -18,6 +18,14 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 # Generate Prisma Client
 RUN npx prisma generate
+# Declare build-time arguments
+ARG NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+ARG DATABASE_URL
+
+# Expose them as environment variables so Next.js can access them during build
+ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+ENV DATABASE_URL=$DATABASE_URL
+
 # Build admin app
 WORKDIR /app/apps/admin
 RUN npm run build
