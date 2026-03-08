@@ -30,7 +30,7 @@ export function CreditWall({ isOpen, onClose }: CreditWallProps) {
         </div>
 
         <div className="space-y-4 pt-2 relative">
-          <Link href="/dashboard/credits" className="block relative group/btn">
+          <Link href="/dashboard/credits" target="_blank" rel="noreferrer" className="block relative group/btn">
             <Button className="relative w-full h-14 text-sm font-black uppercase tracking-widest rounded-xl bg-accent text-accent-text hover:bg-accent-hover transition-all transform hover:scale-[1.02] active:scale-95 shadow-lg">
               ADD CREDITS
             </Button>

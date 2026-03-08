@@ -105,7 +105,7 @@ export async function POST(req: Request) {
           ? `Your top-up of ${targetItem.credits} credits was approved!` 
           : `Your top-up request for ${targetItem.credits} credits was rejected. Please contact support.`;
 
-        await axios.post("http://localhost:5005/notify", {
+        await axios.post("http://bot:5005/notify", {
           telegramId: targetItem.user.telegramId,
           message,
           status: action,
