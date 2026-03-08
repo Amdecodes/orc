@@ -51,7 +51,7 @@ services:
       - HOSTNAME=0.0.0.0
       - PORT=3000
     volumes:
-      - uploads_data:/app/tmp/uploads
+      - uploads_data:/app/apps/web/tmp/uploads
     depends_on:
       postgres:
         condition: service_healthy
@@ -67,6 +67,7 @@ services:
         - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
         - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/et_id_ocr?schema=public
     container_name: worker
+    command: ["sh", "-c", "cd /app/apps/web && tsx src/scripts/worker.ts"]
     restart: always
     environment:
       - IS_WORKER=true
@@ -81,7 +82,7 @@ services:
       - NODE_OPTIONS=--max-old-space-size=${WORKER_HEAP_MB:-2048}
       - MAX_CONCURRENT_JOBS=${MAX_CONCURRENT_JOBS:-2}
     volumes:
-      - uploads_data:/app/tmp/uploads
+      - uploads_data:/app/apps/web/tmp/uploads
     deploy:
       resources:
         limits:

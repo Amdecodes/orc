@@ -13,12 +13,13 @@ RUN apt-get update && apt-get install -y \
     libpixman-1-dev \
     libssl-dev \
     libstdc++6 \
+    libgomp1 \
     tesseract-ocr \
     tesseract-ocr-eng \
     tesseract-ocr-amh \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install opencv-python-headless numpy --break-system-packages
+RUN pip3 install opencv-python-headless numpy Pillow --break-system-packages
 
 FROM base AS deps
 WORKDIR /app
@@ -57,10 +58,17 @@ COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/services ./services
 COPY --from=builder /app/fonts ./fonts
 COPY --from=builder /app/*.png /app/*.jpg /app/*.traineddata ./
+COPY --from=builder /app/templates ./templates
+COPY --from=builder /app/tessdata ./tessdata
 COPY --from=builder /app/apps/web/src/scripts ./apps/web/src/scripts
 COPY --from=builder /app/apps/web/src/lib ./apps/web/src/lib
+COPY --from=builder /app/node_modules ./node_modules
+
+# Copy onnxruntime shared libraries needed for background removal
+COPY --from=builder /app/node_modules/@imgly/background-removal-node/node_modules/onnxruntime-node/bin/napi-v3/linux/x64/ ./node_modules/@imgly/background-removal-node/node_modules/onnxruntime-node/bin/napi-v3/linux/x64/
 
 RUN npm install -g tsx
+RUN npx playwright install chromium --with-deps
 
 EXPOSE 3000
 CMD ["node", "apps/web/server.js"]

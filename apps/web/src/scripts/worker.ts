@@ -1,4 +1,4 @@
-import "dotenv/config";
+
 console.log("--- WORKER FILE LOADED ---");
 import prisma from "../lib/prisma";
 import { processJob } from "../lib/jobs";
