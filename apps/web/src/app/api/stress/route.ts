@@ -31,7 +31,7 @@ export async function GET() {
                 frontImagePath: frontPath, 
                 backImagePath: backPath, 
                 photoPath: photoPath,
-                source: "STRESS_TEST"
+                source: "WEB"
             }
         });
         jobIds.push(job.id);

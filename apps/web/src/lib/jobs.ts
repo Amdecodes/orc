@@ -35,7 +35,7 @@ export async function processJob(jobId: string, userId: string, frontPath: strin
     const outputFileName = `id-${jobId}.${format}.enc`;
     const outputPath = path.join(userDir, outputFileName);
     const encryptedImage = encryptBuffer(image);
-    await writeFile(outputPath, encryptedImage);
+    await writeFile(outputPath, new Uint8Array(Buffer.isBuffer(encryptedImage) ? encryptedImage : Buffer.from(encryptedImage)));
 
     // 3. Deduct Credits & Update Job (Transaction)
     await prisma.$transaction([

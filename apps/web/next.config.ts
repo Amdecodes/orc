@@ -1,12 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  serverExternalPackages: [
-    "@imgly/background-removal-node",
-    "onnxruntime-node",
-    "@prisma/client",
-    "tesseract.js",
-    "sharp"
-  ],
+  output: "standalone",
+  serverExternalPackages: ["@prisma/client"],
 };
-
 export default nextConfig;

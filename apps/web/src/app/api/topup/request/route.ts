@@ -66,7 +66,7 @@ export async function POST(req: Request) {
       const absolutePath = path.join(uploadDir, fileName);
       
       console.log("Saving screenshot to:", absolutePath);
-      await writeFile(absolutePath, buffer);
+      await writeFile(absolutePath, new Uint8Array(buffer));
       screenshotPath = absolutePath; // Store ABSOLUTE path in DB for admin to read easily
     }
 

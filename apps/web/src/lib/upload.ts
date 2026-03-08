@@ -32,7 +32,7 @@ export async function saveUploadedFile(file: File, userId: string, slot: string)
   const filePath = path.join(userDir, fileName);
 
   const bytes = await file.arrayBuffer();
-  await writeFile(filePath, Buffer.from(bytes));
+  await writeFile(filePath, new Uint8Array(Buffer.from(bytes)));
 
   // Return the absolute path for backend use
   return filePath;

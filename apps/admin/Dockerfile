@@ -1,4 +1,3 @@
-# apps/admin/Dockerfile
 FROM node:20-bookworm-slim AS base
 
 FROM base AS deps
@@ -16,8 +15,10 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+
 # Generate Prisma Client
 RUN npx prisma generate
+
 # Declare build-time arguments
 ARG NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
 ARG DATABASE_URL
@@ -34,8 +35,8 @@ FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
-# Copy necessary files for production
-COPY --from=builder /app/apps/admin/public ./apps/admin/public
+# Create public folder in case it doesn't exist, then copy build output
+RUN mkdir -p ./apps/admin/public
 COPY --from=builder /app/apps/admin/.next/standalone ./
 COPY --from=builder /app/apps/admin/.next/static ./apps/admin/.next/static
 COPY --from=builder /app/prisma ./prisma

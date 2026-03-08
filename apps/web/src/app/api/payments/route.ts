@@ -33,7 +33,7 @@ export async function POST(req: Request) {
       const fileName = `${session.user.id}-${Date.now()}-${proof.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
       const absolutePath = path.join(uploadDir, fileName);
       
-      await writeFile(absolutePath, buffer);
+      await writeFile(absolutePath, new Uint8Array(buffer));
       screenshotPath = absolutePath;
     }
 
