@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Inter:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Outfit:wght@100..900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -21,7 +21,7 @@
 
   /* Actions */
   --accent-primary: #1DB954;
-  --accent-hover: #1db9548d;
+  --accent-hover: #16a34a;
   --accent-text: #FFFFFF;
 
   /* Status */
@@ -52,7 +52,7 @@
 
   /* Actions */
   --accent-primary: #1DB954;
-  --accent-hover: #1db9548d;
+  --accent-hover: #16a34a;
   --accent-text: #FFFFFF;
 
   /* Status */
@@ -66,49 +66,14 @@
   --brand: var(--accent-primary);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not(.light) {
-    /* Backgrounds */
-    --bg-page: #0B0D12;
-    --bg-surface: #1E2330;
-    --bg-surface-raised: #252B3B;
-    --bg-muted: #141824;
-
-    /* Text */
-    --text-primary: #F8FAFC;
-    --text-secondary: #CBD5E1;
-    --text-muted: #64748B;
-
-    /* Borders */
-    --border-default: #334155;
-
-    /* Actions */
-    --accent-primary: #1DB954;
-    --accent-hover: #1db9548d;
-    --accent-text: #FFFFFF;
-    /* Status */
-    --success: #22C55E;
-    --warning: #FBBF24;
-    --error: #F87171;
-
-    /* Legacy Compat */
-    --background: var(--bg-page);
-    --foreground: var(--text-primary);
-    --brand: var(--accent-primary);
-  }
-}
-
 @layer base {
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Inter', sans-serif;
-    /* Mobile: remove tap highlight flash */
+    font-family: 'Outfit', sans-serif;
     -webkit-tap-highlight-color: transparent;
-    /* Prevent text size inflation on orientation change */
     -webkit-text-size-adjust: 100%;
   }
 
-  /* Smooth scroll everywhere */
   html {
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
@@ -120,10 +85,9 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
   }
 
-  /* Ensure all interactive elements meet 44px touch target minimum */
   button, [role="button"], a {
     touch-action: manipulation;
   }
@@ -143,4 +107,33 @@
     background-image: conic-gradient(from var(--border-beam-angle, 0deg), transparent 0%, var(--accent-primary) 10%, transparent 20%);
     animation: border-beam 4s linear infinite;
   }
+
+  @keyframes border-beam {
+    from { --border-beam-angle: 0deg; }
+    to { --border-beam-angle: 360deg; }
+  }
+
+  @property --border-beam-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+
+  .glass-card {
+    @apply bg-bg-surface/70 dark:bg-bg-surface/30 backdrop-blur-xl border border-white/20 dark:border-white/5;
+  }
+
+  .premium-shadow {
+    box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.1);
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.1); }
+  }
 }
+

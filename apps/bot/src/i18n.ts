@@ -4,8 +4,8 @@ type SupportedLanguages = 'en' | 'am';
 
 const translations: Record<string, Record<SupportedLanguages, string>> = {
   start_msg: {
-    en: `🇪🇹 *Ethiopian Digital ID Formatter*\n\nGet a professional, print-ready digital ID card in seconds!\n\n🚀 *How it works:*\n1️⃣ Upload 3 clear screenshot (Front, Back, Third Page)\n2️⃣ We automatically format, clean, and crop everything\n3️⃣ Download your high-quality file ready for printing\n\n💡 *Tip: For best results, use original screenshot.*\n\n💳 *Your Balance:* \`{{credits}} credits\``,
-    am: `🇪🇹 *የኢትዮጵያ ዲጂታል መታወቂያ አስተካካይ*\n\nየተስተካከለ እና ለህትመት ዝግጁ የሆነ ዲጂታል መታወቂያ በሰከንዶች ውስጥ ያግኙ!\n\n🚀 *እንዴት እንደሚሰራ:*\n1️⃣ 3 ጥራት ያላቸው ፎቶዎችን(screenshots) ይላኩ (የፊት፣ የጀርባ እና ሶስተኛው ገጽ)\n2️⃣ እኛ በራሳችን እናስተካክለዋለን\n3️⃣ ለህትመት ዝግጁ የሆነ ጥራት ያለው ምስል ያውርዱ\n\n💡 *ጠቃሚ ምክር: የተሻለ ጥራት ለማግኘት፣ ስክሪንሾት በማንሳት  ይጠቀሙ።*\n\n💳 *ያሎት ቀሪ ሂሳብ:* \`{{credits}}\``
+    en: `🇪🇹 *EGet a professional, print-ready digital ID card in seconds!\n\n🚀 *How it works:*\n1️⃣ Upload 3 clear screenshot (Front, Back, Third Page)\n2️⃣ We automatically format, clean, and crop everything\n3️⃣ Download your high-quality file ready for printing\n\n💡 *Tip: For best results, use original screenshot.*\n\n💳 *Your Balance:* \`{{credits}} credits\``,
+    am: `🇪🇹 *የተስተካከለ እና ለህትመት ዝግጁ የሆነ ዲጂታል መታወቂያ በሰከንዶች ውስጥ ያግኙ!\n\n🚀 *እንዴት እንደሚሰራ:*\n1️⃣ 3 ጥራት ያላቸው ፎቶዎችን(screenshots) ይላኩ (የፊት፣ የጀርባ እና ሶስተኛው ገጽ)\n2️⃣ እኛ በራሳችን እናስተካክለዋለን\n3️⃣ ለህትመት ዝግጁ የሆነ ጥራት ያለው ምስል ያውርዱ\n\n💡 *ጠቃሚ ምክር: የተሻለ ጥራት ለማግኘት፣ ስክሪንሾት በማንሳት  ይጠቀሙ።*\n\n💳 *ያሎት ቀሪ ሂሳብ:* \`{{credits}}\``
   },
   choose_language: {
     en: '🌐 Please select your preferred language:',
@@ -52,8 +52,8 @@ const translations: Record<string, Record<SupportedLanguages, string>> = {
     am: '📷 *ደረጃ 2 ከ 3*\n\nበጣም ጥሩ! አሁን እባክዎ ከላይ ባለው ምሳሌ መሠረት የመታወቂያውን **የጀርባ** ክፍል ጥራት ያለው ፎቶ ይላኩ።'
   },
   step3_caption: {
-    en: '📷 *Step 3 of 3*\n\nAlmost done! Lastly, send a **PROFILE** photo showing clearly just the face, like the example below.',
-    am: '📷 *ደረጃ 3 ከ 3*\n\nተቃርበናል! በመጨረሻ፣ ፊትን ብቻ በግልፅ የሚያሳይ የ**ፕሮፋይል** ፎቶ ከምሳሌው ጋር በማመሳሰል ይላኩ።'
+    en: '📷 *Step 3 of 3*\n\nAlmost done! Lastly, send a  photo showing clearly face and QR, like the example below.',
+    am: '📷 *ደረጃ 3 ከ 3*\n\nተቃርበናል! በመጨረሻ፣ ፊትን እና QR code ን በግልፅ የሚያሳይ ፎቶ ከምሳሌው ጋር በማመሳሰል ይላኩ።'
   },
   processing: {
     en: '⏳ *Magic in progress...*\nReconstructing your ID. This usually takes around 10 - 30 seconds 🪄',
@@ -72,8 +72,8 @@ const translations: Record<string, Record<SupportedLanguages, string>> = {
     am: '🏠 ዋና ገጽ'
   },
   error_image_expected: {
-    en: '⚠️ Please send a standard image file (like a photo from your gallery or camera), not a document or text.',
-    am: '⚠️ እባክዎ የተለመደ የፎቶ ፋይል (ከጋለሪዎ ወይም ካሜራዎ) ይላኩ እንጂ ጽሑፍ ወይም ሰነድ አይላኩ።'
+    en: '⚠️ Please send a standard image file (like a photo from your gallery), not a document or text.',
+    am: '⚠️ እባክዎ የተለመደ የፎቶ ፋይል ከጋለሪዎ  ይላኩ እንጂ ጽሑፍ ወይም ሰነድ አይላኩ።'
   },
   error_failed_format: {
     en: '❌ *Formatting failure*\n{{errorMsg}}',

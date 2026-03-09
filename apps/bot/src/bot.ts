@@ -5,12 +5,16 @@ import * as api from './api.js';
 import express from 'express';
 import path from 'path';
 import fs from 'fs';
+import { fileURLToPath } from 'url';
 import { t } from './i18n.js';
 
 const bot = new TelegramBot(config.BOT_TOKEN, { polling: true });
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 // --- Asset Paths ---
-const ASSETS_DIR = path.resolve(process.cwd(), 'assets');
+const ASSETS_DIR = path.resolve(__dirname, '../assets');
 const GUIDE_FRONT = path.join(ASSETS_DIR, 'guide_front.jpg');
 const GUIDE_BACK = path.join(ASSETS_DIR, 'guide_back.jpg');
 const GUIDE_PROFILE = path.join(ASSETS_DIR, 'guide_profile.jpg');
