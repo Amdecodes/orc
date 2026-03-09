@@ -135,17 +135,11 @@ export function Header() {
 
             {user ? (
               <>
-                {/* Credit Badge — premium wallet button look */}
-                <Link href="/dashboard/credits" className="relative group">
-                  <div className="absolute -inset-0.5 bg-gradient-to-r from-accent to-accent-hover rounded-xl blur-[2px] opacity-20 group-hover:opacity-40 transition duration-500" />
-                  <div className="relative flex items-center gap-2 bg-bg-surface/50 dark:bg-bg-surface/30 backdrop-blur-md px-3 sm:px-4 py-1.5 rounded-xl border border-border group-hover:border-accent/40 transition-all shadow-sm">
-                    <div className="w-5 h-5 rounded-lg bg-accent/10 flex items-center justify-center text-accent group-hover:scale-110 transition-transform">
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-[7px] font-black text-text-muted uppercase tracking-[0.2em] leading-none mb-0.5">{t('credits')}</span>
-                      <span className="text-[10px] font-black text-text-primary tabular-nums leading-none">{displayCredits}</span>
-                    </div>
+                {/* Credit Badge — always visible */}
+                <Link href="/dashboard/credits">
+                  <div className="flex items-center gap-1.5 bg-accent/10 px-3 py-1.5 rounded-xl border border-accent/20 hover:bg-accent/15 transition-all">
+                    <span className="text-base leading-none">🪙</span>
+                    <span className="text-[10px] font-black text-text-primary uppercase tracking-widest whitespace-nowrap">{displayCredits}</span>
                   </div>
                 </Link>
 

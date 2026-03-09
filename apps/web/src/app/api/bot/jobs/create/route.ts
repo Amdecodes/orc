@@ -34,7 +34,12 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    if (user.credits < 1) {
+    // Atomically reserve 1 credit — prevents race conditions
+    const reserved = await prisma.user.updateMany({
+      where: { id: user.id, credits: { gte: 1 } },
+      data: { credits: { decrement: 1 } },
+    });
+    if (reserved.count === 0) {
       return NextResponse.json({ error: "Insufficient credits" }, { status: 402 });
     }
 

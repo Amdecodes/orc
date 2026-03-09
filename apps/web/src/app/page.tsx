@@ -165,15 +165,10 @@ function LandingContent() {
 
       {/* Process Section - Bento Layout */}
       <div id="how-it-works" className="mt-32 sm:mt-48 max-w-7xl w-full space-y-16 sm:space-y-24">
-          <div className="text-center space-y-4">
-             <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter text-text-primary font-['Space_Grotesk']">{t('system_architecture')}</h2>
-             <div className="space-y-2">
-               <p className="text-text-secondary font-medium max-w-md mx-auto opacity-60 uppercase text-[9px] sm:text-[10px] tracking-[0.4em]">{t('proprietary_workflow')}</p>
-               <p className="text-accent/70 font-bold max-w-lg mx-auto text-[8px] sm:text-[9px] uppercase tracking-[0.2em] leading-relaxed">
-                 {t('disclaimer')}
-               </p>
-             </div>
-          </div>
+         <div className="text-center space-y-6">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter text-text-primary font-['Space_Grotesk']">{t('system_architecture')}</h2>
+            <p className="text-text-secondary font-medium max-w-md mx-auto opacity-60 uppercase text-[9px] sm:text-[10px] tracking-[0.4em]">{t('proprietary_workflow')}</p>
+         </div>
          
          <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
             {/* Step 1: Capture */}

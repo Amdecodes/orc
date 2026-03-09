@@ -101,13 +101,11 @@ export async function POST(req: Request) {
     // --- Notify the Bot ---
     if (targetItem.user.telegramId) {
       try {
-        const itemType = type === "TOPUP" ? "Top-up" : "Payment";
         const message = action === "APPROVE" 
-          ? `✅ Your ${itemType} of ${targetItem.credits} credits was approved!` 
-          : `❌ Your ${itemType} request for ${targetItem.credits} credits was rejected. Please contact support.`;
+          ? `Your top-up of ${targetItem.credits} credits was approved!` 
+          : `Your top-up request for ${targetItem.credits} credits was rejected. Please contact support.`;
 
-        const botUrl = process.env.BOT_INTERNAL_URL || "http://bot:5005";
-        await axios.post(`${botUrl}/notify`, {
+        await axios.post("http://bot:5005/notify", {
           telegramId: targetItem.user.telegramId,
           message,
           status: action,
@@ -118,6 +116,7 @@ export async function POST(req: Request) {
         });
       } catch (notifyError) {
         console.error("Failed to notify bot:", notifyError);
+        // We don't fail the whole request just because notification failed
       }
     }
 

@@ -21,9 +21,12 @@ export async function POST(req: Request) {
   }
 
   try {
-    // 1. Check Credits (don't deduct yet)
-    const user = await prisma.user.findUnique({ where: { id: userId } });
-    if (!user || user.credits < 1) {
+    // 1. Atomically reserve 1 credit — prevents race conditions with concurrent submissions
+    const reserved = await prisma.user.updateMany({
+      where: { id: userId, credits: { gte: 1 } },
+      data: { credits: { decrement: 1 } },
+    });
+    if (reserved.count === 0) {
       return NextResponse.json({ error: "Insufficient credits" }, { status: 402 });
     }
 

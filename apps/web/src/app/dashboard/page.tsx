@@ -1,9 +1,10 @@
 "use client";
+import React from "react";
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { X, ChevronDown, ChevronRight, Zap as ZestIcon } from "lucide-react";
+import { X, ChevronDown } from "lucide-react";
 import { CreditWall } from "@/components/ui/credit-wall";
 import { useLanguage } from "@/components/LanguageContext";
 function UploadCard({ id, label, step, desc, isDone, onFileChange, onClear, preview, t }: { 
@@ -71,10 +72,109 @@ function UploadCard({ id, label, step, desc, isDone, onFileChange, onClear, prev
   );
 }
 
+
+function JobLoadingState({ status, isSubmitting, queueMetrics, t }: {
+  status: string | null | undefined,
+  isSubmitting: boolean,
+  queueMetrics: { position: number, estimatedSeconds: number } | null,
+  t: (key: string) => string
+}) {
+  const [elapsed, setElapsed] = React.useState(0);
+  const [dots, setDots] = React.useState('');
+
+  React.useEffect(() => {
+    const timer = setInterval(() => setElapsed(e => e + 1), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  React.useEffect(() => {
+    const d = setInterval(() => setDots(p => p.length >= 3 ? '' : p + '.'), 500);
+    return () => clearInterval(d);
+  }, []);
+
+  const stage = isSubmitting ? 0 : (status === 'PENDING' || status === 'IDLE') ? 1 : 2;
+  const stages = [
+    { icon: '⬆️', label: 'Uploading', sub: 'Sending your images securely' },
+    { icon: '🔢', label: 'In Queue', sub: queueMetrics ? `Position #${queueMetrics.position}` : 'Waiting for worker' },
+    { icon: '⚡', label: 'Processing', sub: 'OCR + ID extraction running' },
+  ];
+
+  const progress = isSubmitting ? 15 : status === 'PENDING' ? 35 : Math.min(35 + elapsed * 1.2, 92);
+
+  return (
+    <div className="flex flex-col items-center justify-center w-full h-full min-h-[400px] gap-8 py-8 animate-in fade-in duration-500">
+      {/* Pulsing orb */}
+      <div className="relative flex items-center justify-center">
+        <div className="absolute w-24 h-24 rounded-full bg-accent/10 animate-ping" style={{animationDuration:'2s'}}></div>
+        <div className="absolute w-16 h-16 rounded-full bg-accent/20 animate-ping" style={{animationDuration:'1.5s', animationDelay:'0.3s'}}></div>
+        <div className="relative w-20 h-20 rounded-2xl bg-accent/10 border-2 border-accent/30 flex items-center justify-center text-3xl shadow-lg shadow-accent/10">
+          {stages[stage].icon}
+        </div>
+      </div>
+
+      {/* Stage label */}
+      <div className="text-center space-y-2">
+        <h3 className="text-xl font-black text-text-primary uppercase tracking-[0.2em] font-['Space_Grotesk']">
+          {stages[stage].label}{dots}
+        </h3>
+        <p className="text-xs font-bold text-text-muted uppercase tracking-widest">
+          {stages[stage].sub}
+        </p>
+        {status === 'PROCESSING' && (
+          <p className="text-[10px] font-bold text-accent uppercase tracking-widest">
+            {elapsed}s elapsed
+          </p>
+        )}
+      </div>
+
+      {/* Progress bar */}
+      <div className="w-full max-w-xs space-y-2">
+        <div className="w-full h-2 bg-bg-muted rounded-full overflow-hidden border border-border">
+          <div
+            className="h-full bg-accent rounded-full transition-all duration-1000 ease-out"
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
+        <div className="flex justify-between">
+          <span className="text-[9px] font-black text-text-muted uppercase tracking-widest">
+            {Math.round(progress)}%
+          </span>
+          {queueMetrics && status === 'PENDING' && (
+            <span className="text-[9px] font-black text-accent uppercase tracking-widest">
+              ~{queueMetrics.estimatedSeconds}s wait
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* Stage steps */}
+      <div className="flex items-center gap-3">
+        {stages.map((s, i) => (
+          <React.Fragment key={i}>
+            <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[9px] font-black uppercase tracking-widest transition-all duration-500 ${
+              i < stage ? 'bg-success/10 border-success/30 text-success' :
+              i === stage ? 'bg-accent/10 border-accent/30 text-accent' :
+              'bg-bg-muted border-border text-text-muted'
+            }`}>
+              {i < stage ? '✓' : s.icon} {s.label}
+            </div>
+            {i < stages.length - 1 && (
+              <div className={`w-4 h-px transition-all duration-500 ${i < stage ? 'bg-success/50' : 'bg-border'}`}></div>
+            )}
+          </React.Fragment>
+        ))}
+      </div>
+
+      <p className="text-[9px] font-bold text-text-muted uppercase tracking-[0.3em] text-center max-w-xs">
+        🛡️ Your images are processed securely and never stored
+      </p>
+    </div>
+  );
+}
+
 import { useJobStatus } from "@/hooks/useJobStatus";
 import { authClient } from "@/lib/auth-client";
 import { NotificationBell } from "@/components/NotificationBell";
-import { LoadingOverlay } from "@/components/ui/loading-overlay";
 
 export default function ActionPage() {
   const { data: session } = authClient.useSession();
@@ -88,15 +188,6 @@ export default function ActionPage() {
   const [liveCredits, setLiveCredits] = useState<number | null>(null);
   
   const { status, output, error: jobError, queueMetrics } = useJobStatus(jobId);
-
-  // Map status to LoadingOverlay states
-  const overlayStatus: any = isSubmitting 
-    ? "UPLOADING" 
-    : status === "PENDING" 
-      ? "PENDING" 
-      : status === "PROCESSING" 
-        ? "PROCESSING" 
-        : null;
 
   const fetchCredits = async () => {
     try {
@@ -183,7 +274,7 @@ export default function ActionPage() {
     }
   };
 
-  const isLoading = isSubmitting || status === "PROCESSING" || status === "PENDING";
+  const isLoading = isSubmitting || status === "PROCESSING" || status === "PENDING" || (!!jobId && status === "IDLE");
   const result = output;
   const error = jobError;
 
@@ -229,7 +320,6 @@ export default function ActionPage() {
       </div>
 
       <CreditWall isOpen={showCreditWall} onClose={() => setShowCreditWall(false)} />
-      <LoadingOverlay status={overlayStatus} queueMetrics={queueMetrics} />
 
       {/* Hero Section */}
       <div className="max-w-4xl mx-auto text-center space-y-2">
@@ -267,7 +357,9 @@ export default function ActionPage() {
       <div className="grid lg:grid-cols-12 gap-6 sm:gap-10 items-start">
         {/* Upload Zone & Result View */}
         <div className="lg:col-span-7 p-4 sm:p-10 bg-bg-surface border-2 border-border rounded-[2rem] sm:rounded-[3rem] shadow-2xl transition-all duration-500 min-h-[500px] flex flex-col justify-center">
-          {result ? (
+          {isLoading ? (
+            <JobLoadingState status={status} isSubmitting={isSubmitting} queueMetrics={queueMetrics} t={t} />
+          ) : result ? (
             <div className="flex flex-col items-center w-full animate-in zoom-in-95 duration-500 space-y-10 py-6">
               <div className="flex flex-col items-center text-center space-y-4">
                 <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl sm:rounded-[2rem] bg-success/10 flex items-center justify-center border border-success/20 animate-bounce shadow-inner">
@@ -366,16 +458,16 @@ export default function ActionPage() {
                   <div className="flex items-center gap-3">
                     <div className="w-4 h-4 sm:w-5 sm:h-5 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
                     <span className="text-sm sm:text-base">
-                      {status === "PENDING" ? (queueMetrics ? `In Queue: #${queueMetrics.position}` : t('in_queue')) : t('generating')}
+                      {(status as string) === "PENDING" ? (queueMetrics ? `In Queue: #${queueMetrics.position}` : t('in_queue')) : t('generating')}
                     </span>
                   </div>
-                  {queueMetrics && status === "PENDING" && (
+                  {queueMetrics && (status as string) === "PENDING" && (
                     <span className="text-[10px] sm:text-xs font-bold text-white/80 lowercase tracking-wider">
                       ~ {queueMetrics.estimatedSeconds}s wait time
                     </span>
                   )}
                   {/* Progress bar background animation */}
-                  {status === "PENDING" && (
+                  {(status as string) === "PENDING" && (
                     <div className="absolute bottom-0 left-0 h-1 bg-white/30 w-full overflow-hidden">
                        <div className="h-full bg-white animate-[indeterminate_2s_infinite_linear] w-[30%]"></div>
                     </div>
@@ -460,27 +552,24 @@ export default function ActionPage() {
           {/* Top-up Button — Prominent CTA */}
           <Link
             href="/dashboard/credits"
-            className="group relative flex items-center justify-between p-7 bg-bg-surface border-2 border-border hover:border-accent/20 rounded-[2.5rem] shadow-sm hover:premium-shadow transition-all duration-500 active:scale-[0.98] overflow-hidden"
+            className="group relative flex items-center justify-between p-6 bg-bg-surface border-2 border-border hover:border-transparent rounded-[2rem] shadow-sm hover:shadow-2xl transition-all duration-500 active:scale-[0.98] overflow-hidden"
           >
-            {/* Animated Gradient Background */}
-            <div className="absolute inset-0 bg-gradient-to-r from-accent/0 via-accent/5 to-accent/0 opacity-0 group-hover:opacity-100 group-hover:animate-pulse-glow transition-all duration-1000" />
-            
-            <div className="relative flex items-center gap-5 z-10">
-              <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-white group-hover:-translate-y-1 transition-all duration-500 shadow-inner group-hover:shadow-[0_10px_30px_rgba(29,185,84,0.3)]">
-                <ZestIcon className="w-7 h-7" />
+            {/* Animated Gradient Border/Glow on Hover */}
+            <div className="absolute inset-0 bg-gradient-to-r from-accent/0 via-accent/10 to-accent/0 opacity-0 group-hover:opacity-100 group-hover:animate-pulse transition-opacity duration-700 pointer-events-none"></div>
+            <div className="absolute inset-0 border-2 border-transparent group-hover:border-accent/50 rounded-[2rem] transition-colors duration-500 pointer-events-none"></div>
+
+            <div className="relative flex items-center gap-4 z-10">
+              <div className="w-12 h-12 rounded-[1rem] bg-bg-muted flex items-center justify-center text-text-secondary group-hover:bg-accent group-hover:text-accent-text group-hover:-translate-y-1 transition-all duration-500 shadow-inner group-hover:shadow-[0_0_20px_rgba(139,92,246,0.3)]">
+                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
               </div>
-              <div className="text-left">
-                <h4 className="text-base font-black text-text-primary uppercase tracking-[0.1em] font-['Plus_Jakarta_Sans'] group-hover:text-accent transition-colors">
-                   {t('buy_credits') || 'Top-up Credits'}
-                </h4>
-                <p className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] mt-1 group-hover:text-text-secondary transition-colors">
-                   Fuel your AI generations
-                </p>
+              <div className="text-left transition-transform duration-500 group-hover:translate-x-1">
+                <h4 className="text-sm font-black text-text-primary uppercase tracking-[0.15em] font-['Space_Grotesk'] group-hover:text-accent transition-colors">{t('buy_credits') || 'Top-up Credits'}</h4>
+                <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest mt-1 group-hover:text-text-secondary transition-colors">Fuel your generations</p>
               </div>
             </div>
             
-            <div className="relative w-12 h-12 rounded-full bg-bg-muted border border-border flex items-center justify-center text-text-muted group-hover:bg-accent/10 group-hover:border-accent/30 group-hover:text-accent group-hover:scale-110 transition-all duration-500 z-10">
-              <ChevronRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+            <div className="relative w-10 h-10 rounded-full bg-bg-muted flex items-center justify-center text-text-secondary group-hover:bg-accent/10 group-hover:text-accent group-hover:scale-110 transition-all duration-500 z-10">
+              <svg className="w-5 h-5 relative left-[1px] group-hover:translate-x-1 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"></polyline></svg>
             </div>
           </Link>
         </div>

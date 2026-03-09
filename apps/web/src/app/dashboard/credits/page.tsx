@@ -125,82 +125,68 @@ export default function CreditsPage() {
           
           <div className="text-center space-y-6">
             <Stepper currentStep={1} />
-            <div className="space-y-3">
-              <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-text-primary uppercase font-['Plus_Jakarta_Sans']">
+            <div className="space-y-2">
+              <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-text-primary uppercase font-['Space_Grotesk']">
                 {t('choose_plan')}
               </h1>
-              <p className="text-xs sm:text-sm font-black text-text-muted uppercase tracking-[0.3em] opacity-60">
+              <p className="text-sm font-medium text-text-muted uppercase tracking-widest opacity-60">
                 {t('choose_plan_desc')}
               </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {packages.map((pkg) => (
               <button
                 key={pkg.id}
                 onClick={() => { setSelectedPackage(pkg); setStep("payment"); }}
-                className={`group relative text-left flex flex-col p-10 rounded-[2.5rem] transition-all duration-500 hover:premium-shadow shadow-sm active:scale-[0.98] border-beam-container ${
+                className={`group relative text-left flex flex-col p-10 rounded-[2rem] border transition-all duration-300 ${
                   pkg.popular 
-                    ? "bg-bg-surface/80 dark:bg-bg-surface/40 backdrop-blur-xl border-accent/20" 
-                    : "bg-bg-surface border-border hover:border-accent/40"
+                    ? "bg-bg-surface border-accent shadow-xl" 
+                    : "bg-bg-surface/50 border-border hover:border-accent/40"
                 }`}
               >
                 {pkg.popular && (
-                  <>
-                    <div className="border-beam" style={{ '--border-beam-angle': '0deg' } as any} />
-                    <div className="absolute -top-3 right-10 bg-accent text-white text-[10px] font-black uppercase tracking-widest px-5 py-1.5 rounded-full shadow-[0_5px_15px_rgba(29,185,84,0.3)] z-20">
-                      {t('recommended')}
-                    </div>
-                  </>
+                  <div className="absolute -top-3 right-8 bg-accent text-accent-text text-[10px] font-black uppercase tracking-widest px-4 py-1 rounded-full shadow-lg z-20">
+                    {t('recommended')}
+                  </div>
                 )}
 
-                <div className="mb-12 flex items-center justify-between relative z-10">
-                   <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 ${
-                     pkg.popular ? "bg-accent text-white shadow-lg" : "bg-bg-muted text-text-muted group-hover:bg-accent group-hover:text-white"
-                   }`}>
-                      <pkg.icon className="w-7 h-7" />
-                   </div>
-                   <div className="flex flex-col items-end">
-                      <span className="text-[9px] font-black text-text-muted uppercase tracking-[0.2em]">{t('status')}</span>
-                      <span className={`text-[11px] font-black uppercase tracking-wider ${pkg.popular ? 'text-accent' : 'text-text-primary'}`}>
-                        {pkg.name}
-                      </span>
-                   </div>
+                <div className="mb-10 flex items-center justify-between">
+                  <div className="w-12 h-12 rounded-xl bg-bg-muted border border-border flex items-center justify-center text-text-muted group-hover:text-accent transition-colors">
+                    <pkg.icon className="w-6 h-6" />
+                  </div>
+                  <span className="text-[10px] font-black text-text-muted uppercase tracking-widest bg-bg-muted px-3 py-1 rounded-lg">
+                    {pkg.name}
+                  </span>
                 </div>
 
-                <div className="space-y-2 mb-12 relative z-10">
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-7xl font-black tracking-tighter text-text-primary leading-none">
-                      {pkg.credits}
-                    </span>
-                    <span className="text-lg font-black text-accent">ID</span>
+                <div className="space-y-1 mb-10">
+                  <div className="text-6xl font-black tracking-tighter text-text-primary leading-none">
+                    {pkg.credits}
                   </div>
-                  <div className="text-[10px] font-black text-text-muted uppercase tracking-widest">
+                  <div className="text-xs font-black text-text-muted uppercase tracking-widest">
                     {t('id_conversions')}
                   </div>
                 </div>
 
-                <div className="mt-auto space-y-8 relative z-10">
-                  <div className="pt-8 border-t border-border">
-                    <div className="flex items-baseline gap-1.5">
-                      <span className="text-4xl font-black text-text-primary">{pkg.price}</span>
-                      <span className="text-xs font-black text-text-muted uppercase tracking-[0.2em]">ETB</span>
+                <div className="mt-auto space-y-8">
+                  <div className="border-t border-border pt-8">
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-3xl font-black text-text-primary">{pkg.price}</span>
+                      <span className="text-sm font-bold text-text-muted uppercase tracking-wider">ETB</span>
                     </div>
-                    <div className="text-[9px] font-bold text-text-muted uppercase tracking-widest mt-2 opacity-50">
-                      ~ {Math.round(pkg.price / pkg.credits)} ETB Per scan
+                    <div className="text-[10px] font-bold text-text-muted uppercase tracking-wider mt-1 opacity-50">
+                      ~{Math.round(pkg.price / pkg.credits)} ETB / scan
                     </div>
                   </div>
 
-                  <div className={`w-full h-16 rounded-2xl flex items-center justify-center text-xs font-black uppercase tracking-[0.2em] transition-all relative overflow-hidden group/btn ${
+                  <div className={`w-full h-14 rounded-xl flex items-center justify-center text-xs font-black uppercase tracking-widest transition-all ${
                     pkg.popular
-                      ? "bg-accent text-white shadow-xl hover:bg-accent-hover"
-                      : "bg-text-primary text-bg-page hover:bg-text-primary/90"
+                      ? "bg-accent text-accent-text"
+                      : "bg-text-primary text-bg-page"
                   }`}>
-                    <span className="relative z-10 flex items-center gap-2">
-                       {t('select_plan')} <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                    </span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-700" />
+                    {t('select_plan')} <ChevronRight className="w-4 h-4 ml-2" />
                   </div>
                 </div>
               </button>
@@ -237,7 +223,7 @@ export default function CreditsPage() {
           </button>
 
           <div className="space-y-6">
-            <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-text-primary uppercase font-['Plus_Jakarta_Sans']">
+            <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-text-primary uppercase font-['Space_Grotesk']">
               {t('confirm_payment')}
             </h2>
 
@@ -412,7 +398,7 @@ export default function CreditsPage() {
           </div>
 
           <div className="space-y-3">
-            <h2 className="text-3xl sm:text-4xl font-black text-text-primary uppercase font-['Plus_Jakarta_Sans'] tracking-tight">
+            <h2 className="text-3xl font-black text-text-primary uppercase font-['Space_Grotesk'] tracking-tight">
               {t('submission_received')}
             </h2>
             <p className="text-xs font-bold text-text-muted uppercase tracking-widest max-w-sm mx-auto leading-relaxed">

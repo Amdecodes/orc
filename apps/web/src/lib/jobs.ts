@@ -37,7 +37,7 @@ export async function processJob(jobId: string, userId: string, frontPath: strin
     const encryptedImage = encryptBuffer(image);
     await writeFile(outputPath, new Uint8Array(Buffer.isBuffer(encryptedImage) ? encryptedImage : Buffer.from(encryptedImage)));
 
-    // 3. Deduct Credits & Update Job (Transaction)
+    // 3. Update Job & Log Transaction (credit already deducted at job creation)
     await prisma.$transaction([
       prisma.job.update({
         where: { id: jobId },
@@ -46,10 +46,6 @@ export async function processJob(jobId: string, userId: string, frontPath: strin
           outputPath: outputPath,
           output: `/api/jobs/download/${jobId}`
         },
-      }),
-      prisma.user.update({
-        where: { id: userId },
-        data: { credits: { decrement: 1 } },
       }),
       prisma.transaction.create({
         data: {
@@ -81,26 +77,22 @@ export async function processJob(jobId: string, userId: string, frontPath: strin
     }
 
     if (isUserError) {
-      // User Error: We still deduct the credit because they used system resources successfully but uploaded bad images.
+      // User Error: credit already deducted at job creation — just update job status and log
       await prisma.$transaction([
         prisma.job.update({
           where: { id: jobId },
           data: { status: "FAILED", errorCode, errorMessage }
-        }),
-        prisma.user.update({
-          where: { id: userId },
-          data: { credits: { decrement: 1 } }
         }),
         prisma.transaction.create({
           data: { userId, type: "DEDUCT", amount: 1, jobId }
         })
       ]);
     } else {
-      // System Error: We do NOT deduct the credit (which acts as a refund since deduction hasn't happened yet)
-      await prisma.job.update({
-        where: { id: jobId },
-        data: { status: "FAILED", errorCode, errorMessage },
-      });
+      // System Error: Refund credit — deducted at job creation but system failed
+      await prisma.$transaction([
+        prisma.job.update({ where: { id: jobId }, data: { status: "FAILED", errorCode, errorMessage } }),
+        prisma.user.update({ where: { id: userId }, data: { credits: { increment: 1 } } }),
+      ]);
     }
 
     status = "FAILED";
