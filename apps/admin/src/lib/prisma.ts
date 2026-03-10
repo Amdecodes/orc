@@ -1,8 +1,14 @@
 import { PrismaClient } from "../../../../prisma/generated-client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import pg from "pg";
+import dotenv from "dotenv";
+import path from "path";
 
-
+// In monorepos with background workers, guarantee variables are loaded BEFORE Prisma initializes.
+if (!process.env.DATABASE_URL) {
+  dotenv.config({ path: path.resolve(process.cwd(), "../../.env") });
+  dotenv.config({ path: path.resolve(process.cwd(), ".env") });
+}
 
 const prismaClientSingleton = () => {
   const connectionString = process.env.DATABASE_URL;

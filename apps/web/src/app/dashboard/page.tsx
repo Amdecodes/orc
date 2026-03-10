@@ -96,7 +96,7 @@ function JobLoadingState({ status, isSubmitting, queueMetrics, t }: {
   const stages = [
     { icon: '⬆️', label: 'Uploading', sub: 'Sending your images securely' },
     { icon: '🔢', label: 'In Queue', sub: queueMetrics ? `Position #${queueMetrics.position}` : 'Waiting for worker' },
-    { icon: '⚡', label: 'Processing', sub: 'OCR + ID extraction running' },
+    { icon: '⚡', label: 'Processing', sub: '' },
   ];
 
   const progress = isSubmitting ? 15 : status === 'PENDING' ? 35 : Math.min(35 + elapsed * 1.2, 92);

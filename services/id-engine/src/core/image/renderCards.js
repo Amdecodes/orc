@@ -30,12 +30,12 @@ const ROOT      = path.resolve(__dirname, '../../../../..');
 registerFont(path.join(ROOT, 'fonts', 'PGUNICODE1.TTF'),
              { family: 'PGUNICODE', weight: 'bold' });
 registerFont(path.join(ROOT, 'fonts', 'Roboto-Medium.ttf'),
-             { family: 'Roboto', weight: '500' });
+             { family: 'Roboto', weight: '600' });
 registerFont(path.join(ROOT, 'fonts', 'Roboto-Medium.ttf'),
-             { family: 'Roboto Mono', weight: '500' });
+             { family: 'Roboto Mono', weight: '600' });
 
 // ─── Constants ───────────────────────────────────────────────────────────────
-const W = 2652, H = 1670;
+const W = 2598, H = 1622;
 
 const CLR = '#000000';
 const CLR_PRIMARY = '#000000';
@@ -130,7 +130,7 @@ function txt(ctx, text, x, y, { size = 14, weight = 'normal', color = CLR,
   align = 'left', ethiopic = false, mono = false } = {}) {
   if (!text || String(text).trim() === '') return;
   const fam = ethiopic ? 'PGUNICODE' : mono ? 'Roboto Mono' : 'Roboto';
-  const w   = weight === 'bold' ? 'bold' : ethiopic ? 'bold' : weight; 
+  const w   = weight === 'bold' ? 'bold' : weight === '600' ? '600' : ethiopic ? 'bold' : weight; 
   ctx.font      = `${w} ${size}px "${fam}"`;
   ctx.fillStyle = color;
   ctx.textAlign = align;
@@ -179,19 +179,26 @@ async function _buildFrontCanvas(data, bgPath) {
   const bg     = await loadImage(bgPath);
   const canvas = createCanvas(W, H);
   const ctx    = canvas.getContext('2d');
-  ctx.drawImage(bg, 0, 0, W, H);
 
-  // Portrait — X:256 Y:432 W:730 H:1081
+  // Scale internal rendering system from original 2652x1670 to current W,H
+  // This ensures all hardcoded coordinates align perfectly.
+  const origW = 2652;
+  const origH = 1670;
+  ctx.scale(W / origW, H / origH);
+
+  ctx.drawImage(bg, 0, 0, origW, origH);
+
+  // Portrait — X:231 Y:432 W:730 H:1081
   const portraitB64 = (data.media?.portrait?.png) || null;
   if (portraitB64) {
     const buf = await autocropPortrait(portraitB64, 730, 1081, 60);
-    ctx.drawImage(await loadImage(buf), 256, 412, 730, 1081);
+    ctx.drawImage(await loadImage(buf), 231, 412, 730, 1081);
   }
 
   // Amharic name — X:1060 Y:479
   txt(ctx, namAm, 1060, 494, { size: FS_MAIN, weight: 'bold', ethiopic: true });
   // English name — X:1060 Y:568
-  txt(ctx, namEn, 1060, 583, { size: FS_MAIN, weight: 'bold' });
+  txt(ctx, namEn, 1060, 583, { size: FS_MAIN, weight: '600' });
   // DOB — X:1060 Y:828
   mixedLine(ctx, `${dobEc} |${dobGc}`, 1060, 843, { size: FS_MAIN, weight: 'bold'});
   // Sex — X:1060 Y:1010
@@ -201,7 +208,7 @@ async function _buildFrontCanvas(data, bgPath) {
 
   // FAN number — X:1209 Y:1326
   const fanFmt = fan.replace(/(\d{4})(?=\d)/g, '$1 ');
-  txt(ctx, fanFmt, 1215, 1355, { size: FS_MAIN, weight: 'bold', color: CLR_PRIMARY, mono: true });
+  txt(ctx, fanFmt, 1215, 1355, { size: FS_MAIN, weight: '600', color: CLR_PRIMARY, mono: true });
 
   // FAN barcode — X:1195 Y:1389
   const barcodeB64 = (data.media?.barcode?.png) || null;
@@ -220,12 +227,13 @@ async function _buildFrontCanvas(data, bgPath) {
   txt(ctx, issGc, 0, 0, { size: FS_ISSUE, weight: 'bold'});
   ctx.restore();
 
-  // Thumbnail photo — X:2209 Y:1247 W:226 H:330
+  // Thumbnail photo (Upscaled 1.3x) — X:2209 Y:1130 W:294 H:429
   if (portraitB64) {
-    const buf = await autocropPortrait(portraitB64, 226, 330, 60);
-    ctx.drawImage(await loadImage(buf), 2209, 1230, 226, 330);
+    const buf = await autocropPortrait(portraitB64, 294, 429, 60);
+    ctx.drawImage(await loadImage(buf), 2209, 1130, 294, 429);
   }
 
+  ctx.restore();
   return canvas;
 }
 
@@ -262,19 +270,25 @@ async function _buildBackCanvas(data, bgPath) {
   const bg     = await loadImage(bgPath);
   const canvas = createCanvas(W, H);
   const ctx    = canvas.getContext('2d');
-  ctx.drawImage(bg, 0, 0, W, H);
+
+  // Scale internal rendering system from original 2652x1670 to current W,H
+  const origW = 2652;
+  const origH = 1670;
+  ctx.scale(W / origW, H / origH);
+
+  ctx.drawImage(bg, 0, 0, origW, origH);
 
   txt(ctx, phone, 85, 255, { size: FS_MAIN, weight: 'bold', mono: true });
   mixedLine(ctx, `${natAm} |${natEn}`, 85, 500, { size: FS_NAT, weight: 'bold' });
 
   txt(ctx, amP[0] || '', 85, 677, { size: FS_ADDR_AM, ethiopic: true });
-  txt(ctx, enP[0] || '', 85, 770, { size: FS_ADDR_EN, weight: 'bold' });
+  txt(ctx, enP[0] || '', 85, 770, { size: FS_ADDR_EN, weight: '600' });
   txt(ctx, amP[1] || '', 85, 914, { size: FS_ADDR_AM, ethiopic: true });
-  txt(ctx, enP[1] || '', 85, 976, { size: FS_ADDR_EN, weight: 'bold' });
+  txt(ctx, enP[1] || '', 85, 976, { size: FS_ADDR_EN, weight: '600' });
   txt(ctx, amP[2] || '', 85, 1089, { size: FS_ADDR_AM, ethiopic: true });
-  txt(ctx, enP[2] || '', 85, 1186, { size: FS_ADDR_EN, weight: 'bold' });
+  txt(ctx, enP[2] || '', 85, 1186, { size: FS_ADDR_EN, weight: '600' });
 
-  txt(ctx, fin, 427, 1465, { size: FS_FIN, weight: 'bold', color: CLR_PRIMARY, mono: true });
+  txt(ctx, fin, 422, 1465, { size: FS_FIN + 2, weight: '600', color: CLR_PRIMARY, mono: true });
 
   const qrB64 = (data.media?.qr?.png) || null;
   if (qrB64) {
@@ -294,8 +308,9 @@ async function _buildBackCanvas(data, bgPath) {
 
   // 8-digit Serial Number — X:2185 Y:1548
   const serialNo = String(Math.floor(Math.random() * 100000000)).padStart(8, '0');
-  txt(ctx, serialNo, 2190, 1595, { size: FS_MAIN, weight: 'bold', mono: true });
+  txt(ctx, serialNo, 2190, 1595, { size: FS_MAIN, weight: '600', mono: true });
 
+  ctx.restore();
   return canvas;
 }
 

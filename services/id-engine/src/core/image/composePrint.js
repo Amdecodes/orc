@@ -4,7 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const TEMPLATE_PATH = path.resolve(__dirname, '../../../../../templates/id-print.html');
-const CLIP = { x: 0, y: 0, width: 5944, height: 1778 };
+const CLIP = { x: 0, y: 0, width: 5937, height: 1735 };
 
 // ── Singleton browser — launched once, reused for every job ──
 let _browser = null;
@@ -31,7 +31,7 @@ async function _renderLayout(frontBase64, backBase64) {
   const browser = await getBrowser();
   const page = await browser.newPage({
     viewport: { width: CLIP.width, height: CLIP.height },
-    deviceScaleFactor: 2
+    deviceScaleFactor: 1
   });
   try {
     await page.setContent(html);

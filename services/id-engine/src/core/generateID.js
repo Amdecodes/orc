@@ -23,8 +23,8 @@ const FRONT_TEMPLATE = path.join(ENGINE_ROOT, 'front_V5.0.png');
 const BACK_TEMPLATE  = path.join(ENGINE_ROOT, 'back_v5.0.png');
 
 // Print-ready canvas size (front + back side by side)
-const PRINT_WIDTH  = 5944;
-const PRINT_HEIGHT = 1778;
+const PRINT_WIDTH  = 5937;
+const PRINT_HEIGHT = 1735;
 
 /**
  * Generate a print-ready ID card image from three raw images.
