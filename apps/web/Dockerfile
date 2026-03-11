@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     librsvg2-dev \
     libpixman-1-dev \
     libssl-dev \
+    openssl \
     libstdc++6 \
     libgomp1 \
     tesseract-ocr \

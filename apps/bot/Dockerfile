@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y \
     librsvg2-dev \
     libpixman-1-dev \
     libssl-dev \
+    openssl \
     tesseract-ocr \
     tesseract-ocr-eng \
     tesseract-ocr-amh \
