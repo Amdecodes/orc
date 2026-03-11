@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useLanguage } from "@/components/LanguageContext";
 
 interface CreditWallProps {
   isOpen: boolean;
@@ -9,6 +10,7 @@ interface CreditWallProps {
 }
 
 export function CreditWall({ isOpen, onClose }: CreditWallProps) {
+  const { t } = useLanguage();
   if (!isOpen) return null;
 
   return (
@@ -21,21 +23,24 @@ export function CreditWall({ isOpen, onClose }: CreditWallProps) {
           </div>
           <div className="space-y-2">
             <h2 className="text-3xl font-black tracking-tight text-text-primary font-['Space_Grotesk']">
-              Low Balance
+               {t('low_balance') || 'Low Balance'}
             </h2>
             <p className="text-sm font-bold text-text-secondary uppercase tracking-widest">
-              Standard Account
+               {t('standard_account') || 'Standard Account'}
             </p>
           </div>
         </div>
 
         <div className="space-y-4 pt-2 relative">
           <Link href="/dashboard/credits" target="_blank" rel="noreferrer" className="block relative group/btn">
-            <Button className="relative w-full h-14 text-sm font-black uppercase tracking-widest rounded-xl bg-accent text-accent-text hover:bg-accent-hover transition-all transform hover:scale-[1.02] active:scale-95 shadow-lg">
-              ADD CREDITS
+            {/* Pulsing Highlight Effect */}
+            <div className="absolute -inset-1 bg-accent/30 rounded-xl blur-md group-hover/btn:blur-lg animate-pulse transition-all duration-500" />
+            
+            <Button className="relative w-full h-14 text-sm font-black uppercase tracking-widest rounded-xl bg-accent text-accent-text hover:bg-accent-hover transition-all transform hover:scale-[1.02] active:scale-95 shadow-xl border-2 border-white/20">
+              {t('add_credits')}
             </Button>
           </Link>
-          <a href="https://t.me/AdminUsername" target="_blank" rel="noreferrer" className="block text-center text-[10px] font-black text-text-muted hover:text-text-primary transition-colors uppercase tracking-[0.4em] py-2">
+          <a href="https://t.me/National_ID_Formatter" target="_blank" rel="noreferrer" className="block text-center text-[10px] font-black text-text-muted hover:text-text-primary transition-colors uppercase tracking-[0.4em] py-2">
             Speak with Support
           </a>
         </div>

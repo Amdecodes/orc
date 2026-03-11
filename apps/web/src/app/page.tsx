@@ -9,6 +9,8 @@ import { useLanguage } from "@/components/LanguageContext";
 export const dynamic = "force-dynamic";
 
 export default function Home() {
+  const { t } = useLanguage();
+
   return (
     <div className="flex min-h-screen flex-col bg-bg-page text-text-primary selection:bg-accent/30 overflow-hidden">
       {/* Dynamic Background Effects */}
@@ -20,15 +22,22 @@ export default function Home() {
       <LandingContent />
 
       {/* Footer */}
-      <footer className="py-24 border-t border-border bg-bg-surface/20 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-10">
-          <div className="flex flex-col gap-4 items-center md:items-start text-center md:text-left">
-            <div className="text-xl font-black tracking-tighter text-text-primary font-['Space_Grotesk'] uppercase">ID Formatter</div>
+      <footer className="py-12 md:py-24 border-t border-border bg-bg-surface/20 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-8 flex flex-col gap-8 md:gap-12">
+          <div className="flex flex-col gap-4 text-center md:text-left text-xs md:text-sm text-text-secondary leading-relaxed max-w-5xl opacity-80 bg-bg-muted/30 p-4 md:p-6 rounded-2xl border border-border/50 mx-auto">
+            <div>
+              <span className="font-bold text-warning">{t('disclaimer_title')}</span> {t('disclaimer_text_1')}<a href="https://id.gov.et/" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline font-medium">https://id.gov.et/</a>{t('disclaimer_text_2')}<Link href="/terms" className="text-accent hover:underline font-medium">{t('disclaimer_terms')}</Link>{t('disclaimer_and')}<Link href="/privacy" className="text-accent hover:underline font-medium">{t('disclaimer_policy')}</Link>{t('disclaimer_end')}
+            </div>
           </div>
-          <div className="flex space-x-12 text-[10px] font-black uppercase tracking-[0.4em] text-text-muted">
-            <Link href="/privacy" className="hover:text-text-primary transition-colors">Privacy</Link>
-            <Link href="/terms" className="hover:text-text-primary transition-colors">Terms</Link>
-            <Link href="https://t.me/AdminUsername" className="text-accent hover:text-text-primary transition-colors">Support</Link>
+          <div className="flex flex-col md:flex-row justify-between items-center gap-8 md:border-t border-border/30 md:pt-8 w-full">
+            <div className="flex flex-col gap-4 items-center md:items-start text-center md:text-left">
+              <div className="text-xl font-black tracking-tighter text-text-primary font-['Space_Grotesk'] uppercase">ID Formatter</div>
+            </div>
+            <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 md:space-x-12 text-[10px] font-black uppercase tracking-[0.4em] text-text-muted">
+              <Link href="/privacy" className="hover:text-text-primary transition-colors">Privacy</Link>
+              <Link href="/terms" className="hover:text-text-primary transition-colors">Terms</Link>
+              <Link href="https://t.me/National_ID_Formatter" className="text-accent hover:text-text-primary transition-colors">Support</Link>
+            </div>
           </div>
         </div>
       </footer>
@@ -69,7 +78,7 @@ function LandingContent() {
               )
             )}
             
-            <Link href="https://t.me/EthioIDBot" className="w-full sm:w-auto bg-bg-surface border border-border text-text-primary px-8 sm:px-10 py-4 sm:py-5 rounded-2xl text-lg font-black hover:bg-bg-muted transition-all flex items-center justify-center gap-3 backdrop-blur-xl">
+            <Link href="https://t.me/National_IDFormatter_bot" className="w-full sm:w-auto bg-bg-surface border border-border text-text-primary px-8 sm:px-10 py-4 sm:py-5 rounded-2xl text-lg font-black hover:bg-bg-muted transition-all flex items-center justify-center gap-3 backdrop-blur-xl">
                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.54 3.69-.52.36-.99.53-1.41.52-.46-.01-1.35-.26-2.01-.48-.81-.27-1.45-.42-1.39-.89.03-.24.36-.49.99-.74 3.86-1.68 6.44-2.78 7.73-3.31 3.67-1.53 4.44-1.8 4.94-1.81.11 0 .36.03.52.16.13.11.17.26.19.37.02.12.02.25.01.38z"/></svg>
               {t('telegram_bot')}
             </Link>

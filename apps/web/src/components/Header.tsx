@@ -82,7 +82,6 @@ export function Header() {
             />
             <div className="flex flex-col">
               <span className="hidden sm:block text-sm sm:text-base font-black tracking-tight text-text-primary uppercase font-['Space_Grotesk'] leading-none">ID Formatter</span>
-              <span className="hidden sm:block text-[8px] sm:text-[10px] font-bold text-text-secondary uppercase tracking-widest mt-1">Ethiopian National ID Tool</span>
             </div>
           </Link>
 

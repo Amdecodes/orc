@@ -28,8 +28,8 @@ const packages = [
   { id: "p3", name: "Pro", credits: 40, price: 1400, icon: Rocket },
 ];
 
-const TELEBIRR_ACCOUNT = "0911223377";
-const ACCOUNT_NAME = "admin name";
+const TELEBIRR_ACCOUNT = "0910805188";
+const ACCOUNT_NAME = "KELEMWORIK";
 
 type Step = "select" | "payment" | "pending";
 

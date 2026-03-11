@@ -230,7 +230,7 @@ async function _buildFrontCanvas(data, bgPath) {
   // Thumbnail photo (Upscaled 1.3x) — X:2209 Y:1130 W:294 H:429
   if (portraitB64) {
     const buf = await autocropPortrait(portraitB64, 294, 429, 60);
-    ctx.drawImage(await loadImage(buf), 2209, 1130, 294, 429);
+    ctx.drawImage(await loadImage(buf), 2095, 1100, 294, 429);
   }
 
   ctx.restore();

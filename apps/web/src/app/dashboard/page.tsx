@@ -552,24 +552,24 @@ export default function ActionPage() {
           {/* Top-up Button — Prominent CTA */}
           <Link
             href="/dashboard/credits"
-            className="group relative flex items-center justify-between p-6 bg-bg-surface border-2 border-border hover:border-transparent rounded-[2rem] shadow-sm hover:shadow-2xl transition-all duration-500 active:scale-[0.98] overflow-hidden"
+            className="group relative flex items-center justify-between p-7 bg-bg-surface border-2 border-accent/20 hover:border-accent rounded-[2.5rem] shadow-[0_10px_40px_-10px_rgba(var(--accent),0.1)] hover:shadow-[0_20px_60px_-10px_rgba(var(--accent),0.3)] transition-all duration-500 active:scale-[0.98] overflow-hidden"
           >
-            {/* Animated Gradient Border/Glow on Hover */}
-            <div className="absolute inset-0 bg-gradient-to-r from-accent/0 via-accent/10 to-accent/0 opacity-0 group-hover:opacity-100 group-hover:animate-pulse transition-opacity duration-700 pointer-events-none"></div>
-            <div className="absolute inset-0 border-2 border-transparent group-hover:border-accent/50 rounded-[2rem] transition-colors duration-500 pointer-events-none"></div>
-
-            <div className="relative flex items-center gap-4 z-10">
-              <div className="w-12 h-12 rounded-[1rem] bg-bg-muted flex items-center justify-center text-text-secondary group-hover:bg-accent group-hover:text-accent-text group-hover:-translate-y-1 transition-all duration-500 shadow-inner group-hover:shadow-[0_0_20px_rgba(139,92,246,0.3)]">
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+            {/* Intense Pulsing Glow */}
+            <div className="absolute inset-0 bg-accent/5 animate-[pulse_3s_infinite]" />
+            <div className="absolute -inset-1 bg-gradient-to-r from-accent/0 via-accent/20 to-accent/0 opacity-0 group-hover:opacity-100 group-hover:animate-shimmer transition-opacity duration-1000" />
+            
+            <div className="relative flex items-center gap-5 z-10">
+              <div className="w-14 h-14 rounded-2xl bg-accent text-accent-text flex items-center justify-center shadow-lg transform group-hover:-translate-y-1 transition-all duration-500">
+                <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
               </div>
-              <div className="text-left transition-transform duration-500 group-hover:translate-x-1">
-                <h4 className="text-sm font-black text-text-primary uppercase tracking-[0.15em] font-['Space_Grotesk'] group-hover:text-accent transition-colors">{t('buy_credits') || 'Top-up Credits'}</h4>
-                <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest mt-1 group-hover:text-text-secondary transition-colors">Fuel your generations</p>
+              <div className="text-left">
+                <h4 className="text-base font-black text-text-primary uppercase tracking-[0.2em] font-['Space_Grotesk'] group-hover:text-accent transition-colors">{t('buy_credits')}</h4>
+                <p className="text-[11px] font-bold text-text-secondary uppercase tracking-widest mt-1 opacity-70 group-hover:opacity-100 transition-opacity">Fuel your generations</p>
               </div>
             </div>
             
-            <div className="relative w-10 h-10 rounded-full bg-bg-muted flex items-center justify-center text-text-secondary group-hover:bg-accent/10 group-hover:text-accent group-hover:scale-110 transition-all duration-500 z-10">
-              <svg className="w-5 h-5 relative left-[1px] group-hover:translate-x-1 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"></polyline></svg>
+            <div className="relative w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-accent-text group-hover:scale-110 transition-all duration-500 z-10">
+              <svg className="w-6 h-6 relative left-[1px] group-hover:translate-x-1 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"></polyline></svg>
             </div>
           </Link>
         </div>

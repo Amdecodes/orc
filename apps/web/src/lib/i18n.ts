@@ -8,6 +8,9 @@ export const translations: Record<string, Record<SupportedLanguages, string>> = 
   dashboard: { en: 'Dashboard', am: 'ዳሽቦርድ' },
   history: { en: 'History', am: 'ታሪክ' },
   credits: { en: 'Credits', am: 'ክሬዲት' },
+  add_credits: { en: 'ADD CREDITS', am: 'ክሬዲት ጨምር' },
+  low_balance: { en: 'Low Balance', am: 'ዝቅተኛ ቀሪ ሂሳብ' },
+  standard_account: { en: 'Standard Account', am: 'መደበኛ አካውንት' },
   login: { en: 'Login', am: 'ግባ' },
   register: { en: 'Register', am: 'ተመዝገብ' },
   logout: { en: 'Logout', am: 'ውጣ' },
@@ -20,6 +23,7 @@ export const translations: Record<string, Record<SupportedLanguages, string>> = 
   // Header
   nav_admin: { en: 'Admin', am: 'አድሚን' },
   nav_buy_credits: { en: 'Buy Credits', am: 'ክሬዲት ግዛ' },
+  buy_credits: { en: 'Buy Credits', am: 'ክሬዲት ግዛ' },
   nav_admin_portal: { en: 'Admin Portal', am: 'የአድሚን ገጽ' },
   nav_sign_out: { en: 'Sign Out', am: 'ውጣ' },
   signed_in_as: { en: 'Signed in as', am: 'ገብተዋል በ' },
@@ -176,6 +180,15 @@ export const translations: Record<string, Record<SupportedLanguages, string>> = 
   // Password Reset Completion
   complete_your_reset: { en: 'Complete your reset', am: 'ለውጡን ያጠናቅቁ' },
   success_exclamation: { en: 'Success!', am: 'ተሳክቷል!' },
+
+  // Footer Disclaimer
+  disclaimer_title: { en: 'DISCLAIMER OF AFFILIATION AND LIABILITY:', am: 'የግንኙነት እና የኃላፊነት ማስተባበያ፡' },
+  disclaimer_text_1: { en: 'This platform is an independent service and is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Ethiopian National ID Program (Fayda) or the official website at ', am: 'ይህ መድረክ ራሱን የቻለ አገልግሎት ሲሆን ከኢትዮጵያ ብሄራዊ መታወቂያ ፕሮግራም (ፋይዳ) ወይም ከኦፊሴላዊው ድረ-ገጽ ' },
+  disclaimer_text_2: { en: '. The generated output images are provided "as is" without warranties of any kind. Users assume full responsibility and legal liability for the generation, use, and distribution of all outputs. By using this service, you explicitly agree to our ', am: ' ጋር ምንም አይነት ይፋዊ ግንኙነት፣ ትብብር ወይም እውቅና የለውም። የሚመነጩት ምስሎች ምንም አይነት ዋስትና ሳይሰጥባቸው "እንዳሉ" የሚቀርቡ ናቸው። ተጠቃሚዎች ምስሎቹን በማመንጨት፣ በመጠቀም እና በማሰራጨት ረገድ ለሚመጣ ማንኛውም ህጋዊ ኃላፊነት ሙሉ ተጠያቂነትን ይወስዳሉ። ይህን አገልግሎት በመጠቀምዎ በ' },
+  disclaimer_terms: { en: 'Terms of Service', am: 'አገልግሎት ውል' },
+  disclaimer_policy: { en: 'Privacy Policy', am: 'ግላዊነት ፖሊሲያችን' },
+  disclaimer_and: { en: ' and ', am: ' እና በ' },
+  disclaimer_end: { en: '.', am: ' መስማማትዎን በግልፅ ያረጋግጣሉ።' },
 };
 
 export function t(key: string, lang: SupportedLanguages = 'en', params?: Record<string, string | number>): string {
