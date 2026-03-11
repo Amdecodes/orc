@@ -520,8 +520,8 @@ app.post('/notify-job', async (req, res) => {
         parse_mode: 'Markdown',
         reply_markup: getMainMenuMarkup(lang)
       }, {
-        filename: `Ethiopian_ID_${jobId.substring(0, 6)}.jpeg`,
-        contentType: 'image/jpeg'
+        filename: `Ethiopian_ID_${jobId.substring(0, 6)}.png`,
+        contentType: 'image/png'
       });
     } else {
       const msg = errorMessage || 'Processing failed.';

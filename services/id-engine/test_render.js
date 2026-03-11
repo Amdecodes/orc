@@ -6,8 +6,8 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = __dirname;
 const jsonPath = path.join(ROOT, '..', '..', 'verification_result.json');
-const frontBg  = path.join(ROOT, 'front_V5.0.png');
-const backBg   = path.join(ROOT, 'back_v5.0.png');
+const frontBg  = path.join(ROOT, 'front_V6.0.png');
+const backBg   = path.join(ROOT, 'back_v6.0.png');
 const outDir   = path.join(ROOT, 'output');
 
 if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });

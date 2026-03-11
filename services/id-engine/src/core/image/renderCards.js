@@ -35,7 +35,7 @@ registerFont(path.join(ROOT, 'fonts', 'Roboto-Medium.ttf'),
              { family: 'Roboto Mono', weight: '600' });
 
 // ─── Constants ───────────────────────────────────────────────────────────────
-const W = 2598, H = 1622;
+const W = 1025, H = 645;
 
 const CLR = '#000000';
 const CLR_PRIMARY = '#000000';
@@ -102,8 +102,8 @@ async function autocropPortrait(b64, w, h, facePercent = 60) {
   const wB = 0.05 + 0.02 * t;
 
   // Adaptive brightness lift (replaces gamma — sharp .gamma() only accepts 1.0–3.0)
-  // dark skin (t=0) → 1.45× lift;  lighter skin (t=1) → 1.10× lift
-  const brightness = 1.45 - 0.35 * t;
+  // dark skin (t=0) → 1.30× lift;  lighter skin (t=1) → 1.00× lift
+  const brightness = 1.30 - 0.30 * t;
 
   // ── Step 3: full sharp grayscale pipeline ──────────────────────────────
   const result = await sharp(croppedBuf)
@@ -117,7 +117,7 @@ async function autocropPortrait(b64, w, h, facePercent = 60) {
     .normalise({ lower: 2, upper: 98 })   // percentile contrast stretch
     .clahe({ width: 64, height: 64, maxSlope: 2 })   // local contrast
     .sharpen({ sigma: 1.2, m1: 0.5, m2: 0.5 })       // edge sharpening
-    .linear(0.74, 0)                      // final darkness trim (×0.74)
+    .linear(0.65, 0)                      // final darkness trim (×0.65)
     .png()
     .toBuffer();
 

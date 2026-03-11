@@ -4,7 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const TEMPLATE_PATH = path.resolve(__dirname, '../../../../../templates/id-print.html');
-const CLIP = { x: 0, y: 0, width: 5937, height: 1735 };
+const CLIP = { x: 0, y: 0, width: 2360, height: 667 };
 
 // ── Singleton browser — launched once, reused for every job ──
 let _browser = null;
@@ -36,7 +36,7 @@ async function _renderLayout(frontBase64, backBase64) {
   try {
     await page.setContent(html);
     await page.waitForTimeout(500);
-    const buf = await page.screenshot({ type: 'jpeg', quality: 95, clip: CLIP });
+    const buf = await page.screenshot({ type: 'png', clip: CLIP });
     return buf;
   } finally {
     await page.close(); // close tab only, NOT the browser
