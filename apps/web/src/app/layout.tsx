@@ -7,20 +7,77 @@ import { LanguageProvider } from "@/components/LanguageContext";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "National ID Formatter",
-  description: "Professional, print-ready Ethiopian ID formatting in seconds.",
-  icons: {
-    icon: [
-      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-    ],
-    apple: "/apple-touch-icon.png",
-    other: [
-      { rel: "android-chrome-192x192", url: "/android-chrome-192x192.png" },
-      { rel: "android-chrome-512x512", url: "/android-chrome-512x512.png" },
+  metadataBase: new URL('https://nationalidformatter.app'),
+  title: {
+    default: 'National ID Formatter — Ethiopian Digital ID Formatter',
+    template: '%s | National ID Formatter',
+  },
+  description:
+    'Get a professional, print-ready Ethiopian national ID card formatted in seconds. Upload your Fayda ID screenshots and receive a clean, correctly sized print file instantly.',
+  keywords: [
+    'Ethiopian ID formatter',
+    'National ID formatter',
+    'Fayda ID',
+    'Ethiopian digital ID',
+    'print ready ID',
+    'ID card formatter Ethiopia',
+    'national ID converter',
+    'Ethiopian fayda formatter',
+  ],
+  authors: [{ name: 'National ID Formatter', url: 'https://nationalidformatter.app' }],
+  creator: 'National ID Formatter',
+  publisher: 'National ID Formatter',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  alternates: {
+    canonical: 'https://nationalidformatter.app',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://nationalidformatter.app',
+    siteName: 'National ID Formatter',
+    title: 'National ID Formatter — Ethiopian Digital ID Formatter',
+    description:
+      'Get a professional, print-ready Ethiopian national ID card formatted in seconds.',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'National ID Formatter — Ethiopian Digital ID',
+      },
     ],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'National ID Formatter — Ethiopian Digital ID Formatter',
+    description:
+      'Get a professional, print-ready Ethiopian national ID card formatted in seconds.',
+    images: ['/og-image.png'],
+  },
+  icons: {
+    icon: [
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: '/apple-touch-icon.png',
+    other: [
+      { rel: 'android-chrome-192x192', url: '/android-chrome-192x192.png' },
+      { rel: 'android-chrome-512x512', url: '/android-chrome-512x512.png' },
+    ],
+  },
+  manifest: '/site.webmanifest',
 };
+
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -41,6 +98,33 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased bg-bg-page text-text-primary overflow-x-hidden`}>
+        {/* JSON-LD Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebApplication',
+              name: 'National ID Formatter',
+              url: 'https://nationalidformatter.app',
+              description:
+                'A professional tool to format Ethiopian national (Fayda) ID screenshots into print-ready, correctly sized digital ID cards.',
+              applicationCategory: 'UtilitiesApplication',
+              operatingSystem: 'Web',
+              offers: {
+                '@type': 'Offer',
+                price: '0',
+                priceCurrency: 'ETB',
+                description: 'First credit free, then pay-per-use packages available.',
+              },
+              provider: {
+                '@type': 'Organization',
+                name: 'National ID Formatter',
+                url: 'https://nationalidformatter.app',
+              },
+            }),
+          }}
+        />
         <LanguageProvider>
           <Header />
           {children}

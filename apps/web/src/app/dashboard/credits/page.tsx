@@ -23,9 +23,56 @@ import { useLanguage } from "@/components/LanguageContext";
 export const dynamic = "force-dynamic";
 
 const packages = [
-  { id: "p1", name: "Starter", credits: 1, price: 50, icon: User },
-  { id: "p2", name: "Standard", credits: 12, price: 500, popular: true, icon: Briefcase },
-  { id: "p3", name: "Pro", credits: 40, price: 1400, icon: Rocket },
+  { 
+    id: "p1", 
+    name: "Starter", 
+    credits: 1, 
+    price: 29, 
+    icon: User,
+    tagline: "Great for one-off needs",
+    features: ["Standard OCR Quality", "24h Email Support", "Basic Formatting"]
+  },
+  { 
+    id: "p2", 
+    name: "Regular", 
+    credits: 10, 
+    price: 249, 
+    icon: Briefcase,
+    savings: "14% OFF",
+    tagline: "Perfect for core family",
+    features: ["Standard OCR Quality", "Priority Email Support", "Basic Formatting"]
+  },
+  { 
+    id: "p3", 
+    name: "Business", 
+    credits: 40, 
+    price: 799, 
+    popular: true, 
+    icon: Rocket,
+    savings: "31% OFF",
+    tagline: "The Choice of Pros",
+    features: ["High-Res Processing", "Priority Support", "Advanced Formatting", ]
+  },
+  { 
+    id: "p4", 
+    name: "Pro", 
+    credits: 180, 
+    price: 2999, 
+    icon: Zap,
+    savings: "42% OFF",
+    tagline: "For Heavy Workflow",
+    features: ["Ultra-Res Processing", "Express Support", "Premium Formatting", ]
+  },
+  { 
+    id: "p5", 
+    name: "Scale", 
+    credits: 800, 
+    price: 11999, 
+    icon: ShieldCheck,
+    savings: "48% OFF",
+    tagline: "For Large Teams",
+    features: ["Everything in Pro",  "Priority Support"]
+  },
 ];
 
 const TELEBIRR_ACCOUNT = "0910805188";
@@ -121,94 +168,105 @@ export default function CreditsPage() {
   if (step === "select") {
     return (
       <div className="min-h-screen bg-bg-page px-6 py-16 sm:py-24">
-        <div className="max-w-6xl mx-auto space-y-16">
+        <div className="max-w-7xl mx-auto space-y-16">
           
           <div className="text-center space-y-6">
             <Stepper currentStep={1} />
             <div className="space-y-2">
-              <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-text-primary uppercase font-['Space_Grotesk']">
+              <h1 className="text-4xl sm:text-6xl font-black tracking-tighter text-text-primary uppercase font-['Space_Grotesk'] leading-none">
                 {t('choose_plan')}
               </h1>
-              <p className="text-sm font-medium text-text-muted uppercase tracking-widest opacity-60">
+              <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.4em] opacity-40">
                 {t('choose_plan_desc')}
               </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {packages.map((pkg) => (
               <button
                 key={pkg.id}
                 onClick={() => { setSelectedPackage(pkg); setStep("payment"); }}
-                className={`group relative text-left flex flex-col p-10 rounded-[2rem] border transition-all duration-300 ${
+                className={`group relative text-left flex flex-col p-8 rounded-[2.5rem] border transition-all duration-500 bg-bg-surface ${
                   pkg.popular 
-                    ? "bg-bg-surface border-accent shadow-xl" 
-                    : "bg-bg-surface/50 border-border hover:border-accent/40"
+                    ? "border-accent shadow-[0_30px_60px_-15px_rgba(var(--accent-rgb),0.15)] ring-1 ring-accent/20 scale-105 z-10" 
+                    : "border-border hover:border-accent/40 hover:shadow-2xl"
                 }`}
               >
                 {pkg.popular && (
-                  <div className="absolute -top-3 right-8 bg-accent text-accent-text text-[10px] font-black uppercase tracking-widest px-4 py-1 rounded-full shadow-lg z-20">
+                  <div className="absolute top-0 right-0 bg-accent text-accent-text text-[8px] font-black uppercase tracking-widest px-4 py-2 rounded-bl-3xl shadow-sm z-20">
                     {t('recommended')}
                   </div>
                 )}
 
-                <div className="mb-10 flex items-center justify-between">
-                  <div className="w-12 h-12 rounded-xl bg-bg-muted border border-border flex items-center justify-center text-text-muted group-hover:text-accent transition-colors">
-                    <pkg.icon className="w-6 h-6" />
+                <div className="space-y-4 mb-8">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-black text-text-primary uppercase tracking-[0.2em]">
+                      {pkg.name}
+                    </span>
+                    {pkg.savings && (
+                      <span className="text-[10px] font-black text-[#000] uppercase tracking-tighter bg-[#FFD700] px-3 py-1 rounded-full shadow-[0_4px_12px_rgba(255,215,0,0.3)] animate-pulse">
+                        {pkg.savings}
+                      </span>
+                    )}
                   </div>
-                  <span className="text-[10px] font-black text-text-muted uppercase tracking-widest bg-bg-muted px-3 py-1 rounded-lg">
-                    {pkg.name}
-                  </span>
-                </div>
-
-                <div className="space-y-1 mb-10">
-                  <div className="text-6xl font-black tracking-tighter text-text-primary leading-none">
-                    {pkg.credits}
-                  </div>
-                  <div className="text-xs font-black text-text-muted uppercase tracking-widest">
-                    {t('id_conversions')}
-                  </div>
-                </div>
-
-                <div className="mt-auto space-y-8">
-                  <div className="border-t border-border pt-8">
+                  
+                  <div className="space-y-1">
                     <div className="flex items-baseline gap-1">
-                      <span className="text-3xl font-black text-text-primary">{pkg.price}</span>
-                      <span className="text-sm font-bold text-text-muted uppercase tracking-wider">ETB</span>
+                      <span className="text-[14px] font-black text-text-muted/60 uppercase tracking-widest leading-none">ETB</span>
+                      <span className="text-5xl font-black text-text-primary tracking-tighter leading-none">{pkg.price}</span>
                     </div>
-                    <div className="text-[10px] font-bold text-text-muted uppercase tracking-wider mt-1 opacity-50">
-                      ~{Math.round(pkg.price / pkg.credits)} ETB / scan
-                    </div>
+                    <p className="text-[10px] font-bold text-text-muted/40 uppercase tracking-widest">{pkg.tagline}</p>
                   </div>
+                </div>
 
-                  <div className={`w-full h-14 rounded-xl flex items-center justify-center text-xs font-black uppercase tracking-widest transition-all ${
-                    pkg.popular
-                      ? "bg-accent text-accent-text"
-                      : "bg-text-primary text-bg-page"
-                  }`}>
-                    {t('select_plan')} <ChevronRight className="w-4 h-4 ml-2" />
+                <div className="py-6 border-y border-border/50 mb-8">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent">
+                      <pkg.icon className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <div className="text-xl font-black text-text-primary leading-none">{pkg.credits}</div>
+                      <div className="text-[9px] font-black text-text-muted/60 uppercase tracking-widest mt-1">Conversions</div>
+                    </div>
                   </div>
+                </div>
+
+                <div className="flex-1 space-y-4 mb-8">
+                  {pkg.features.map((feature, i) => (
+                    <div key={i} className="flex items-center gap-2.5 text-[10px] font-bold text-text-primary/70">
+                      <div className="w-1 h-1 rounded-full bg-accent" />
+                      {feature}
+                    </div>
+                  ))}
+                </div>
+
+                <div className={`w-full h-12 rounded-2xl flex items-center justify-center text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-500 ${
+                  pkg.popular
+                    ? "bg-accent text-accent-text hover:bg-accent-hover shadow-lg shadow-accent/20"
+                    : "bg-text-primary text-bg-page hover:bg-text-primary/90"
+                }`}>
+                  {t('select_plan')}
                 </div>
               </button>
             ))}
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6 pt-12 border-t border-border/50">
-            <div className="flex items-center gap-2.5 text-[10px] font-bold text-text-muted uppercase tracking-widest">
-              <ShieldCheck className="w-4 h-4 text-success opacity-60" /> {t('verifying')}
+            <div className="flex items-center gap-3 text-[10px] font-black text-text-muted uppercase tracking-widest opacity-60">
+              <div className="w-2 h-2 rounded-full bg-success"></div> {t('verifying')}
             </div>
-            <div className="flex items-center gap-2.5 text-[10px] font-bold text-text-muted uppercase tracking-widest">
-              <Clock className="w-4 h-4 text-accent opacity-60" /> 24h Review Window
+            <div className="flex items-center gap-3 text-[10px] font-black text-text-muted uppercase tracking-widest opacity-60">
+              <div className="w-2 h-2 rounded-full bg-accent"></div> 24h Review Window
             </div>
-            <div className="flex items-center gap-2.5 text-[10px] font-bold text-text-muted uppercase tracking-widest">
-              <Zap className="w-4 h-4 text-accent opacity-60" /> Priority Support
+            <div className="flex items-center gap-3 text-[10px] font-black text-text-muted uppercase tracking-widest opacity-60">
+              <div className="w-2 h-2 rounded-full bg-accent"></div> Priority Support
             </div>
           </div>
         </div>
       </div>
     );
   }
-
   /* ─── STEP 2: Payment Details ─── */
   if (step === "payment") {
     return (

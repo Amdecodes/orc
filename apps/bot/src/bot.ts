@@ -5,12 +5,16 @@ import * as api from './api.js';
 import express from 'express';
 import path from 'path';
 import fs from 'fs';
+import { fileURLToPath } from 'url';
 import { t } from './i18n.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const bot = new TelegramBot(config.BOT_TOKEN, { polling: true });
 
 // --- Asset Paths ---
-const ASSETS_DIR = path.resolve(process.cwd(), '../../assets');
+const ASSETS_DIR = path.resolve(__dirname, '../assets');
 const GUIDE_FRONT = path.join(ASSETS_DIR, 'guide_front.jpg');
 const GUIDE_BACK = path.join(ASSETS_DIR, 'guide_back.jpg');
 const GUIDE_PROFILE = path.join(ASSETS_DIR, 'guide_profile.jpg');
@@ -209,9 +213,11 @@ bot.on('callback_query', async (callbackQuery: TelegramBot.CallbackQuery) => {
       
       const topupMarkup: TelegramBot.InlineKeyboardMarkup = {
         inline_keyboard: [
-            [{ text: t('btn_pkg_1', lang), callback_data: 'PKG_1' }],
-            [{ text: t('btn_pkg_10', lang), callback_data: 'PKG_10' }],
-            [{ text: t('btn_pkg_40', lang), callback_data: 'PKG_40' }],
+            [{ text: t('btn_pkg_p1', lang), callback_data: 'PKG_p1' }],
+            [{ text: t('btn_pkg_p2', lang), callback_data: 'PKG_p2' }],
+            [{ text: t('btn_pkg_p3', lang), callback_data: 'PKG_p3' }],
+            [{ text: t('btn_pkg_p4', lang), callback_data: 'PKG_p4' }],
+            [{ text: t('btn_pkg_p5', lang), callback_data: 'PKG_p5' }],
             [{ text: t('btn_back', lang), callback_data: 'START' }]
         ]
       };
@@ -300,7 +306,7 @@ bot.on('callback_query', async (callbackQuery: TelegramBot.CallbackQuery) => {
     if (data === 'HELP') {
       const text = t('menu_help', lang);
       safeEditMessageText(chatId, message.message_id, text, {
-        parse_mode: 'Markdown',
+        parse_mode: 'HTML',
         reply_markup: { inline_keyboard: [[{ text: t('btn_back', lang), callback_data: 'START' }]] }
       });
       return bot.answerCallbackQuery(callbackQuery.id).catch(console.error);

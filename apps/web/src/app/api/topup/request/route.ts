@@ -75,8 +75,8 @@ export async function POST(req: Request) {
     const request = await prisma.topUpRequest.create({
       data: {
         userId,
-        credits: packageId === "1" ? 1 : packageId === "10" ? 10 : 40,
-        price: packageId === "1" ? 50 : packageId === "10" ? 450 : 1400,
+        credits: packageId === "p1" ? 1 : packageId === "p2" ? 10 : packageId === "p3" ? 40 : packageId === "p4" ? 180 : 800,
+        price: packageId === "p1" ? 29 : packageId === "p2" ? 249 : packageId === "p3" ? 799 : packageId === "p4" ? 2999 : 11999,
         screenshotPath,
         referenceText,
         status: "PENDING",

@@ -80,20 +80,28 @@ const translations: Record<string, Record<SupportedLanguages, string>> = {
     am: '❌ *ማስተካከል አልተሳካም*\n{{errorMsg}}'
   },
   menu_topup: {
-    en: `💳 *Buy Credits*\n\nSelect a package to continue:\n\n🔹 1 ID — 50 ETB\n🔹 10 IDs — 450 ETB\n🔹 40 IDs — 1400 ETB\n\nClick below to select:`,
-    am: `💳 *ክሬዲት ይግዙ*\n\nለመቀጠል ፓኬጅ ይምረጡ:\n\n🔹 1 መታወቂያ — 50 ብር\n🔹 10 መታወቂያ — 450 ብር\n🔹 40 መታወቂያ — 1400 ብር\n\nለመምረጥ ከታች ይጫኑ:`
+    en: `💳 *Buy Credits*\n\nSelect a package to continue:\n\n🔥 *180 IDs* — 2999 ETB\n💎 *800 IDs* — 11999 ETB\n\n🔹 *1 ID* — 29 ETB\n🔹 *10 IDs* — 249 ETB\n🔹 *40 IDs* — 799 ETB\n\nClick below to select:`,
+    am: `💳 *ክሬዲት ይግዙ*\n\nለመቀጠል ፓኬጅ ይምረጡ:\n\n🔥 *180 መታወቂያ* — 2999 ብር\n💎 *800 መታወቂያ* — 11999 ብር\n\n🔹 *1 መታወቂያ* — 29 ብር\n🔹 *10 መታወቂያ* — 249 ብር\n🔹 *40 መታወቂያ* — 799 ብር\n\nለመምረጥ ከታች ይጫኑ:`
   },
-  btn_pkg_1: {
-    en: '🔹 1 ID (50 ETB)',
-    am: '🔹 1 መታወቂያ (50 ብር)'
+  btn_pkg_p1: {
+    en: '🔹 1 ID (29 ETB)',
+    am: '🔹 1 መታወቂያ (29 ብር)'
   },
-  btn_pkg_10: {
-    en: '🔹 10 IDs (450 ETB)',
-    am: '🔹 10 መታወቂያ (450 ብር)'
+  btn_pkg_p2: {
+    en: '🔹 10 IDs (249 ETB)',
+    am: '🔹 10 መታወቂያ (249 ብር)'
   },
-  btn_pkg_40: {
-    en: '🔹 40 IDs (1400 ETB)',
-    am: '🔹 40 መታወቂያ (1400 ብር)'
+  btn_pkg_p3: {
+    en: '🔹 40 IDs (799 ETB)',
+    am: '🔹 40 መታወቂያ (799 ብር)'
+  },
+  btn_pkg_p4: {
+    en: '🔹 180 IDs (2999 ETB)',
+    am: '🔹 180 መታወቂያ (2999 ብር)'
+  },
+  btn_pkg_p5: {
+    en: '🔹 800 IDs (11999 ETB)',
+    am: '🔹 800 መታወቂያ (11999 ብር)'
   },
   btn_back: {
     en: '⬅️ Back',
@@ -104,12 +112,12 @@ const translations: Record<string, Record<SupportedLanguages, string>> = {
     am: '📂 *የቅርብ ጊዜ ስራዎችዎ*\n\n'
   },
   menu_help: {
-    en: `🛠️ *Help & Support*\n\n• Each ID generation costs **1 credit**.\n• Ensure your photos are clear, well-lit, and legible.\n• *Avoid glare* from lights when taking photos of physical screens.\n• For manual bank top-ups, please allow up to 10 minutes for an admin to verify and approve.\n\n📞 *Still need help?* Contact our support team: @AdminUsername\n\n📍 *Commands:*\n/start - Show the Main Menu\n/language - Change Language\n/cancel - Cancel whatever you are currently doing`,
-    am: `🛠️ *እርዳታ እና ድጋፍ*\n\n• እያንዳንዱ መታወቂያ ማዘጋጀት **1 ክሬዲት** ያስከፍላል።\n• ፎቶዎችዎ ግልጽ፣ ብርሃን ያላቸው እና የሚነበቡ መሆናቸውን ያረጋግጡ።\n• ፎቶ ሲያነሱ የብርሃን ነፀብራቅ (*glare*) እንዳይኖር ይጠንቀቁ።\n• ለባንክ ክፍያዎች፣ አድሚን እስኪያረጋግጥ እና እስኪያፀድቅ ድረስ እስከ 10 ደቂቃ ሊወስድ ይችላል።\n\n📞 *ተጨማሪ እርዳታ ይፈልጋሉ?* ድጋፍ ሰጪ ቡድናችንን ያነጋግሩ: @AdminUsername\n\n📍 *ትዕዛዞች:*\n/start - ዋናውን ምናሌ አሳይ\n/language - ቋንቋ ቀይር\n/cancel - አሁን እየሰሩት ያለውን ነገር ለመሰረዝ`
+    en: `🛠️ <b>Help &amp; Support</b>\n\n• Each ID generation costs <b>1 credit</b>.\n• Ensure your photos are clear, well-lit, and legible.\n• <i>Avoid glare</i> from lights when taking photos of physical screens.\n• For manual bank top-ups, please allow up to 10 minutes for an admin to verify and approve.\n\n📞 <b>Still need help?</b> Contact our support team: @National_ID_Formatter\n\n📍 <b>Commands:</b>\n/start - Show the Main Menu\n/language - Change Language\n/cancel - Cancel whatever you are currently doing`,
+    am: `🛠️ <b>እርዳታ እና ድጋፍ</b>\n\n• እያንዳንዱ መታወቂያ ማዘጋጀት <b>1 ክሬዲት</b> ያስከፍላል።\n• ፎቶዎችዎ ግልጽ፣ ብርሃን ያላቸው እና የሚነበቡ መሆናቸውን ያረጋግጡ።\n• ፎቶ ሲያነሱ የብርሃን ነፀብራቅ (<i>glare</i>) እንዳይኖር ይጠንቀቁ።\n• ለባንክ ክፍያዎች፣ አድሚን እስኪያረጋግጥ እና እስኪያፀድቅ ድረስ እስከ 10 ደቂቃ ሊወስድ ይችላል።\n\n📞 <b>ተጨማሪ እርዳታ ይፈልጋሉ?</b> ድጋፍ ሰጪ ቡድናችንን ያነጋግሩ: @National_ID_Formatter\n\n📍 <b>ትዕዛዞች:</b>\n/start - ዋናውን ምናሌ አሳይ\n/language - ቋንቋ ቀይር\n/cancel - አሁን እየሰሩት ያለውን ነገር ለመሰረዝ`
   },
   pkg_details: {
-    en: `🧾 *Order Details*\n\nPackage ID: *{{pkgId}}*\n\n📍 *Payment Instructions*\nSend payment to:\n🏦 *Bank:* Telebirr /\n🔢 *Account:* 1000xxxxxx\n👤 *Name:* National ID Services\n\n📸 *Final Step:*\nHow would you like to provide proof?`,
-    am: `🧾 *የትዕዛዝ ዝርዝሮች*\n\nየፓኬጅ መለያ: *{{pkgId}}*\n\n📍 *የክፍያ መመሪያዎች*\nክፍያዎን ወደዚህ ይላኩ:\n🏦 *ባንክ:* ቴሌብር /\n🔢 *ክፍያ ሂሳብ:* 1000xxxxxx\n👤 *ስም:* National ID Services\n\n📸 *የመጨረሻ ደረጃ:*\nማስረጃዎን እንዴት ማቅረብ ይፈልጋሉ?`
+    en: `🧾 *Order Details*\n\nPackage ID: *{{pkgId}}*\n\n📍 *Payment Instructions*\nSend payment to:\n🏦 *Bank:* Telebirr\n🔢 *Phone:* 0910805188\n👤 *Name:* KELEMWORIK\n\n📸 *Final Step:*\nHow would you like to provide proof?`,
+    am: `🧾 *የትዕዛዝ ዝርዝሮች*\n\nየፓኬጅ መለያ: *{{pkgId}}*\n\n📍 *የክፍያ መመሪያዎች*\nክፍያዎን ወደዚህ ይላኩ:\n🏦 *ባንክ:* ቴሌብር\n🔢 *የስልክ ቁጥር:* 0910805188\n👤 *ስም:* KELEMWORIK\n\n📸 *የመጨረሻ ደረጃ:*\nማስረጃዎን እንዴት ማቅረብ ይፈልጋሉ?`
   },
   btn_proof_screenshot: {
     en: '📸 Upload Screenshot',
