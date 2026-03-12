@@ -185,6 +185,7 @@ export default function ActionPage() {
   const [jobId, setJobId] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showCreditWall, setShowCreditWall] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(false);
   const [liveCredits, setLiveCredits] = useState<number | null>(null);
   
   const { status, output, error: jobError, queueMetrics } = useJobStatus(jobId);
@@ -243,6 +244,7 @@ export default function ActionPage() {
     
     // Reset previous job state
     setJobId(null);
+    setIsFlipped(false);
     setIsSubmitting(true);
     
     try {
@@ -369,24 +371,177 @@ export default function ActionPage() {
                 <p className="text-sm text-text-secondary font-bold uppercase tracking-[0.2em]">{t('success_desc')}</p>
               </div>
 
-              <div className="w-full relative group max-w-6xl mx-auto bg-bg-muted rounded-[1.5rem] p-3 border border-border shadow-xl">
-                <img src={`${result}?inline=true`} className="w-full h-auto rounded-[1.2rem]" alt="Formatted ID Result" />
+              <div className="w-full relative group max-w-6xl mx-auto">
+                {/* Image Container with 3D Flip Animation */}
+                <div className="bg-bg-muted rounded-[1.5rem] sm:rounded-[2.5rem] p-3 border-2 border-border shadow-2xl overflow-hidden group/result h-full">
+                  <div 
+                    className="relative transition-all duration-700 ease-in-out preserve-3d"
+                    style={{ 
+                      transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+                      transformStyle: 'preserve-3d'
+                    }}
+                  >
+                    <img 
+                      id="result-image"
+                      src={`${result}?inline=true`} 
+                      className="w-full h-auto rounded-[1.2rem] sm:rounded-[1.8rem] shadow-sm backface-hidden" 
+                      style={{ backfaceVisibility: 'hidden' }}
+                      alt="Formatted ID Result" 
+                    />
+                    {/* Flipped version for the back side of the 3D rotation */}
+                    <div 
+                      className="absolute inset-0 w-full h-full backface-hidden"
+                      style={{ 
+                        backfaceVisibility: 'hidden', 
+                        transform: 'rotateY(180deg)',
+                        display: isFlipped ? 'block' : 'none' 
+                      }}
+                    >
+                      <img 
+                        src={`${result}?inline=true`} 
+                        className="w-full h-auto rounded-[1.2rem] sm:rounded-[1.8rem] shadow-sm scale-x-[-1]" 
+                        alt="Formatted ID Result Flipped" 
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Status Indicator */}
+                {isFlipped && (
+                  <div className="absolute top-6 right-6 px-4 py-2 bg-accent text-accent-text text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg animate-in fade-in zoom-in duration-300 z-10">
+                    {t('mirrored') || 'Mirrored'}
+                  </div>
+                )}
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 w-full max-w-6xl mx-auto mt-8">
-                <button 
-                  onClick={() => window.location.href = result} 
-                  className="w-full h-16 bg-accent text-accent-text font-black rounded-xl sm:rounded-2xl uppercase tracking-[0.15em] hover:bg-accent-hover transition-all active:scale-95 text-xs sm:text-sm flex items-center justify-center gap-3 shadow-lg"
+              {/* Action Grid (Optimized Alignment & Hierarchy) */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-6 w-full max-w-6xl mx-auto mt-4 sm:mt-12">
+                
+                {/* 1. Tool: Flip Toggle */}
+                <button
+                  onClick={() => setIsFlipped(f => !f)}
+                  className={`w-full h-16 sm:h-24 font-black rounded-xl sm:rounded-[2rem] uppercase tracking-[0.2em] transition-all duration-300 active:scale-95 text-[10px] sm:text-xs flex flex-col items-center justify-center gap-1.5 shadow-sm border-2 group ${
+                    isFlipped 
+                      ? 'bg-accent/5 border-accent text-accent ring-4 ring-accent/5 shadow-[inset_0_2px_4px_rgba(var(--accent),0.1)]' 
+                      : 'bg-bg-surface border-border text-text-primary hover:bg-bg-muted hover:border-text-muted/30 hover:shadow-lg'
+                  }`}
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                  {t('download_png') || 'Download Image'}
+                  <div className={`p-2 rounded-xl transition-all duration-500 ${isFlipped ? 'bg-accent text-accent-text' : 'bg-bg-muted group-hover:bg-accent/10 group-hover:text-accent'}`}>
+                    <svg className={`w-4 h-4 sm:w-6 sm:h-6 transition-transform duration-700 ${isFlipped ? 'rotate-180' : 'group-hover:rotate-12'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path></svg>
+                  </div>
+                  <span className="font-['Space_Grotesk']">{isFlipped ? 'Back' : 'Flip'}</span>
                 </button>
-                <button 
-                  onClick={() => { setFront(null); setBack(null); setProfile(null); setPreviews({front:null, back:null, profile:null}); setJobId(null); window.scrollTo({top: 0, behavior: 'smooth'}); }} 
-                  className="w-full h-16 bg-bg-surface text-text-primary font-black rounded-xl sm:rounded-2xl border-2 border-border uppercase tracking-[0.15em] hover:bg-bg-muted transition-all active:scale-95 text-xs sm:text-sm flex items-center justify-center gap-3 shadow-sm"
+
+                {/* 2. Tool: Direct Print */}
+                <button
+                  onClick={() => {
+                    const img = document.getElementById('result-image') as HTMLImageElement;
+                    if (!img) return;
+                    const w = window.open('', '_blank');
+                    if (!w) return;
+                    w.document.write(`
+                      <!DOCTYPE html>
+                      <html>
+                        <head>
+                          <title>Print ID</title>
+                          <style>
+                            * { margin: 0; padding: 0; box-sizing: border-box; }
+                            body { 
+                              display: flex; 
+                              flex-direction: column;
+                              align-items: center; 
+                              justify-content: flex-start; 
+                              min-height: 100vh; 
+                              background: white;
+                              padding: 10mm 10mm;
+                            }
+                            img { 
+                              max-width: 100%; 
+                              height: auto; 
+                              ${isFlipped ? 'transform: scaleX(-1);' : ''} 
+                            }
+                            @media print { 
+                              body { padding: 0; margin: 0; } 
+                              img { 
+                                width: 100%; 
+                                height: auto;
+                              } 
+                              @page { margin: 0; }
+                            }
+                          </style>
+                        </head>
+                        <body>
+                          <img src="${img.src}" onload="window.print();window.close();"/>
+                        </body>
+                      </html>
+                    `);
+                    w.document.close();
+                  }}
+                  className="w-full h-16 sm:h-24 bg-bg-surface text-text-primary font-black rounded-xl sm:rounded-[2rem] border-2 border-border uppercase tracking-[0.2em] hover:bg-bg-muted hover:border-text-muted/30 hover:shadow-lg transition-all duration-300 active:scale-95 text-[10px] sm:text-xs flex flex-col items-center justify-center gap-1.5 shadow-sm group"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                  {t('create_another') || 'Generate Another'}
+                  <div className="p-2 rounded-xl bg-bg-muted transition-all duration-300 group-hover:bg-accent/10 group-hover:text-accent">
+                    <svg className="w-4 h-4 sm:w-6 sm:h-6 group-hover:scale-110 group-hover:-translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                  </div>
+                  <span className="font-['Space_Grotesk']">Print</span>
+                </button>
+
+                {/* 3. Exit: New Job */}
+                <button 
+                  onClick={() => { 
+                    setFront(null); 
+                    setBack(null); 
+                    setProfile(null); 
+                    setPreviews({front:null, back:null, profile:null}); 
+                    setJobId(null); 
+                    setIsFlipped(false); 
+                    window.scrollTo({top: 0, behavior: 'smooth'}); 
+                  }} 
+                  className="w-full h-16 sm:h-24 bg-bg-surface text-text-primary font-black rounded-xl sm:rounded-[2rem] border-2 border-border uppercase tracking-[0.2em] hover:bg-bg-muted hover:border-text-muted/30 hover:shadow-lg transition-all duration-300 active:scale-95 text-[10px] sm:text-xs flex flex-col items-center justify-center gap-1.5 shadow-sm group"
+                >
+                  <div className="p-2 rounded-xl bg-bg-muted transition-all duration-300 group-hover:bg-destructive/10 group-hover:text-destructive">
+                    <svg className="w-4 h-4 sm:w-6 sm:h-6 group-hover:rotate-[120deg] transition-transform duration-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                  </div>
+                  <span className="font-['Space_Grotesk']">{t('create_another') || 'New'}</span>
+                </button>
+
+                {/* 4. Completion (Primary): Download */}
+                <button 
+                  onClick={() => {
+                    if (isFlipped) {
+                      const img = document.getElementById('result-image') as HTMLImageElement;
+                      if (!img) return;
+                      
+                      const canvas = document.createElement('canvas');
+                      canvas.width = img.naturalWidth;
+                      canvas.height = img.naturalHeight;
+                      const ctx = canvas.getContext('2d');
+                      if (!ctx) return;
+
+                      ctx.translate(canvas.width, 0);
+                      ctx.scale(-1, 1);
+                      ctx.drawImage(img, 0, 0);
+
+                      const link = document.createElement('a');
+                      link.href = canvas.toDataURL('image/png');
+                      link.download = `id_export_mirrored_${Date.now()}.png`;
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                    } else {
+                      const link = document.createElement('a');
+                      link.href = result;
+                      link.download = `id_export_${Date.now()}.png`;
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                    }
+                  }} 
+                  className="w-full h-16 sm:h-24 bg-accent text-accent-text font-black rounded-xl sm:rounded-[2rem] border-b-4 border-accent-hover uppercase tracking-[0.2em] hover:bg-accent-hover hover:translate-y-[-2px] hover:shadow-[0_20px_40px_-5px_rgba(var(--accent),0.3)] transition-all duration-300 active:translate-y-[2px] active:border-b-0 active:scale-95 text-[10px] sm:text-xs flex flex-col items-center justify-center gap-1.5 shadow-xl group order-last"
+                >
+                  <div className="p-2 rounded-xl bg-white/10 transition-all duration-300 group-hover:bg-white/20">
+                    <svg className="w-4 h-5 sm:w-6 sm:h-7 group-hover:-translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                  </div>
+                  <span className="font-['Space_Grotesk']">{t('download_png') || 'Download'}</span>
                 </button>
               </div>
             </div>

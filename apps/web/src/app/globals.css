@@ -143,4 +143,13 @@
     background-image: conic-gradient(from var(--border-beam-angle, 0deg), transparent 0%, var(--accent-primary) 10%, transparent 20%);
     animation: border-beam 4s linear infinite;
   }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
 }
