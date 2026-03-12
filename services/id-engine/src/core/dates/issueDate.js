@@ -37,6 +37,9 @@ const EXPIRY_KEYS = [
   "expiry date",
   "valid until",
   "expires",
+  "dato of expiry",
+  "dateofexpiry",
+  "dateof expiry",
   "የሚያበቃበት",
   "የሚያልቅ"
 ];
@@ -244,6 +247,121 @@ function resolvePass3(normalized) {
     return null;
 }
 
+
+// ── PASS 4: BRUTE FORCE EC RANGE FILTER (0.75) ──────────────
+// Last resort: grab ALL dates, filter for plausible EC issue date range
+// Ethiopian IDs issued ~2013-2020 EC (2020-2028 GC)
+function resolvePass4(normalized) {
+    const allDates = [];
+    for (const line of normalized) {
+        if (containsKeyword(line.clean, DOB_BLOCKLIST)) continue;
+        // Also try with spaces squashed to catch "20 16/05/23" type OCR artifacts
+        const variants = [line.clean, line.clean.replace(/\s+/g, "")];
+        for (const v of variants) {
+            const matches = [...v.matchAll(new RegExp(GC_DATE_REGEX, 'g'))];
+            for (const match of matches) {
+                const normalized_date = normalizeDate(match[0]);
+                const year = parseInt(normalized_date.split('-')[0]);
+                // Plausible EC issue year: 2008-2020 (converts to GC 2015-2028)
+                if (year >= 2008 && year <= 2020) {
+                    allDates.push(normalized_date);
+                }
+            }
+        }
+    }
+    if (allDates.length === 0) return null;
+    // Sort ascending, pick earliest as issue date (DOB already filtered)
+    allDates.sort();
+    return { issue: allDates[0], method: "pass_4_bruteforce", confidence: 0.75 };
+}
+
+// ── PASS 5: FULL TEXT REGEX FALLBACK (0.60) ──────────────────
+// Concatenate ALL OCR text and scan for any date pattern
+function resolvePass5(normalized) {
+    const fullText = normalized
+        .filter(l => !containsKeyword(l.clean, DOB_BLOCKLIST))
+        .map(l => l.clean.replace(/\s+/g, ""))
+        .join(" ");
+    
+    const matches = [...fullText.matchAll(new RegExp(GC_DATE_REGEX, 'g'))];
+    const dates = matches.map(m => normalizeDate(m[0]));
+    const plausible = dates.filter(d => {
+        const y = parseInt(d.split('-')[0]);
+        return y >= 2008 && y <= 2020;
+    });
+    if (plausible.length === 0) return null;
+    plausible.sort();
+    return { issue: plausible[0], method: "pass_5_fulltext", confidence: 0.60 };
+}
+
+
+// ── PASS 6: BACK-CALCULATE FROM EXPIRY DATE (0.85) ──────────
+// If expiry keyword found, extract GC expiry date and subtract 2920 days
+function subtractDays(dateStr, days) {
+  try {
+    const [y, m, d] = dateStr.split("-").map(Number);
+    const date = new Date(Date.UTC(y, m - 1, d));
+    date.setUTCDate(date.getUTCDate() - days);
+    return date.toISOString().split("T")[0];
+  } catch (e) { return null; }
+}
+
+// Extract ALL plausible GC dates from a messy merged string like "2026/06/022034/feb/09"
+// Also handles month names like "Feb"
+function extractAllGCDates(str) {
+    const squashed = str.replace(/\s+/g, "");
+    const results = [];
+    // Numeric dates: YYYY/MM/DD or YYYY-MM-DD
+    const numericRe = /((?:19|20)\d{2})[\/-](0[1-9]|1[0-2])[\/-](0[1-9]|[12]\d|3[01])/g;
+    let m;
+    while ((m = numericRe.exec(squashed)) !== null) {
+        results.push(`${m[1]}-${m[2]}-${m[3]}`);
+    }
+    // Month-name dates: YYYY/Mon/DD or YYYY-Mon-DD
+    const monthNames = {jan:'01',feb:'02',mar:'03',apr:'04',may:'05',jun:'06',
+                        jul:'07',aug:'08',sep:'09',oct:'10',nov:'11',dec:'12'};
+    const monthRe = /((?:19|20)\d{2})[\/-]([a-z]{3})[\/-](0[1-9]|[12]\d|3[01])/gi;
+    while ((m = monthRe.exec(squashed)) !== null) {
+        const mo = monthNames[m[2].toLowerCase()];
+        if (mo) results.push(`${m[1]}-${mo}-${m[3]}`);
+    }
+    return results;
+}
+
+function resolvePass6(normalized) {
+    for (let i = 0; i < normalized.length; i++) {
+        const cur = normalized[i];
+        const isExpiry = containsKeyword(cur.clean, EXPIRY_KEYS);
+        const nextLine = normalized[i + 1];
+        
+        // Check current line and next line for a GC date
+        const linesToCheck = [cur.clean];
+        if (nextLine) linesToCheck.push(nextLine.clean);
+        
+        if (isExpiry || (i > 0 && containsKeyword(normalized[i-1].clean, EXPIRY_KEYS))) {
+            for (const line of linesToCheck) {
+                const allDates = extractAllGCDates(line);
+                // Pick the date with the latest year as expiry (expiry is ~8 yrs after issue)
+                const expiryDates = allDates.filter(d => {
+                    const y = parseInt(d.split("-")[0]);
+                    return y >= 2025 && y <= 2040; // valid GC expiry range
+                });
+                if (expiryDates.length > 0) {
+                    expiryDates.sort((a, b) => b.localeCompare(a)); // latest first
+                    const gcExpiry = expiryDates[0];
+                    const gcIssue = subtractDays(gcExpiry, 2920);
+                    if (gcIssue) {
+                        console.log(`[Pass6] All dates found: ${allDates.join(", ")}`);
+                        console.log(`[Pass6] Using expiry ${gcExpiry}, back-calculated GC issue: ${gcIssue}`);
+                        return { issue: gcIssue, method: "pass_6_from_expiry", confidence: 0.85, isGC: true };
+                    }
+                }
+            }
+        }
+    }
+    return null;
+}
+
 // ── Main Extraction ────────────────────────────────────────────
 
 /**
@@ -256,10 +374,17 @@ export function extractValidityDates(ocrLines, imgWidth) {
         bbox: line.bbox || null
     }));
 
+    // DEBUG: log all normalized lines to see what OCR gives us
+    console.log("[DateDebug] All normalized lines:");
+    normalized.forEach((l, i) => { if(l.clean) console.log(`  [${i}] bbox_x=${l.bbox ? Math.round((l.bbox.x0+l.bbox.x1)/2) : '?'} | ${l.clean}`); });
+
     // Escalating Passes
     let best = resolvePass1(normalized, imgWidth);
     if (!best) best = resolvePass2(normalized, imgWidth);
     if (!best) best = resolvePass3(normalized);
+    if (!best) best = resolvePass4(normalized);
+    if (!best) best = resolvePass5(normalized);
+    if (!best) best = resolvePass6(normalized);
     // Note: Pass 4 (Backward) is effectively a variant of Pass 3 or covered by Twin-Check logic
 
     const result = {
@@ -272,12 +397,18 @@ export function extractValidityDates(ocrLines, imgWidth) {
     };
 
     if (best) {
-        let ecIssue = best.issue; // OCR detected numeric is EC Issue
-        // Ensure EC issue uses slashes for output
-        ecIssue = ecIssue.replace(/-/g, "/");
-
-        const gcIssue = ecToGc(best.issue); // ecToGc still expects dashes or handles both? 
-        // Let's check ecToGc - it uses split("-").
+        let gcIssue, ecIssue;
+        if (best.isGC) {
+            // Pass 6: issue date is already in GC
+            gcIssue = best.issue;
+            const ecIssueRaw = gcToEc ? null : null; // derive below
+            const ecConverted = gcIssue ? gcToEc(gcIssue) : null;
+            ecIssue = ecConverted ? ecConverted.replace(/-/g, "/") : null;
+        } else {
+            // Passes 1-5: issue date is EC
+            ecIssue = best.issue.replace(/-/g, "/");
+            gcIssue = ecToGc(best.issue);
+        }
         const gcExpiry = gcIssue ? addDays(gcIssue, 2920) : null;
         const ecExpiry = gcExpiry ? gcToEc(gcExpiry) : null;
 
