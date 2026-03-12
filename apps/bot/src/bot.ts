@@ -14,7 +14,7 @@ const __dirname = path.dirname(__filename);
 const bot = new TelegramBot(config.BOT_TOKEN, { polling: true });
 
 // --- Asset Paths ---
-const ASSETS_DIR = path.resolve(__dirname, '../assets');
+const ASSETS_DIR = process.env.ASSETS_DIR || path.resolve(__dirname, '../../../assets');
 const GUIDE_FRONT = path.join(ASSETS_DIR, 'guide_front.jpg');
 const GUIDE_BACK = path.join(ASSETS_DIR, 'guide_back.jpg');
 const GUIDE_PROFILE = path.join(ASSETS_DIR, 'guide_profile.jpg');
