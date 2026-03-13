@@ -32,7 +32,7 @@ COPY services/id-engine/package.json ./services/id-engine/
 COPY services/credit-engine/package.json ./services/credit-engine/
 COPY services/payment-engine/package.json ./services/payment-engine/
 COPY prisma ./prisma
-RUN npm ci
+RUN npm install --legacy-peer-deps
 
 FROM base AS builder
 WORKDIR /app
