@@ -32,7 +32,7 @@
     "@mediapipe/face_detection": "^0.4.1646425229",
     "@mediapipe/face_mesh": "^0.4.1633559619",
     "@prisma/adapter-pg": "^7.4.1",
-    "@prisma/client": "^7.4.1",
+    "@prisma/client": "^6.0.0",
     "@tensorflow-models/face-detection": "^1.0.3",
     "@tensorflow/tfjs-backend-wasm": "^4.22.0",
     "@tensorflow/tfjs-core": "^4.22.0",
@@ -62,6 +62,6 @@
     "axios": "^1.13.5",
     "concurrently": "^9.2.1",
     "form-data": "^4.0.5",
-    "prisma": "^7.4.1"
+    "prisma": "^6.0.0"
   }
 }
