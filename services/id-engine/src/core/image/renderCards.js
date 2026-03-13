@@ -35,7 +35,8 @@ registerFont(path.join(ROOT, 'fonts', 'Roboto-Medium.ttf'),
              { family: 'Roboto Mono', weight: '600' });
 
 // ─── Constants ───────────────────────────────────────────────────────────────
-const W = 1025, H = 645;
+const W_FRONT = 1020, H_FRONT = 648;
+const W_BACK  = 1035, H_BACK  = 648;
 
 const CLR = '#000000';
 const CLR_PRIMARY = '#000000';
@@ -177,14 +178,14 @@ async function _buildFrontCanvas(data, bgPath) {
   const fan   = id.fan || '';
 
   const bg     = await loadImage(bgPath);
-  const canvas = createCanvas(W, H);
+  const canvas = createCanvas(W_FRONT, H_FRONT);
   const ctx    = canvas.getContext('2d');
 
   // Scale internal rendering system from original 2652x1670 to current W,H
   // This ensures all hardcoded coordinates align perfectly.
   const origW = 2652;
   const origH = 1670;
-  ctx.scale(W / origW, H / origH);
+  ctx.scale(W_FRONT / origW, H_FRONT / origH);
 
   ctx.drawImage(bg, 0, 0, origW, origH);
 
@@ -268,13 +269,13 @@ async function _buildBackCanvas(data, bgPath) {
   const enP = addrEn.split(',').map(s => s.trim());
 
   const bg     = await loadImage(bgPath);
-  const canvas = createCanvas(W, H);
+  const canvas = createCanvas(W_BACK, H_BACK);
   const ctx    = canvas.getContext('2d');
 
   // Scale internal rendering system from original 2652x1670 to current W,H
   const origW = 2652;
   const origH = 1670;
-  ctx.scale(W / origW, H / origH);
+  ctx.scale(W_BACK / origW, H_BACK / origH);
 
   ctx.drawImage(bg, 0, 0, origW, origH);
 

@@ -19,8 +19,8 @@ import { IdentityExtractionError } from './errors.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // Both template images live in the id-engine package root — 2 levels up from src/core/
 const ENGINE_ROOT = path.resolve(__dirname, '../../');
-const FRONT_TEMPLATE = path.join(ENGINE_ROOT, 'front_V6.0.png');
-const BACK_TEMPLATE  = path.join(ENGINE_ROOT, 'back_v6.0.png');
+const FRONT_TEMPLATE = path.join(ENGINE_ROOT, 'front_V7.0.png');
+const BACK_TEMPLATE  = path.join(ENGINE_ROOT, 'back_v7.0.png');
 
 // Print-ready canvas size (front + back side by side)
 const PRINT_WIDTH  = 2360;
