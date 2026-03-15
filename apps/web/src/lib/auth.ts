@@ -19,6 +19,7 @@ export const auth = betterAuth({
         "http://localhost:3000", 
         "http://localhost:3001",
         "https://nationalidformatter.app",
+        "https://www.nationalidformatter.app",
         "https://admin.nationalidformatter.app"
     ],
     emailAndPassword: {
